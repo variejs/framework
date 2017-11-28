@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import { injectable } from "inversify";
 import ConfigInterface from "./ConfigInterface";
 
@@ -9,7 +8,7 @@ export default class Config implements ConfigInterface {
   constructor() {
     let files = require.context("@config", true, /^\.\/.*\.(ts)$/);
 
-    _.each(files.keys(), filename => {
+    for (let filename of files.keys()) {
       let configName = filename
         .replace(/^\.\//, "")
         .replace(/\/$/, "")
@@ -17,14 +16,21 @@ export default class Config implements ConfigInterface {
         .replace(/\.ts/, "");
 
       this._configs[configName] = files(filename).default;
-    });
+    }
   }
 
-  get(key, defaultValue?) {
-    return _.get(this._configs, key, defaultValue);
+  get(path : string, defaultValue : any) {
+    let value = path.split('.').reduce(function(prev : object , curr : string) {
+      return prev ? prev[curr] : undefined
+    }, this._configs)
+
+    return value !== undefined ? value : defaultValue;
   }
 
-  set(key, value) {
-    return _.set(this._configs, key, value);
+  set(path : string, value : any) {
+    let parts = path.split('.');
+    return parts.reduce(function(prev : object, curr : string , ix : number) {
+      return (ix + 1 == parts.length) ? prev[curr] = value : prev[curr] = prev[curr] || {};
+    }, this._configs);
   }
 }

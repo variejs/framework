@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import { injectable } from "inversify";
 import ServiceProviderInterface from "./ServiceProviderInterface";
 
@@ -12,7 +11,7 @@ export default class ServiceProvider implements ServiceProviderInterface {
   }
 
   protected mergeConfigFrom(config, key) {
-    $config.set(key, _.merge(config, $config.get(key)));
+    $config.set(key, Object.assign(config, $config.get(key)));
   }
 
   public boot() {}

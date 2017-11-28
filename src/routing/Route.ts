@@ -1,5 +1,3 @@
-import * as _ from "lodash";
-
 export default class Route {
   private path;
   private meta;

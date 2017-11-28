@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import { Store } from "vuex";
 
 class NotificationService {
@@ -7,11 +6,6 @@ class NotificationService {
   };
 
   protected __store: Store<object>;
-
-  constructor(config: object, store: Store<object>) {
-    this.__store = store;
-    this.__config = _.merge(this.__config, config);
-  }
 
   public showError(message: string, title: string, duration?: number) {
     this._makeAlert(message, title, duration, "error");
@@ -38,11 +32,12 @@ class NotificationService {
     if (duration === undefined) {
       duration = this.__config.duration;
     }
+    console.info('this wont work')
     this.__store.dispatch("varie/notifications/add", {
       message: message,
       duration: duration,
       severity: severity,
-      title: !_.isEmpty(title) ? title : `${_.startCase(_.toLower(severity))}!!`
+      // title: !_.isEmpty(title) ? title : `${_.startCase(_.toLower(severity))}!!`
     });
   }
 }

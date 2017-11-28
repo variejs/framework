@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import NotificationStores from "./store";
 import { VueConstructor } from "vue/types/vue";
 import NotificationService from "./NotificationService";

@@ -56,6 +56,7 @@ export default class VueRouterService implements RouterInterface {
         });
       });
 
+      console.info(tempRoutes);
       $config.set("router.routes", tempRoutes);
       this.router = new VueRouter($config.get("router"));
       this.registerMiddleware();
