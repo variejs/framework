@@ -1,4 +1,4 @@
-import ServiceProviderInterface from "./serviceProviderInterface";
+import ServiceProviderInterface from "./ServiceProviderInterface";
 export default class ServiceProvider implements ServiceProviderInterface {
     _app: {};
     constructor(app: any);

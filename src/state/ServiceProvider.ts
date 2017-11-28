@@ -1,6 +1,6 @@
 import VuexService from "./VuexService";
-import ServiceProvider from "../support/serviceProvider";
-import StateServiceInterface from "./stateServiceInterface";
+import ServiceProvider from "../support/ServiceProvider";
+import StateServiceInterface from "./StateServiceInterface";
 
 export default class StateServiceProvider extends ServiceProvider {
   public register() {

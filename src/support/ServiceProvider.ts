@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import { injectable } from "inversify";
-import ServiceProviderInterface from "./serviceProviderInterface";
+import ServiceProviderInterface from "./ServiceProviderInterface";
 
 @injectable()
 export default class ServiceProvider implements ServiceProviderInterface {

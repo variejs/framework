@@ -1,4 +1,4 @@
-import ServiceProvider from "../support/serviceProvider";
+import ServiceProvider from "../support/ServiceProvider";
 
 declare const global: any;
 import ConfigService from "./ConfigService";

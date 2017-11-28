@@ -1,7 +1,7 @@
 import RouterConfig from "./config";
 import RouterInterface from "./RouterInterface";
 import VueRouterService from "./VueRouterService";
-import ServiceProvider from "../support/serviceProvider";
+import ServiceProvider from "../support/ServiceProvider";
 
 export default class RoutingServiceProvider extends ServiceProvider {
   public register() {

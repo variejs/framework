@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex, { Store } from "vuex";
 import { injectable } from "inversify";
-import StateServiceInterface from "./stateServiceInterface";
+import StateServiceInterface from "./StateServiceInterface";
 
 @injectable()
 export default class VuexService implements StateServiceInterface {

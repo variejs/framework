@@ -1,7 +1,6 @@
 import NotificationsComponent from "varie/src/plugins/notifications/components/Notifications.vue";
 
 export default {
-
   /*
   |--------------------------------------------------------------------------
   | Duration
@@ -23,4 +22,4 @@ export default {
   |
   */
   component: NotificationsComponent
-}
+};
