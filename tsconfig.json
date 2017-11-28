@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "outDir": "./lib/",
+    "moduleResolution": "node",
+    "lib": ["es2017", "dom"],
+    "target": "es5",
+    "strict": true,
+    "types": [
+      "ajv",
+      "vue",
+      "vuex",
+      "node",
+      "lodash",
+      "vue-router",
+      "webpack-env",
+      "moment-timezone",
+      "reflect-metadata"
+    ],
+    "declaration" : true,
+    "inlineSourceMap" : true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators" : true
+  },
+  "include": ["src/**/*"]
+}
