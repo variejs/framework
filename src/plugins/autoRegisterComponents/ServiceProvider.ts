@@ -1,12 +1,9 @@
-import Vue from 'vue';
-import kebabCase from 'kebab-case';
+import Vue from "vue";
+import kebabCase from "kebab-case";
 import ServiceProvider from "../../support/ServiceProvider";
 
 export default class CommonServiceProvider extends ServiceProvider {
-
-  public register() {
-
-  }
+  public register() {}
 
   public boot() {
     try {
@@ -19,7 +16,6 @@ export default class CommonServiceProvider extends ServiceProvider {
         "You are trying to auto load components, but do not have a component folder, please create `app/components` folder."
       );
     }
-
   }
 
   private getComponentName(filename: string) {

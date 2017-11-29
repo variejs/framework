@@ -1,7 +1,6 @@
 import { Store } from "vuex";
 
 class NotificationService {
-
   constructor(config, store) {
     this.__store = store;
     this.__config = config;
