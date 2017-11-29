@@ -1,3 +1,5 @@
+import * as camelCase from 'camelcase';
+
 export default class Route {
   private path;
   private meta;
@@ -19,21 +21,23 @@ export default class Route {
       this._props = true;
     }
 
-    if (_.isObject(components)) {
+    if (typeof components === 'object') {
       if (this._props) {
         this.props = {};
       }
       this.components = {};
-      _.each(components, (component, name) => {
-        this.components[name] = require(`@views/${component}`);
-        if (this._props) {
-          this.components[name] = {
-            props: props,
-            template: this.components[name]
-          };
-          this.props[name] = true;
+
+        for (let name in components) {
+            let component = components[name];
+            this.components[name] = require(`@views/${component}`);
+            if (this._props) {
+                this.components[name] = {
+                    props: props,
+                    template: this.components[name]
+                };
+                this.props[name] = true;
+            }
         }
-      });
     } else {
       this.component = require(`@views/${components}`);
       if (this._props) {
@@ -44,7 +48,7 @@ export default class Route {
       }
     }
     let prefix = this.meta.prefix ? this.meta.prefix + "/" : "";
-    this.name = _.camelCase(`${prefix}${path}`);
+    this.name = camelCase(`${prefix}${path}`);
   }
 
   public setName(name: string): this {

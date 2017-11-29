@@ -17,7 +17,9 @@ export const remove = (
   Vue.set(
     state,
     "notifications",
-    // _.reject(state.notifications, { id: notification.id })
+    state.notifications.filter((tempNotification) =>{
+        return notification.id !== tempNotification.id;
+    })
   );
 };
 

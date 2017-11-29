@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import camelCase from 'camelCase';
+import * as camelCase from 'camelcase';
 import ServiceProvider from "../../support/ServiceProvider";
 
 export default class CommonServiceProvider extends ServiceProvider {

@@ -1,5 +1,4 @@
 import Vue from "vue";
-import * as _ from "lodash";
 import Route from "./Route";
 import VueRouter from "vue-router";
 import { injectable } from "inversify";
@@ -32,7 +31,7 @@ export default class VueRouterService implements RouterInterface {
 
       let paths = {};
 
-      _.each(routes, route => {
+        routes.forEach(route => {
         if (route.meta && route.meta.template) {
           let path = route.meta.template.prefix;
 
@@ -48,15 +47,15 @@ export default class VueRouterService implements RouterInterface {
         }
       });
 
-      _.each(paths, (data, path) => {
-        tempRoutes.push({
-          path: path,
-          children: data.routes,
-          component: data.component
-        });
-      });
+      for (let path in paths) {
+          let data = paths[path];
+          tempRoutes.push({
+            path: path,
+            children: data.routes,
+            component: data.component
+          });
+      }
 
-      console.info(tempRoutes);
       $config.set("router.routes", tempRoutes);
       this.router = new VueRouter($config.get("router"));
       this.registerMiddleware();
@@ -64,7 +63,7 @@ export default class VueRouterService implements RouterInterface {
   }
 
   public route(path, component: string | {}, props = {}): Route {
-    let route = new Route(path, component, _.clone(this.currentMeta), props);
+    let route = new Route(path, component, Object.assign({}, this.currentMeta), props);
     this.routes.push(route);
     return route;
   }
@@ -115,14 +114,16 @@ export default class VueRouterService implements RouterInterface {
 
   private registerMiddleware() {
     let middleware = Middleware;
-    _.each(middleware, (middlewareFunction, middleware) => {
-      this.router.beforeResolve((to, from, next) => {
-        if (to.meta.middleware && to.meta.middleware.indexOf(middleware) > -1) {
-          return middlewareFunction(to, from, next);
-        }
-        next();
-      });
-    });
+
+      for (let middlewareName in middleware) {
+          let middlewareFunction = middleware[middlewareName];
+          this.router.beforeResolve((to, from, next) => {
+              if (to.meta.middleware && to.meta.middleware.indexOf(middlewareName) > -1) {
+                  return middlewareFunction(to, from, next);
+              }
+              next();
+          });
+      }
   }
 
   private _resetCurrentMeta() {

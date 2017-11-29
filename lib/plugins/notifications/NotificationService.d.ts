@@ -1,8 +1,6 @@
 import { Store } from "vuex";
 declare class NotificationService {
-    protected __config: {
-        duration: number | undefined;
-    };
+    constructor(config: any, store: any);
     protected __store: Store<object>;
     showError(message: string, title: string, duration?: number): void;
     showInfo(message: string, title: string, duration?: number): void;

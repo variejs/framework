@@ -1,9 +1,11 @@
 import { Store } from "vuex";
 
 class NotificationService {
-  protected __config: {
-    duration: number | undefined;
-  };
+
+  constructor(config, store) {
+    this.__store = store;
+    this.__config = config;
+  }
 
   protected __store: Store<object>;
 
@@ -32,12 +34,11 @@ class NotificationService {
     if (duration === undefined) {
       duration = this.__config.duration;
     }
-    console.info('this wont work')
     this.__store.dispatch("varie/notifications/add", {
       message: message,
       duration: duration,
       severity: severity,
-      // title: !_.isEmpty(title) ? title : `${_.startCase(_.toLower(severity))}!!`
+      title: title ? title : `${severity}!!`
     });
   }
 }

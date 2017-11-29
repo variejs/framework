@@ -13,9 +13,10 @@ class Notifications {
   public install(Vue: VueConstructor, { store }) {
     this.__config = $config.get("notifications");
 
-    _.each(NotificationStores, (module, name: string) => {
+    for (let name in NotificationStores) {
+      let module = NotificationStores[name];
       store.registerModule(["varie", name], module);
-    });
+    }
 
     this._service = new NotificationService(this.__config, store);
 
