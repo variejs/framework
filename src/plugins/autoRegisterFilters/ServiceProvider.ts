@@ -1,12 +1,9 @@
-import Vue from 'vue';
-import * as camelCase from 'camelcase';
+import Vue from "vue";
+import * as camelCase from "camelcase";
 import ServiceProvider from "../../support/ServiceProvider";
 
 export default class CommonServiceProvider extends ServiceProvider {
-
-  public register() {
-
-  }
+  public register() {}
 
   public boot() {
     try {
