@@ -2,6 +2,6 @@ import ConfigInterface from "./ConfigInterface";
 export default class Config implements ConfigInterface {
     _configs: {};
     constructor();
-    get(key: any, defaultValue?: any): any;
-    set(key: any, value: any): {};
+    get(path: string, defaultValue: any): any;
+    set(path: string, value: any): any;
 }

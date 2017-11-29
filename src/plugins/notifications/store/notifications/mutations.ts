@@ -1,5 +1,4 @@
 import Vue from "vue";
-import * as _ from "lodash";
 import { NotificationsState } from "./stateInterface";
 import NotificationModel from "../../models/NotificationModel";
 
@@ -18,7 +17,9 @@ export const remove = (
   Vue.set(
     state,
     "notifications",
-    _.reject(state.notifications, { id: notification.id })
+    state.notifications.filter((tempNotification) =>{
+        return notification.id !== tempNotification.id;
+    })
   );
 };
 

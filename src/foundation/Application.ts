@@ -1,7 +1,6 @@
 declare const global: any;
 
 import "reflect-metadata";
-import * as _ from "lodash";
 import { Container } from "inversify";
 
 export class Application {
@@ -26,7 +25,9 @@ export class Application {
 
   private registerConfiguredProviders() {
     let appConfig = require("@config/app").default;
-    _.each(appConfig.providers, provider => {
+
+    for (let provider in appConfig.providers) {
+      provider = appConfig.providers[provider];
       let providerPromise = new Promise(resolve => {
         let registering = new provider(this).register();
         if (registering instanceof Promise) {
@@ -37,13 +38,14 @@ export class Application {
         resolve();
       });
       this.$providerPromises.push(providerPromise);
-    });
+    }
     return Promise.all(this.$providerPromises);
   }
 
   private bootProviders() {
-    _.each(this.providers, provider => {
+    for (let provider in this.providers) {
+      provider = this.providers[provider];
       provider.boot();
-    });
+    }
   }
 }
