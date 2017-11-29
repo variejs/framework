@@ -1,5 +1,5 @@
 import Vue from "vue";
-import kebabCase from "kebab-case";
+import * as dashify from "dashify";
 import ServiceProvider from "../../support/ServiceProvider";
 
 export default class CommonServiceProvider extends ServiceProvider {
@@ -19,6 +19,6 @@ export default class CommonServiceProvider extends ServiceProvider {
   }
 
   private getComponentName(filename: string) {
-    return kebabCase(filename.replace(".vue", ""));
+    return dashify(filename.replace(".vue", ""));
   }
 }

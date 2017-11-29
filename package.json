@@ -1,6 +1,6 @@
 {
   "name": "varie",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "VueJS Framework",
   "main": "./lib/index.js",
   "typings": "./lib/index",
@@ -12,8 +12,8 @@
     "ajv": "^5.3.0",
     "axios": "^0.17.0",
     "camelcase": "^4.1.0",
+    "dashify": "^0.2.2",
     "inversify": "^4.5.1",
-    "kebab-case": "^1.0.0",
     "reflect-metadata": "^0.1.10"
   },
   "devDependencies": {
