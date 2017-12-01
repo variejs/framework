@@ -12,7 +12,6 @@
       "node",
       "vue-router",
       "webpack-env",
-      "moment-timezone",
       "reflect-metadata"
     ],
     "declaration" : true,
