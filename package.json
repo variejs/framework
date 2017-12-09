@@ -1,6 +1,6 @@
 {
   "name": "varie",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "VueJS Framework",
   "main": "./lib/index.js",
   "typings": "./lib/index",
