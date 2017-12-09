@@ -1,26 +1,46 @@
+import ApplicationInterface from "./ApplicationInterface";
+
 declare const global: any;
 
+import ContainerMixin from "./ContainerMixin";
 import "reflect-metadata";
 import { Container } from "inversify";
 
-export class Application {
+export class Application implements ApplicationInterface {
   private providers = [];
   private $container: Container;
   private $providerPromises = [];
 
   constructor() {
     this.$container = new Container();
-    global.$container = this.$container;
     this.$container.bind("app").toConstantValue(this);
+    global.app = this;
   }
 
-  public boot() {
+  public boot(): Promise<ApplicationInterface> {
+    new ContainerMixin().registerMixin(this);
+
     return new Promise(resolve => {
       this.registerConfiguredProviders().then(() => {
         this.bootProviders();
-        return resolve();
+        return resolve(this);
       });
     });
+  }
+
+  public bind<T>(abstract: string, concrete: any) {
+    this.$container.bind(abstract).to(concrete);
+  }
+
+  public singleton<T>(abstract: string, concrete: any) {
+    this.$container
+      .bind(abstract)
+      .to(concrete)
+      .inSingletonScope();
+  }
+
+  public make<T>(abstract: string): T {
+    return this.$container.get(abstract);
   }
 
   private registerConfiguredProviders() {

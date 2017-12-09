@@ -4,9 +4,6 @@ import StateServiceInterface from "./StateServiceInterface";
 
 export default class StateServiceProvider extends ServiceProvider {
   public register() {
-    $container
-      .bind<StateServiceInterface>("$store")
-      .to(VuexService)
-      .inSingletonScope();
+    this.app.singleton<StateServiceInterface>("$store", VuexService);
   }
 }

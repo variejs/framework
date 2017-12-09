@@ -1,7 +1,8 @@
 import ServiceProviderInterface from "./ServiceProviderInterface";
+import ApplicationInterface from "./../foundation/ApplicationInterface";
 export default class ServiceProvider implements ServiceProviderInterface {
-    _app: {};
-    constructor(app: any);
-    protected mergeConfigFrom(config: any, key: any): void;
+    protected app: ApplicationInterface;
+    constructor(app: ApplicationInterface);
+    protected mergeConfigFrom(config: {}, key: string): void;
     boot(): void;
 }

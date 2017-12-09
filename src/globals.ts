@@ -1,8 +1,7 @@
-import { interfaces } from "inversify";
-import Container = interfaces.Container;
 import ConfigInterface from "./config/ConfigInterface";
+import ApplicationInterface from "./foundation/ApplicationInterface";
 
 declare global {
-  const $container: Container;
   const $config: ConfigInterface;
+  const app: ApplicationInterface;
 }

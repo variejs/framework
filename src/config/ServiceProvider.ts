@@ -6,10 +6,7 @@ import ConfigInterface from "./ConfigInterface";
 
 export default class ConfigServiceProvider extends ServiceProvider {
   public register() {
-    $container
-      .bind<ConfigInterface>("$config")
-      .to(ConfigService)
-      .inSingletonScope();
-    global.$config = $container.get("$config");
+    this.app.singleton<ConfigInterface>("$config", ConfigService);
+    global.$config = this.app.make("$config");
   }
 }

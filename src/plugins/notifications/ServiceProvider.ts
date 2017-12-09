@@ -6,7 +6,7 @@ import ServiceProvider from "../../support/ServiceProvider";
 export default class NotificationsServiceProvider extends ServiceProvider {
   public boot() {
     Vue.use(new Notifications(), {
-      store: $container.get("$store").getStore()
+      store: this.app.make("$store").getStore()
     });
   }
 

@@ -7,11 +7,8 @@ export default class RoutingServiceProvider extends ServiceProvider {
   public register() {
     this.mergeConfigFrom(RouterConfig, "router");
 
-    $container
-      .bind<RouterInterface>("$router")
-      .to(VueRouterService)
-      .inSingletonScope();
+    this.app.singleton("$router", VueRouterService);
 
-    return $container.get<RouterInterface>("$router").buildRouter();
+    return this.app.make("$router").buildRouter();
   }
 }
