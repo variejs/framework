@@ -14,7 +14,7 @@ export class Application implements ApplicationInterface {
   constructor() {
     this.$container = new Container();
     this.$container.bind("app").toConstantValue(this);
-    global.app = this;
+    global.$app = this;
   }
 
   public boot(): Promise<ApplicationInterface> {
