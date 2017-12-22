@@ -7,7 +7,7 @@ export default class ContainerMixin {
   registerMixin(app: ApplicationInterface) {
     Vue.mixin({
       beforeMount() {
-        this.$injector(this.inject || []);
+        this.$injector(this.$options.$inject || []);
       },
       methods: {
         $injector(services: Array<string>) {
