@@ -14,11 +14,13 @@
     "camelcase": "^4.1.0",
     "dashify": "^1.0.0",
     "inversify": "^4.9.0",
-    "reflect-metadata": "^0.1.12"
+    "reflect-metadata": "^0.1.12",
+    "validator": "^9.2.0",
+    "vee-validate": "^2.0.3"
   },
   "devDependencies": {
     "@types/ajv": "^1.0.0",
-    "@types/node": "^8.9.4",
+    "@types/node": "^8.5.9",
     "@types/webpack-env": "^1.13.3",
     "awesome-typescript-loader": "^3.4.1",
     "typescript": "^2.6.2"

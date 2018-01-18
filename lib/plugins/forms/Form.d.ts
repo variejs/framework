@@ -1,12 +1,12 @@
 import ValidationServiceInterface from "../../validation/ValidationServiceInterface";
 declare class Form {
-    private _schema;
+    private _rules;
     private _messages;
     private _originalData;
     private _validator;
     constructor(data: object, validator?: ValidationServiceInterface);
-    validation({schema, messages}: {
-        schema: any;
+    validation({rules, messages}: {
+        rules: any;
         messages: any;
     }): this;
     isValid(): any;

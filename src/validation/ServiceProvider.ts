@@ -1,5 +1,5 @@
-import AjvValidationService from "./AjvValidationService";
 import ServiceProvider from "../support/ServiceProvider";
+import VarieValidationService from "./VarieValidationService";
 import ValidationServiceInterface from "./ValidationServiceInterface";
 
 export default class RoutingServiceProvider extends ServiceProvider {
@@ -8,6 +8,9 @@ export default class RoutingServiceProvider extends ServiceProvider {
   }
 
   public register() {
-    this.app.singleton<ValidationServiceInterface>('$validator', AjvValidationService)
+    this.app.singleton<ValidationServiceInterface>(
+      "$validator",
+      VarieValidationService
+    );
   }
 }
