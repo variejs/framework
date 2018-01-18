@@ -56,6 +56,11 @@ export default class Route {
     return this;
   }
 
+  public setMeta(data: Object): this {
+    this.meta = Object.assign(this.meta, data);
+    return this;
+  }
+
   public setAlias(alias) {
     this.alias = alias;
   }

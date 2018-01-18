@@ -1,15 +1,13 @@
 ## About Varie
 
-
 > **Note:** This repository contains the core code of the Varie framework. If you want to build an application using Varie, visit the main [Varie repository](https://github.com/variejs/varie).
-
 
 Varie is a framework built ontop of VueJS, and was built in effort to build simple, but powerful vue applications.
 
 ### Features : 
  
 - A simple routing Engine built on top of Vue Router
-    - Routing Middleware
+- Routing Middleware
 - State management - Vuex with a bit of magic
 - A dependency injection container 
 - Web pack configuration made easy (Mix)
@@ -18,7 +16,6 @@ Varie is a framework built ontop of VueJS, and was built in effort to build simp
 - And more!
 
 Varie is built with simplicity in mind, making it easier to get your product out the door.
-
 
 ## Contributions
 1. Setup
