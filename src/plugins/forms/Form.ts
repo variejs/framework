@@ -1,13 +1,12 @@
-import Vue from 'vue';
+import Vue from "vue";
 import ValidationServiceInterface from "../../validation/ValidationServiceInterface";
 
 class Form {
-
-  private _schema : object;
-  private _messages : object;
-  private _originalData : any;
+  private _schema: object;
+  private _messages: object;
+  private _originalData: any;
   private _validator: ValidationServiceInterface;
-  
+
   constructor(data) {
     for (const field in data) {
       this[field] = data[field];
@@ -27,25 +26,25 @@ class Form {
   }
 
   public reset() {
-      for (const field in this._originalData) {
-        Vue.set(this, field, this._originalData[field])
-      }
-      this.setOriginaldata();
+    for (const field in this._originalData) {
+      Vue.set(this, field, this._originalData[field]);
+    }
+    this.setOriginaldata();
   }
 
   public data() {
-      let data = {};
-      let tempData = Object.assign({}, this);
-      for(const field in tempData) {
-        if(field.indexOf('_') != 0) {
-          data[field] = JSON.parse(JSON.stringify(this[field]));
-        }
+    let data = {};
+    let tempData = Object.assign({}, this);
+    for (const field in tempData) {
+      if (field.indexOf("_") != 0) {
+        data[field] = JSON.parse(JSON.stringify(this[field]));
       }
-      return data;
+    }
+    return data;
   }
 
   public setOriginaldata() {
-      this._originalData = Object.assign({}, this.data());
+    this._originalData = Object.assign({}, this.data());
   }
 
   public isDirty() {
