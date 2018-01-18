@@ -1,13 +1,11 @@
 import Form from "./Form";
-import { inject, injectable } from 'inversify';
+import { inject, injectable } from "inversify";
 import { VueConstructor } from "vue/types/vue";
-import ValidationServiceInterface from '../../validation/ValidationServiceInterface'
+import ValidationServiceInterface from "../../validation/ValidationServiceInterface";
 
 @injectable()
 class Forms {
-
-  @inject('$validator')
-  private _validator : ValidationServiceInterface;
+  @inject("$validator") private _validator: ValidationServiceInterface;
 
   public install(Vue: VueConstructor) {
     Vue.mixin({
