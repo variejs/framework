@@ -7,12 +7,14 @@ class Form {
   private _messages : object;
   private _originalData : any;
   private _validator: ValidationServiceInterface;
-  
-  constructor(data) {
+
+  constructor(data : object, validator? : ValidationServiceInterface) {
+    if(validator) {
+      this._validator = validator;
+    }
     for (const field in data) {
       this[field] = data[field];
     }
-    this._validator = $app.make("$validator");
     this.setOriginaldata();
   }
 
@@ -23,7 +25,10 @@ class Form {
   }
 
   public isValid() {
-    return this._validator.validate(this, this._schema, this._messages);
+    if(this._validator) {
+      return this._validator.validate(this, this._schema, this._messages);
+    }
+    return true;
   }
 
   public reset() {
