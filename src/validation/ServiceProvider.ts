@@ -8,6 +8,9 @@ export default class RoutingServiceProvider extends ServiceProvider {
   }
 
   public register() {
-    this.app.singleton<ValidationServiceInterface>('$validator', AjvValidationService)
+    this.app.singleton<ValidationServiceInterface>(
+      "$validator",
+      AjvValidationService
+    );
   }
 }
