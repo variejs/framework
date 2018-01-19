@@ -1,4 +1,5 @@
 import { injectable } from "inversify";
+import { getByDot, setByDot } from "./../utilities";
 import ConfigInterface from "./ConfigInterface";
 
 @injectable()
@@ -20,19 +21,10 @@ export default class Config implements ConfigInterface {
   }
 
   get(path: string, defaultValue: any) {
-    let value = path.split(".").reduce(function(prev: object, curr: string) {
-      return prev ? prev[curr] : undefined;
-    }, this._configs);
-
-    return value !== undefined ? value : defaultValue;
+    return getByDot(this._configs, path, defaultValue);
   }
 
   set(path: string, value: any) {
-    let parts = path.split(".");
-    return parts.reduce(function(prev: object, curr: string, ix: number) {
-      return ix + 1 == parts.length
-        ? (prev[curr] = value)
-        : (prev[curr] = prev[curr] || {});
-    }, this._configs);
+    return setByDot(this._configs, path, value);
   }
 }

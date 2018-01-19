@@ -8,5 +8,4 @@ export default class Validator {
     validate(): {};
     private validateSchema(schema, key?);
     private _checkRules(field, rules);
-    private _get(path, defaultValue?);
 }

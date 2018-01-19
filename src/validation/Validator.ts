@@ -1,5 +1,6 @@
 import Rules from "./rules";
 import { isObject } from "util";
+import { getByDot } from "./../utilities";
 
 export default class Validator {
   public errors = {};
@@ -41,21 +42,15 @@ export default class Validator {
         if (tempRule[1]) {
           params = tempRule[1].split(",");
         }
-        if (!this._rules[rule].passes(this._get(field), params)) {
-          let errorMessage = this._rules[rule].message(params);
-          this.errors[field] = errorMessage;
+        if (!this._rules[rule].passes(getByDot(this._data, field), params)) {
+          this.errors[field] = getByDot(
+            this._messages,
+            field,
+            this._rules[rule].message(params)
+          );
           break;
         }
       }
     }
-  }
-
-  // TODO - MOVE THIS TO A HELPER?
-  private _get(path: string, defaultValue?: any) {
-    let value = path.split(".").reduce(function(prev: object, curr: string) {
-      return prev ? prev[curr] : undefined;
-    }, this._data);
-
-    return value !== undefined ? value : defaultValue;
   }
 }
