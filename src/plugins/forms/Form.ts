@@ -26,9 +26,20 @@ class Form {
 
   public isValid() {
     if (this._validator) {
-      return this._validator.validate(this.data(), this._rules, this._messages);
+      let errors = this._validator.validate(
+        this.data(),
+        this._rules,
+        this._messages
+      );
+      if (Object.keys(errors).length) {
+        return false;
+      }
     }
     return true;
+  }
+
+  public errors() {
+    return this._validator.validate(this.data(), this._rules, this._messages);
   }
 
   public reset() {
@@ -54,7 +65,7 @@ class Form {
   }
 
   public isDirty() {
-    return JSON.stringify(this.data()) === JSON.stringify(this._originalData);
+    return JSON.stringify(this.data()) !== JSON.stringify(this._originalData);
   }
 }
 

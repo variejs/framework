@@ -9,7 +9,8 @@ declare class Form {
         rules: any;
         messages: any;
     }): this;
-    isValid(): any;
+    isValid(): boolean;
+    errors(): any;
     reset(): void;
     data(): {};
     setOriginaldata(): void;
