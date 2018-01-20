@@ -10,6 +10,6 @@ export default {
   },
 
   replacers() {
-    return ['min']
+    return ["min"];
   }
 };
