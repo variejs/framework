@@ -1,4 +1,4 @@
 declare const _default: {
-    passes(value: any): Boolean;
+    passes(value: any): boolean | undefined;
 };
 export default _default;

@@ -21,7 +21,6 @@ export default class Validator {
     "max",
     "Size",
     "Between",
-    "Dimensions"
   ];
 
   private _numericRules = ["numeric", "integer"];
@@ -101,7 +100,7 @@ export default class Validator {
     }
   }
 
-  private _getRule(rule) {
+  private _getRule(rule : string) {
     return this._rules[rule];
   }
 
@@ -112,6 +111,7 @@ export default class Validator {
     parameters: any
   ) {
     let ruleFunctions = this._getRule(rule);
+    // TODO - uncamel
     message = message.replace(":field", field.replace(".", " "));
     if (ruleFunctions.replacers) {
       ruleFunctions.replacers().forEach((replacer, index) => {

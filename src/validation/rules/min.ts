@@ -5,10 +5,6 @@ export default {
     return isLength(value, { min: attributes[0] });
   },
 
-  message() {
-    return `The :attribute length is :min. Your :input is length :value`;
-  },
-
   replacers() {
     return ["min"];
   }

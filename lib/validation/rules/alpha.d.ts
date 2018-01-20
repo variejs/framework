@@ -1,5 +1,4 @@
-import Rule from './Rule';
-export default class Alpha extends Rule {
-    passes($attribute: any, $value: any): void;
-    message(): void;
-}
+declare const _default: {
+    passes(value: any): any;
+};
+export default _default;
