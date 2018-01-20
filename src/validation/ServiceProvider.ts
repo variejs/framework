@@ -8,6 +8,13 @@ export default class RoutingServiceProvider extends ServiceProvider {
   }
 
   public register() {
+
+    let files = require.context("@resources/lang", true, /validation\.(ts)$/);
+
+    for (let filename of files.keys()) {
+      $config.set(`validation.${filename.replace('./', '').split('/').shift()}`, files(filename).default);
+    }
+
     this.app.singleton<ValidationServiceInterface>(
       "$validator",
       VarieValidationService
