@@ -20,7 +20,7 @@ export default class Validator {
     "min",
     "max",
     "Size",
-    "Between",
+    "Between"
   ];
 
   private _numericRules = ["numeric", "integer"];
@@ -100,7 +100,7 @@ export default class Validator {
     }
   }
 
-  private _getRule(rule : string) {
+  private _getRule(rule: string) {
     return this._rules[rule];
   }
 

@@ -2,6 +2,6 @@ import * as isAlphanumeric from "validator/lib/isAlphanumeric";
 
 export default {
   passes(value: any) {
-   return isAlphanumeric(value);
-  },
+    return isAlphanumeric(value);
+  }
 };
