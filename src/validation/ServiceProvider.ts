@@ -1,6 +1,7 @@
 import ServiceProvider from "../support/ServiceProvider";
 import VarieValidationService from "./VarieValidationService";
 import ValidationServiceInterface from "./ValidationServiceInterface";
+import ValidationConfig from "./config";
 
 export default class RoutingServiceProvider extends ServiceProvider {
   public boot() {
@@ -8,6 +9,8 @@ export default class RoutingServiceProvider extends ServiceProvider {
   }
 
   public register() {
+    this.mergeConfigFrom(ValidationConfig, "validation");
+
     let files = require.context("@resources/lang", true, /validation\.(ts)$/);
 
     for (let filename of files.keys()) {

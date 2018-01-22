@@ -1,19 +1,20 @@
-import { isArray } from 'util'
+import { isArray } from "util";
 
 export default {
   passes(files: any, parameters: any) {
-
-    if(files) {
-
-      if(!isArray(files)) {
+    if (files) {
+      if (!isArray(files)) {
         files = [files];
       }
       let validLength = 0;
 
-      const regex = new RegExp(`${parameters.join('|').replace('*', '.+')}$`, 'i');
+      const regex = new RegExp(
+        `${parameters.join("|").replace("*", ".+")}$`,
+        "i"
+      );
 
       files.forEach(file => {
-        if(regex.test(file.type)) {
+        if (regex.test(file.type)) {
           validLength++;
         }
       });

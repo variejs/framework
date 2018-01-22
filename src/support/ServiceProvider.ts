@@ -1,6 +1,7 @@
 import { injectable } from "inversify";
 import ServiceProviderInterface from "./ServiceProviderInterface";
 import ApplicationInterface from "./../foundation/ApplicationInterface";
+import { isObject } from "util";
 
 @injectable()
 export default class ServiceProvider implements ServiceProviderInterface {
@@ -11,8 +12,19 @@ export default class ServiceProvider implements ServiceProviderInterface {
     app.providers.push(this);
   }
 
-  protected mergeConfigFrom(config: {}, key: string) {
-    $config.set(key, Object.assign(config, $config.get(key)));
+  protected mergeConfigFrom(frameworkConfig: {}, key: string) {
+    let appConfig = $config.get(key);
+
+    for (let appConfigKey in appConfig) {
+      if (appConfig[appConfigKey]) {
+        if (isObject(appConfig[appConfigKey])) {
+          Object.assign(frameworkConfig[appConfigKey], appConfig[appConfigKey]);
+        } else if (appConfig[appConfigKey]) {
+          frameworkConfig[appConfigKey] = appConfig[appConfigKey];
+        }
+      }
+    }
+    $config.set(key, frameworkConfig);
   }
 
   public boot() {}

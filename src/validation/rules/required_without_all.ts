@@ -2,7 +2,6 @@ import { getByDot } from "./../../utilities";
 
 export default {
   passes(value: any, parameters: [], data: {}): Boolean {
-    console.info(parameters);
     if (!value) {
       let validLength = 0;
       parameters.forEach(parameter => {

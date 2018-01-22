@@ -1,13 +1,12 @@
-import Rules from "./rules";
-import { isArray, isObject } from 'util'
+import { isArray, isObject } from "util";
 import { getByDot } from "./../utilities";
 import * as isNumeric from "validator/lib/isNumeric";
 
 export default class Validator {
   public errors = {};
 
+  private _rules = {};
   private _data: object;
-  private _rules = Rules;
   private _schema: object;
   private _messages: object;
 
@@ -18,49 +17,11 @@ export default class Validator {
    */
   private _sizeRules = ["between", "min", "max", "size"];
 
-  /**
-   * The validation rules that imply the field is required.
-   *
-   * @var array
-   */
-  private _implicitRules = [
-    "required",
-    "required_with",
-    "required_with_all",
-    "required_without",
-    "required_without_all",
-    "required_if",
-    "required_unless",
-    "accepted"
-  ];
-
-  // TODO - need to determine if we need this
-  /**
-   * The validation rules which depend on other fields as parameters.
-   *
-   * @var array
-   */
-  protected $dependentRules = [
-    "RequiredWith",
-    "RequiredWithAll",
-    "RequiredWithout",
-    "RequiredWithoutAll",
-    "RequiredIf",
-    "RequiredUnless",
-    "Confirmed",
-    "Same",
-    "Different",
-    "Unique",
-    "Before",
-    "After",
-    "BeforeOrEqual",
-    "AfterOrEqual"
-  ];
-
   constructor(data: object, schema: object, messages: object) {
     this._data = data;
     this._schema = schema;
     this._messages = messages;
+    this._rules = $config.get("validation.rules");
   }
 
   public validate() {
@@ -89,10 +50,7 @@ export default class Validator {
         if (tempRule[1]) {
           parameters = tempRule[1].split(",");
         }
-
-        // TODO - allow for array wildcards to check for validation in arrays
-        // replaceAsterisksInParameters
-        // TODO - we can sometimes know if a rule fails if its implicitly required, so we should check for that
+        // TODO - allow for array wildcards to check for validation in arrays - replaceAsterisksInParameters
         if (
           !this._getRule(rule).passes(
             this._getValue(field),
@@ -113,7 +71,6 @@ export default class Validator {
   }
 
   private _getRule(rule: string) {
-    // TODO - we should merge the rules from their config so they can have custom rules
     return this._rules[rule];
   }
 
@@ -125,13 +82,17 @@ export default class Validator {
   ) {
     let ruleFunctions = this._getRule(rule);
     // TODO - uncamel
-    // TODO - if we see `values` we should grab all the values and display all them in a command list
     message = message.replace(":field", field.replace(".", " "));
     if (ruleFunctions.replacers) {
       ruleFunctions.replacers().forEach((replacer, index) => {
         message = message.replace(`:${replacer}`, parameters[index]);
       });
     }
+
+    if (message.indexOf(":values") > -1) {
+      message.replace(":values", parameters.join(", "));
+    }
+
     return message;
   }
 
@@ -146,30 +107,29 @@ export default class Validator {
       return customMessage;
     }
 
-    // TODO - allow for custom messages
-    // $customMessage = $this->getCustomMessageFromTranslator(
-    //   $customKey = "validation.custom.{$attribute}.{$lowerRule}"
-    // );
-
     if (this._sizeRules.indexOf(rule) > -1) {
       return this._getSizeMessage(field, rule);
+    }
+
+    let tempRule = this._getRule(rule).message;
+    if (tempRule) {
+      return tempRule();
     }
 
     return this._getMessageFromLocale(rule);
   }
 
-  private _getSizeMessage(field : string, rule : string) {
-
+  private _getSizeMessage(field: string, rule: string) {
     let value = getByDot(this._data, field);
 
-    let type = 'string';
+    let type = "string";
 
-    if(isObject(value)) {
-      type = 'file';
-    } else if(isArray(value)) {
-      type = 'array'
-    } else if(isNumeric(value)) {
-      type ='numeric';
+    if (isObject(value)) {
+      type = "file";
+    } else if (isArray(value)) {
+      type = "array";
+    } else if (isNumeric(value)) {
+      type = "numeric";
     }
 
     return $config.get(`validation.en.${rule}.${type}`);

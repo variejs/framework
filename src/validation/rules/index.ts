@@ -11,7 +11,7 @@ import boolean from "./boolean";
 import date from "./date";
 import different from "./different";
 import email from "./email";
-import image from "./image";
+import image from "./image"; // TODO
 import integer from "./integer";
 import max from "./max";
 import mimetypes from "./mimetypes";
