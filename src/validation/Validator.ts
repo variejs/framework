@@ -1,5 +1,5 @@
 import Rules from "./rules";
-import { isArray, isObject } from 'util'
+import { isArray, isObject } from "util";
 import { getByDot } from "./../utilities";
 import * as isNumeric from "validator/lib/isNumeric";
 
@@ -158,18 +158,17 @@ export default class Validator {
     return this._getMessageFromLocale(rule);
   }
 
-  private _getSizeMessage(field : string, rule : string) {
-
+  private _getSizeMessage(field: string, rule: string) {
     let value = getByDot(this._data, field);
 
-    let type = 'string';
+    let type = "string";
 
-    if(isObject(value)) {
-      type = 'file';
-    } else if(isArray(value)) {
-      type = 'array'
-    } else if(isNumeric(value)) {
-      type ='numeric';
+    if (isObject(value)) {
+      type = "file";
+    } else if (isArray(value)) {
+      type = "array";
+    } else if (isNumeric(value)) {
+      type = "numeric";
     }
 
     return $config.get(`validation.en.${rule}.${type}`);
