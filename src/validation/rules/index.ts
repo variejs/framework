@@ -2,21 +2,19 @@ import accepted from "./accepted";
 import after from "./after";
 import after_or_equal from "./after_or_equal";
 import alpha from "./alpha";
-// TODO - alpha dash
 import alpha_num from "./alpha_num";
 import array from "./array";
 import before from "./before";
 import before_or_equal from "./before_or_equal";
-import between from "./between"; // TODO - types
+import between from "./between";
 import boolean from "./boolean";
 import date from "./date";
-import date_format from "./date_format"; // TODO - decide if we will do this
 import different from "./different";
 import email from "./email";
 import image from "./image";
 import integer from "./integer";
-import max from "./max"; // TODO - types
-import mimetypes from "./mimetypes"; // TODO
+import max from "./max";
+import mimetypes from "./mimetypes";
 import min from "./min";
 import numeric from "./numeric";
 import regex from "./regex";
@@ -28,8 +26,7 @@ import required_with_all from "./required_with_all";
 import required_without from "./required_without";
 import required_without_all from "./required_without_all";
 import same from "./same";
-import size from "./size"; // TODO
-import timezone from "./timezone"; // TODO
+import size from "./size";
 import url from "./url";
 
 export default {
@@ -37,7 +34,6 @@ export default {
   after,
   after_or_equal,
   alpha,
-  // TODO - alpha dash
   alpha_num,
   array,
   before,
@@ -45,7 +41,6 @@ export default {
   between,
   boolean,
   date,
-  date_format,
   different,
   email,
   image,
@@ -64,6 +59,5 @@ export default {
   required_without_all,
   same,
   size,
-  timezone,
   url
 };

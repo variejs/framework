@@ -54,7 +54,7 @@ class Form {
     let tempData = Object.assign({}, this);
     for (const field in tempData) {
       if (field.indexOf("_") != 0) {
-        data[field] = JSON.parse(JSON.stringify(this[field]));
+        data[field] =this[field];
       }
     }
     return data;

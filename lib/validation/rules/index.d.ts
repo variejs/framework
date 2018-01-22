@@ -28,7 +28,7 @@ declare const _default: {
         replacers(): string[];
     };
     between: {
-        passes(value: any, parameters: any): boolean;
+        passes(value: any, parameters: any): boolean | undefined;
         replacers(): string[];
     };
     boolean: {
@@ -36,9 +36,6 @@ declare const _default: {
     };
     date: {
         passes(value: any): boolean | undefined;
-    };
-    date_format: {
-        passes(value: any, parameters: any): false | undefined;
     };
     different: {
         passes(value: any, parameters: [], data: {}): Boolean;
@@ -58,7 +55,8 @@ declare const _default: {
         replacers(): string[];
     };
     mimetypes: {
-        passes(value: any, parameters: any): void;
+        passes(files: any, parameters: any): boolean;
+        replacers(): string[];
     };
     min: {
         passes(value: any, attributes: any): any;
@@ -102,10 +100,7 @@ declare const _default: {
         replacers(): string[];
     };
     size: {
-        passes(value: any, parameters: [], data: {}): Boolean;
-    };
-    timezone: {
-        passes(value: any): Boolean;
+        passes(value: any, parameters: []): Boolean;
     };
     url: {
         passes(value: any): Boolean;

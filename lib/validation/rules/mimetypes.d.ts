@@ -1,4 +1,5 @@
 declare const _default: {
-    passes(value: any, parameters: any): void;
+    passes(files: any, parameters: any): boolean;
+    replacers(): string[];
 };
 export default _default;

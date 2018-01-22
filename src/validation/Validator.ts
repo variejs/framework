@@ -1,6 +1,7 @@
 import Rules from "./rules";
-import { isObject } from "util";
+import { isArray, isObject } from 'util'
 import { getByDot } from "./../utilities";
+import * as isNumeric from "validator/lib/isNumeric";
 
 export default class Validator {
   public errors = {};
@@ -15,7 +16,7 @@ export default class Validator {
    *
    * @var array
    */
-  private _sizeRules = ["between", "min", "max", "mimetypes", "size"];
+  private _sizeRules = ["between", "min", "max", "size"];
 
   /**
    * The validation rules that imply the field is required.
@@ -88,6 +89,10 @@ export default class Validator {
         if (tempRule[1]) {
           parameters = tempRule[1].split(",");
         }
+
+        // TODO - allow for array wildcards to check for validation in arrays
+        // replaceAsterisksInParameters
+        // TODO - we can sometimes know if a rule fails if its implicitly required, so we should check for that
         if (
           !this._getRule(rule).passes(
             this._getValue(field),
@@ -108,6 +113,7 @@ export default class Validator {
   }
 
   private _getRule(rule: string) {
+    // TODO - we should merge the rules from their config so they can have custom rules
     return this._rules[rule];
   }
 
@@ -119,6 +125,7 @@ export default class Validator {
   ) {
     let ruleFunctions = this._getRule(rule);
     // TODO - uncamel
+    // TODO - if we see `values` we should grab all the values and display all them in a command list
     message = message.replace(":field", field.replace(".", " "));
     if (ruleFunctions.replacers) {
       ruleFunctions.replacers().forEach((replacer, index) => {
@@ -148,16 +155,24 @@ export default class Validator {
       return this._getSizeMessage(field, rule);
     }
 
-    // elseif (in_array($rule, $this->sizeRules)) {
-    //   return $this->getSizeMessage($attribute, $rule);
-    // }
-
     return this._getMessageFromLocale(rule);
   }
 
-  private _getSizeMessage(field, rule) {
-    // TODO - string / file / numeric / array
-    return $config.get(`validation.en.${rule}.string`);
+  private _getSizeMessage(field : string, rule : string) {
+
+    let value = getByDot(this._data, field);
+
+    let type = 'string';
+
+    if(isObject(value)) {
+      type = 'file';
+    } else if(isArray(value)) {
+      type = 'array'
+    } else if(isNumeric(value)) {
+      type ='numeric';
+    }
+
+    return $config.get(`validation.en.${rule}.${type}`);
   }
 
   private _getMessageFromLocale(rule: string) {
