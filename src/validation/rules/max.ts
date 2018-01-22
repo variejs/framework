@@ -6,6 +6,6 @@ export default {
   },
 
   replacers() {
-    return ["max"];
+    return ["max", "size"];
   }
 };

@@ -10,22 +10,36 @@ export default class Validator {
   private _schema: object;
   private _messages: object;
 
-  private _sizeRules = ["Size", "Between", "min", "max"];
+  /**
+   * The size related validation rules.
+   *
+   * @var array
+   */
+  private _sizeRules = ["between", "min", "max", "mimetypes", "size"];
 
-  private _fileRules = [
-    "File",
-    "Image",
-    "Mimes",
-    "Mimetypes",
-    "min",
-    "max",
-    "Size",
-    "Between",
+  /**
+   * The validation rules that imply the field is required.
+   *
+   * @var array
+   */
+  private _implicitRules = [
+    "required",
+    "required_with",
+    "required_with_all",
+    "required_without",
+    "required_without_all",
+    "required_if",
+    "required_unless",
+    "accepted"
   ];
 
-  private _numericRules = ["numeric", "integer"];
-
-  private _dependentRules = [
+  // TODO - need to determine if we need this
+  /**
+   * The validation rules which depend on other fields as parameters.
+   *
+   * @var array
+   */
+  protected $dependentRules = [
     "RequiredWith",
     "RequiredWithAll",
     "RequiredWithout",
@@ -40,19 +54,6 @@ export default class Validator {
     "After",
     "BeforeOrEqual",
     "AfterOrEqual"
-  ];
-
-  private _implicitRules = [
-    "Required",
-    "Filled",
-    "RequiredWith",
-    "RequiredWithAll",
-    "RequiredWithout",
-    "RequiredWithoutAll",
-    "RequiredIf",
-    "RequiredUnless",
-    "Accepted",
-    "Present"
   ];
 
   constructor(data: object, schema: object, messages: object) {
@@ -87,7 +88,13 @@ export default class Validator {
         if (tempRule[1]) {
           parameters = tempRule[1].split(",");
         }
-        if (!this._getRule(rule).passes(this._getValue(field), parameters)) {
+        if (
+          !this._getRule(rule).passes(
+            this._getValue(field),
+            parameters,
+            this._data
+          )
+        ) {
           this.errors[field] = this._makeReplacements(
             this._getMessage(rule, field, parameters),
             rule,
@@ -100,7 +107,7 @@ export default class Validator {
     }
   }
 
-  private _getRule(rule : string) {
+  private _getRule(rule: string) {
     return this._rules[rule];
   }
 
@@ -125,7 +132,7 @@ export default class Validator {
     return getByDot(this._data, field);
   }
 
-  private _getMessage(rule, field, parameters) {
+  private _getMessage(rule: string, field: string) {
     let customMessage = getByDot(this._messages, field);
 
     if (customMessage) {

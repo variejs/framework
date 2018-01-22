@@ -28,30 +28,86 @@ declare const _default: {
         replacers(): string[];
     };
     between: {
-        passes(value: any, attributes: any): void;
+        passes(value: any, parameters: any): boolean;
         replacers(): string[];
     };
     boolean: {
         passes(value: any): boolean;
     };
-    confirmed: {
-        passes(value: any): boolean;
-    };
     date: {
         passes(value: any): boolean | undefined;
     };
-    max: {
-        passes(value: any, attributes: any): any;
-        replacers(): string[];
+    date_format: {
+        passes(value: any, parameters: any): false | undefined;
     };
-    min: {
-        passes(value: any, attributes: any): any;
+    different: {
+        passes(value: any, parameters: [], data: {}): Boolean;
         replacers(): string[];
     };
     email: {
         passes(value: any): any;
     };
+    image: {
+        passes(value: any): void;
+    };
+    integer: {
+        passes(value: any): any;
+    };
+    max: {
+        passes(value: any, attributes: any): any;
+        replacers(): string[];
+    };
+    mimetypes: {
+        passes(value: any, parameters: any): void;
+    };
+    min: {
+        passes(value: any, attributes: any): any;
+        replacers(): string[];
+    };
+    numeric: {
+        passes(value: any): any;
+    };
+    regex: {
+        passes(value: any, parameters: any): boolean;
+    };
     required: {
+        passes(value: any): Boolean;
+    };
+    required_if: {
+        passes(value: any, parameters: [], data: {}): Boolean;
+        replacers(): string[];
+    };
+    required_unless: {
+        passes(value: any, parameters: [], data: {}): Boolean;
+        replacers(): string[];
+    };
+    required_with: {
+        passes(value: any, parameters: [], data: {}): Boolean;
+        replacers(): string[];
+    };
+    required_with_all: {
+        passes(value: any, parameters: [], data: {}): Boolean;
+        replacers(): string[];
+    };
+    required_without: {
+        passes(value: any, parameters: [], data: {}): Boolean;
+        replacers(): string[];
+    };
+    required_without_all: {
+        passes(value: any, parameters: [], data: {}): Boolean;
+        replacers(): string[];
+    };
+    same: {
+        passes(value: any, parameters: [], data: {}): Boolean;
+        replacers(): string[];
+    };
+    size: {
+        passes(value: any, parameters: [], data: {}): Boolean;
+    };
+    timezone: {
+        passes(value: any): Boolean;
+    };
+    url: {
         passes(value: any): Boolean;
     };
 };

@@ -1,11 +1,9 @@
-// import * as isLength from "validator/lib/isBetween";
-
 export default {
-  passes(value: any, attributes: any) {
-    // TODO - between
+  passes(value: any, parameters: any) {
+    return Number(parameters[0]) <= value && Number(parameters[1]) >= value;
   },
 
   replacers() {
-    return ["max"];
+    return ["min", "max"];
   }
 };
