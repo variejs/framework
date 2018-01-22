@@ -1,7 +1,7 @@
+import ValidationConfig from "./config";
 import ServiceProvider from "../support/ServiceProvider";
 import VarieValidationService from "./VarieValidationService";
 import ValidationServiceInterface from "./ValidationServiceInterface";
-import ValidationConfig from "./config";
 
 export default class RoutingServiceProvider extends ServiceProvider {
   public boot() {

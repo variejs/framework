@@ -59,7 +59,7 @@ export default class Validator {
           )
         ) {
           this.errors[field] = this._makeReplacements(
-            this._getMessage(rule, field, parameters),
+            this._getMessage(rule, field),
             rule,
             field,
             parameters
@@ -120,9 +120,9 @@ export default class Validator {
   }
 
   private _getSizeMessage(field: string, rule: string) {
-    let value = getByDot(this._data, field);
-
     let type = "string";
+    let locale = $config.get("app.locale");
+    let value = getByDot(this._data, field);
 
     if (isObject(value)) {
       type = "file";
@@ -132,7 +132,7 @@ export default class Validator {
       type = "numeric";
     }
 
-    return $config.get(`validation.en.${rule}.${type}`);
+    return $config.get(`validation.${locale}.${rule}.${type}`);
   }
 
   private _getMessageFromLocale(rule: string) {

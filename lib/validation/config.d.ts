@@ -21,7 +21,7 @@ declare const _default: {
             passes(value: any): boolean;
         };
         before: {
-            passes(value: any, parameters: any): any;
+            passes(value: any, parameters?: never[]): any;
             replacers(): string[];
         };
         before_or_equal: {
@@ -39,7 +39,7 @@ declare const _default: {
             passes(value: any): boolean | undefined;
         };
         different: {
-            passes(value: any, parameters: [], data: {}): Boolean;
+            passes(value: any, parameters: never[] | undefined, data: {}): Boolean;
             replacers(): string[];
         };
         email: {
@@ -73,7 +73,7 @@ declare const _default: {
             passes(value: any): Boolean;
         };
         required_if: {
-            passes(value: any, parameters: [], data: {}): Boolean;
+            passes(value: any, parameters: never[] | undefined, data: {}): Boolean;
             replacers(): string[];
         };
         required_unless: {
@@ -81,7 +81,7 @@ declare const _default: {
             replacers(): string[];
         };
         required_with: {
-            passes(value: any, parameters: [], data: {}): Boolean;
+            passes(value: any, parameters: never[] | undefined, data: {}): Boolean;
             replacers(): string[];
         };
         required_with_all: {
@@ -93,11 +93,11 @@ declare const _default: {
             replacers(): string[];
         };
         required_without_all: {
-            passes(value: any, parameters: [], data: {}): Boolean;
+            passes(value: any, parameters: never[] | undefined, data: {}): Boolean;
             replacers(): string[];
         };
         same: {
-            passes(value: any, parameters: [], data: {}): Boolean;
+            passes(value: any, parameters: never[] | undefined, data: {}): Boolean;
             replacers(): string[];
         };
         size: {
