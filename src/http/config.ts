@@ -7,7 +7,5 @@ export default {
     }
   },
 
-  middleware : [
-
-  ]
+  middleware: []
 };

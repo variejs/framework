@@ -4,7 +4,6 @@ import { inject, injectable } from "inversify";
 
 @injectable()
 export default class AxiosHttpService implements HttpServiceInterface {
-
   private axios;
   private _middleware = {};
 
@@ -12,9 +11,9 @@ export default class AxiosHttpService implements HttpServiceInterface {
     let config = $config.get("http");
     this.axios = axios.create(config);
 
-    require('@app/middleware').default.forEach((middleware) => {
-      this.registerMiddleware(middleware)
-    })
+    require("@app/middleware").default.forEach(middleware => {
+      this.registerMiddleware(middleware);
+    });
   }
 
   public delete(url: string, config = {}) {
@@ -55,28 +54,29 @@ export default class AxiosHttpService implements HttpServiceInterface {
   }
 
   public registerMiddleware(Middleware) {
-
     let middleware = new Middleware();
 
     this._middleware[middleware.constructor.name] = {
-      request : this.axios.interceptors.request.use(config => {
+      request: this.axios.interceptors.request.use(config => {
         return middleware.request(config);
       }),
-      response :  this.axios.interceptors.response.use(function (response) {
-        return middleware.response(response);
-      }, function (error) {
-        if(middleware.responseError) {
-          return middleware.responseError(error);
+      response: this.axios.interceptors.response.use(
+        function(response) {
+          return middleware.response(response);
+        },
+        function(error) {
+          if (middleware.responseError) {
+            return middleware.responseError(error);
+          }
+          return Promise.reject(error);
         }
-        return Promise.reject(error);
-      })
-    }
+      )
+    };
   }
 
   public unregisterMiddleware(Middleware) {
-    let middleware = new Middleware().constructor.name
+    let middleware = new Middleware().constructor.name;
     axios.interceptors.request.eject(this._middleware[middleware].request);
     axios.interceptors.response.eject(this._middleware[middleware].response);
-
   }
 }
