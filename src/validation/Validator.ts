@@ -1,8 +1,9 @@
 import { isArray, isObject } from "util";
-import { getByDot, uncamelize } from "./../utilities";
 import * as isNumeric from "validator/lib/isNumeric";
+import { getByDot, uncamelize } from "./../utilities";
 
 export default class Validator {
+
   public errors = {};
 
   private _rules = {};
