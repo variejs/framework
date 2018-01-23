@@ -6,15 +6,11 @@ export default class ContainerMixin {
 
   registerMixin(app: ApplicationInterface) {
     Vue.mixin({
-      beforeMount() {
-        this.$injector(this.$options.$inject || []);
-      },
-      methods: {
-        $injector(services: Array<string>) {
-          services.forEach((service: string) => {
-            this[service] = app.make(service);
-          });
-        }
+      beforeCreate() {
+        let services = this.$options.$inject || [];
+        services.forEach((service: string) => {
+          this[service] = app.make(service);
+        });
       }
     });
   }

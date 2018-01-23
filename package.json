@@ -1,6 +1,6 @@
 {
   "name": "varie",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "description": "VueJS Framework",
   "main": "./lib/index.js",
   "typings": "./lib/index",
@@ -9,17 +9,15 @@
   "author": "Luke Policinski <Luke@LukePOLO.com>",
   "license": "MIT",
   "dependencies": {
-    "ajv": "^6.0.1",
     "axios": "^0.17.1",
     "camelcase": "^4.1.0",
     "dashify": "^1.0.0",
     "inversify": "^4.9.0",
+    "nprogress": "^0.2.0",
     "reflect-metadata": "^0.1.12",
-    "validator": "^9.2.0",
-    "vee-validate": "^2.0.3"
+    "validator": "^9.2.0"
   },
   "devDependencies": {
-    "@types/ajv": "^1.0.0",
     "@types/node": "^8.5.9",
     "@types/webpack-env": "^1.13.3",
     "awesome-typescript-loader": "^3.4.1",
