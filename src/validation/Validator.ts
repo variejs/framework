@@ -83,7 +83,10 @@ export default class Validator {
     message = message.replace(":field", uncamelize(field.replace(".", "s ")));
     if (ruleFunctions.replacers) {
       ruleFunctions.replacers().forEach((replacer, index) => {
-          message = message.replace(`:${replacer}`, uncamelize(parameters[index].replace(".", "s ")));
+        message = message.replace(
+          `:${replacer}`,
+          uncamelize(parameters[index].replace(".", "s "))
+        );
       });
     }
 
@@ -137,6 +140,4 @@ export default class Validator {
     let locale = $config.get("app.locale");
     return $config.get(`validation.${locale}.${rule}`);
   }
-
-
 }
