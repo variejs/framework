@@ -50,7 +50,6 @@ export default class Validator {
         if (tempRule[1]) {
           parameters = tempRule[1].split(",");
         }
-        // TODO - allow for array wildcards to check for validation in arrays - replaceAsterisksInParameters
         if (
           !this._getRule(rule).passes(
             this._getValue(field),
