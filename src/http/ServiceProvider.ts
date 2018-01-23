@@ -4,8 +4,7 @@ import ServiceProvider from "../support/ServiceProvider";
 import HttpServiceInterface from "./HttpServiceInterface";
 
 export default class RoutingServiceProvider extends ServiceProvider {
-  public boot() {
-  }
+  public boot() {}
 
   public register() {
     this.mergeConfigFrom(HttpConfig, "http");
