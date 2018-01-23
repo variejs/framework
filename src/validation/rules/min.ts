@@ -19,6 +19,6 @@ export default {
   },
 
   replacers() {
-    return ["min", "size"];
+    return ["min"];
   }
 };

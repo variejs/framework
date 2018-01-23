@@ -46,7 +46,7 @@ declare const _default: {
             passes(value: any): any;
         };
         image: {
-            passes(value: any): void;
+            passes(value: any): boolean;
         };
         integer: {
             passes(value: any): any;

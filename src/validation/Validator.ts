@@ -1,5 +1,5 @@
 import { isArray, isObject } from "util";
-import { getByDot } from "./../utilities";
+import { getByDot, uncamelize } from "./../utilities";
 import * as isNumeric from "validator/lib/isNumeric";
 
 export default class Validator {
@@ -81,11 +81,10 @@ export default class Validator {
     parameters: any
   ) {
     let ruleFunctions = this._getRule(rule);
-    // TODO - uncamel
-    message = message.replace(":field", field.replace(".", " "));
+    message = message.replace(":field", uncamelize(field.replace(".", "s ")));
     if (ruleFunctions.replacers) {
       ruleFunctions.replacers().forEach((replacer, index) => {
-        message = message.replace(`:${replacer}`, parameters[index]);
+          message = message.replace(`:${replacer}`, uncamelize(parameters[index].replace(".", "s ")));
       });
     }
 
@@ -139,4 +138,6 @@ export default class Validator {
     let locale = $config.get("app.locale");
     return $config.get(`validation.${locale}.${rule}`);
   }
+
+
 }
