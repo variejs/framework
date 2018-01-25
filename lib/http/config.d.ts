@@ -5,6 +5,5 @@ declare const _default: {
             "X-Requested-With": string;
         };
     };
-    middleware: never[];
 };
 export default _default;
