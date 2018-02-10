@@ -4,8 +4,8 @@ import VueRouter from "vue-router";
 import { injectable } from "inversify";
 import Middleware from "@routes/middleware";
 import RouterInterface from "./RouterInterface";
-import setByDot from './../utilities/setByDot';
-import getByDot from './../utilities/getByDot';
+import setByDot from "./../utilities/setByDot";
+import getByDot from "./../utilities/getByDot";
 
 @injectable()
 export default class VueRouterService implements RouterInterface {
@@ -35,19 +35,23 @@ export default class VueRouterService implements RouterInterface {
 
       routes.forEach(route => {
         if (route.meta && route.meta.template) {
-          let path = route.meta.template.prefix.replace(/(\/)(?=\/*\1)/g, '');
+          let path = route.meta.template.prefix.replace(/(\/)(?=\/*\1)/g, "");
 
-          let dotPath = '/'+route.meta.template.prefix.replace(/(\/)(?=\/*\1)/g, '').replace(/\//g, '.tempRoutes.').replace(/\.tempRoutes\.$/, "");
+          let dotPath =
+            "/" +
+            route.meta.template.prefix
+              .replace(/(\/)(?=\/*\1)/g, "")
+              .replace(/\//g, ".tempRoutes.")
+              .replace(/\.tempRoutes\.$/, "");
 
           if (!getByDot(paths, dotPath)) {
-
-            setByDot(paths, dotPath,{
+            setByDot(paths, dotPath, {
               path,
               tempRoutes: [],
               component: route.meta.template.component
-            })
+            });
           }
-          getByDot(paths, dotPath).tempRoutes.push(route)
+          getByDot(paths, dotPath).tempRoutes.push(route);
         } else {
           tempRoutes.push(route);
         }
@@ -56,7 +60,7 @@ export default class VueRouterService implements RouterInterface {
       for (let path in paths) {
         let data = paths[path];
         tempRoutes.push({
-          path: path.replace(/(\/)(?=\/*\1)/g, ''),
+          path: path.replace(/(\/)(?=\/*\1)/g, ""),
           children: this._getPaths(data.routes, data.tempRoutes),
           component: data.component
         });
@@ -68,13 +72,15 @@ export default class VueRouterService implements RouterInterface {
     });
   }
 
-  private _getPaths(routes = [], tempRoutes : Object) {
-    for(let tempRoute in tempRoutes) {
+  private _getPaths(routes = [], tempRoutes: Object) {
+    for (let tempRoute in tempRoutes) {
       tempRoute = tempRoutes[tempRoute];
-      tempRoute.path = tempRoute.path.substring(tempRoute.path.lastIndexOf('/')).replace(/^\//, '')
-      if(tempRoute.tempRoutes) {
-          tempRoute.children = this._getPaths([], tempRoute.tempRoutes);
-          delete tempRoute.tempRoutes;
+      tempRoute.path = tempRoute.path
+        .substring(tempRoute.path.lastIndexOf("/"))
+        .replace(/^\//, "");
+      if (tempRoute.tempRoutes) {
+        tempRoute.children = this._getPaths([], tempRoute.tempRoutes);
+        delete tempRoute.tempRoutes;
       }
       routes.push(tempRoute);
     }
@@ -130,7 +136,7 @@ export default class VueRouterService implements RouterInterface {
       prefix = this.currentMeta.prefix = prefix;
     }
 
-    this.currentMeta.prefix = prefix.replace(/(\/)(?=\/*\1)/g, '')
+    this.currentMeta.prefix = prefix.replace(/(\/)(?=\/*\1)/g, "");
 
     return this;
   }

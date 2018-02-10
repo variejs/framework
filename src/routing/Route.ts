@@ -49,7 +49,7 @@ export default class Route {
     }
     let prefix = this.meta.prefix ? this.meta.prefix + "/" : "";
     let name = `${prefix}${path}`;
-    this.name = camelCase(name.replace(/\//g, ' '));
+    this.name = camelCase(name.replace(/\//g, " "));
   }
 
   public setName(name: string): this {
