@@ -6,13 +6,10 @@ export default class Route {
   private meta = {};
   private component;
   private components;
-  private groupLevel;
   private _props = false;
 
-  constructor(path, components, groupLevel, props = {}) {
+  constructor(path, components, props = {}) {
     this.path = path;
-
-    this.groupLevel = groupLevel;
 
     if (Object.keys(props).length) {
       this._props = true;

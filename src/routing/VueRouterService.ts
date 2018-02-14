@@ -34,80 +34,27 @@ export default class VueRouterService implements RouterInterface {
       this.requireAll(require.context("@routes", false, /^\.\/.*\.(ts)$/));
       resolve(this.routes);
     }).then(routes => {
-      let tempRoutes = [];
-
-      let paths = {};
-
-      routes.forEach(route => {
-        if (route.groupLevel !== null && route.groupLevel >= 0) {
-          let group = this.groups[route.groupLevel];
-          let prefix = group.prefix;
-
-          let path = prefix.replace(/(\/)(?=\/*\1)/g, "");
-
-          let name = `${prefix}${route.path}`;
-          route.name = camelCase(name.replace(/\//g, " "));
-
-          let dotPath =
-            "/" +
-            prefix
-              .replace(/(\/)(?=\/*\1)/g, "")
-              .replace(/\//g, ".tempRoutes.")
-              .replace(/\.tempRoutes\.$/, "");
-
-          if (!getByDot(paths, dotPath)) {
-            setByDot(paths, dotPath, {
-              path,
-              tempRoutes: [],
-              component: require(`@views/${group.template.template}`)
-            });
-          }
-          getByDot(paths, dotPath).tempRoutes.push(route);
-        } else {
-          route.name = camelCase(route.path.replace(/\//g, " "));
-
-          tempRoutes.push(route);
-        }
-      });
-
-      for (let path in paths) {
-        let data = paths[path];
-        tempRoutes.push({
-          path: path.replace(/(\/)(?=\/*\1)/g, ""),
-          children: this._getPaths(data.routes, data.tempRoutes),
-          component: data.component
-        });
-      }
-
-      $config.set("router.routes", tempRoutes);
+      console.info(routes)
+      $config.set("router.routes", routes);
       this.router = new VueRouter($config.get("router"));
       this.registerMiddleware();
     });
-  }
-
-  private _getPaths(routes = [], tempRoutes: Object) {
-    for (let tempRoute in tempRoutes) {
-      tempRoute = tempRoutes[tempRoute];
-      tempRoute.path = tempRoute.path
-        .substring(tempRoute.path.lastIndexOf("/"))
-        .replace(/^\//, "");
-      if (tempRoute.tempRoutes) {
-        tempRoute.children = this._getPaths([], tempRoute.tempRoutes);
-        delete tempRoute.tempRoutes;
-      }
-      routes.push(tempRoute);
-    }
-    return routes;
   }
 
   public route(path, component: string | {}, props = {}): Route {
     let route = new Route(
       path,
       component,
-      this.currentGroupLevel >= 0 ? this.currentGroupLevel : null,
       props
     );
+
+    if(this.currentGroupLevel > -1) {
+      this.groups[this.currentGroupLevel].children.push(route)
+      return route;
+    }
+
     this.routes.push(route);
+
     return route;
   }
 
@@ -124,10 +71,8 @@ export default class VueRouterService implements RouterInterface {
   }
 
   public group(path, routes) {
-    this.groupInfo.prefix = this.groupInfo.prefix
-      ? `${this.groupInfo.prefix}/${path}`
-      : path;
-    let groupInfo = Object.assign({}, this.groupInfo);
+    this.groupInfo.path = path;
+    let groupInfo = JSON.parse(JSON.stringify(this.groupInfo));
     this.groups.push(groupInfo);
     this.currentGroupLevel++;
     routes();
@@ -137,21 +82,12 @@ export default class VueRouterService implements RouterInterface {
   }
 
   public template(template) {
-    this.groupInfo.template = {
-      template
-    };
+    this.groupInfo.component = require(`@views/${template}`);
     return this;
   }
 
   public prefix(prefix) {
-    if (this.groupInfo.prefix.length > 0) {
-      prefix = `${this.groupInfo.prefix}/${prefix}`;
-    } else {
-      prefix = this.groupInfo.prefix = prefix;
-    }
-
-    this.groupInfo.prefix = prefix.replace(/(\/)(?=\/*\1)/g, "");
-
+    this.groupInfo.path = prefix;
     return this;
   }
 
@@ -179,9 +115,18 @@ export default class VueRouterService implements RouterInterface {
   private _resetGroup() {
     this.currentGroupLevel--;
     this.groupInfo = {
-      prefix: "",
-      middleware: [],
-      template: null
+      meta : {
+        middleware: [],
+      },
+      component : null,
+      children : [],
     };
+
+    if(this.currentGroupLevel === -1 && this.groups.length) {
+      for(let groupIndex = this.groups.length - 1; groupIndex > 0; groupIndex--) {
+          this.groups[groupIndex - 1].children = [this.groups[groupIndex]]
+      }
+      this.routes.push(this.groups[0])
+    }
   }
 }

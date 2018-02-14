@@ -13,7 +13,6 @@ export default class VueRouterService implements RouterInterface {
     getRouter(): any;
     private currentGroupLevel;
     private buildRouter();
-    private _getPaths(routes, tempRoutes);
     route(path: any, component: string | {}, props?: {}): Route;
     middleware(middleware: any): this;
     redirect(path: any, redirect: any): void;
