@@ -4,25 +4,30 @@ import VueRouter from "vue-router";
 import { injectable } from "inversify";
 import Middleware from "@routes/middleware";
 import RouterInterface from "./RouterInterface";
-import setByDot from './../utilities/setByDot';
-import getByDot from './../utilities/getByDot';
+import setByDot from "./../utilities/setByDot";
+import getByDot from "./../utilities/getByDot";
+import * as camelCase from "camelcase";
+import { isObject } from "util";
 
 @injectable()
 export default class VueRouterService implements RouterInterface {
   public routes = [];
   public router: VueRouter;
-  protected currentMeta = null;
+  protected groupInfo = null;
   protected groupMeta = [];
   public loaded = false;
-
+  public oldMeta = {};
+  public groups = [];
   constructor() {
     Vue.use(VueRouter);
-    this._resetCurrentMeta();
+    this._resetGroup();
   }
 
   public getRouter() {
     return this.router;
   }
+
+  private currentGroupLevel = 0;
 
   private buildRouter() {
     return new Promise(resolve => {
@@ -34,21 +39,33 @@ export default class VueRouterService implements RouterInterface {
       let paths = {};
 
       routes.forEach(route => {
-        if (route.meta && route.meta.template) {
-          let path = route.meta.template.prefix.replace(/(\/)(?=\/*\1)/g, '');
+        if (route.groupLevel !== null && route.groupLevel >= 0) {
+          let group = this.groups[route.groupLevel];
+          let prefix = group.prefix;
 
-          let dotPath = '/'+route.meta.template.prefix.replace(/(\/)(?=\/*\1)/g, '').replace(/\//g, '.tempRoutes.').replace(/\.tempRoutes\.$/, "");
+          let path = prefix.replace(/(\/)(?=\/*\1)/g, "");
+
+          let name = `${prefix}${route.path}`;
+          route.name = camelCase(name.replace(/\//g, " "));
+
+          let dotPath =
+            "/" +
+            prefix
+              .replace(/(\/)(?=\/*\1)/g, "")
+              .replace(/\//g, ".tempRoutes.")
+              .replace(/\.tempRoutes\.$/, "");
 
           if (!getByDot(paths, dotPath)) {
-
-            setByDot(paths, dotPath,{
+            setByDot(paths, dotPath, {
               path,
               tempRoutes: [],
-              component: route.meta.template.component
-            })
+              component: require(`@views/${group.template.template}`)
+            });
           }
-          getByDot(paths, dotPath).tempRoutes.push(route)
+          getByDot(paths, dotPath).tempRoutes.push(route);
         } else {
+          route.name = camelCase(route.path.replace(/\//g, " "));
+
           tempRoutes.push(route);
         }
       });
@@ -56,7 +73,7 @@ export default class VueRouterService implements RouterInterface {
       for (let path in paths) {
         let data = paths[path];
         tempRoutes.push({
-          path: path.replace(/(\/)(?=\/*\1)/g, ''),
+          path: path.replace(/(\/)(?=\/*\1)/g, ""),
           children: this._getPaths(data.routes, data.tempRoutes),
           component: data.component
         });
@@ -68,13 +85,15 @@ export default class VueRouterService implements RouterInterface {
     });
   }
 
-  private _getPaths(routes = [], tempRoutes : Object) {
-    for(let tempRoute in tempRoutes) {
+  private _getPaths(routes = [], tempRoutes: Object) {
+    for (let tempRoute in tempRoutes) {
       tempRoute = tempRoutes[tempRoute];
-      tempRoute.path = tempRoute.path.substring(tempRoute.path.lastIndexOf('/')).replace(/^\//, '')
-      if(tempRoute.tempRoutes) {
-          tempRoute.children = this._getPaths([], tempRoute.tempRoutes);
-          delete tempRoute.tempRoutes;
+      tempRoute.path = tempRoute.path
+        .substring(tempRoute.path.lastIndexOf("/"))
+        .replace(/^\//, "");
+      if (tempRoute.tempRoutes) {
+        tempRoute.children = this._getPaths([], tempRoute.tempRoutes);
+        delete tempRoute.tempRoutes;
       }
       routes.push(tempRoute);
     }
@@ -85,7 +104,7 @@ export default class VueRouterService implements RouterInterface {
     let route = new Route(
       path,
       component,
-      Object.assign({}, this.currentMeta),
+      this.currentGroupLevel >= 0 ? this.currentGroupLevel : null,
       props
     );
     this.routes.push(route);
@@ -93,9 +112,7 @@ export default class VueRouterService implements RouterInterface {
   }
 
   public middleware(middleware) {
-    this.currentMeta.middleware = this.currentMeta.middleware.concat(
-      middleware
-    );
+    this.groupInfo.middleware = this.groupInfo.middleware.concat(middleware);
     return this;
   }
 
@@ -106,31 +123,34 @@ export default class VueRouterService implements RouterInterface {
     });
   }
 
-  public group(routes) {
+  public group(path, routes) {
+    this.groupInfo.prefix = this.groupInfo.prefix
+      ? `${this.groupInfo.prefix}/${path}`
+      : path;
+    let groupInfo = Object.assign({}, this.groupInfo);
+    this.groups.push(groupInfo);
+    this.currentGroupLevel++;
     routes();
-    this._resetCurrentMeta();
+    this._resetGroup();
+
     return this;
   }
 
-  public template(prefix, template) {
-    this.currentMeta.template = {
-      template,
-      prefix: this.currentMeta.prefix
-        ? `${this.currentMeta.prefix}/${prefix}`
-        : prefix
+  public template(template) {
+    this.groupInfo.template = {
+      template
     };
-    this.prefix(prefix);
     return this;
   }
 
   public prefix(prefix) {
-    if (this.currentMeta.prefix.length > 0) {
-      prefix = `${this.currentMeta.prefix}/${prefix}`;
+    if (this.groupInfo.prefix.length > 0) {
+      prefix = `${this.groupInfo.prefix}/${prefix}`;
     } else {
-      prefix = this.currentMeta.prefix = prefix;
+      prefix = this.groupInfo.prefix = prefix;
     }
 
-    this.currentMeta.prefix = prefix.replace(/(\/)(?=\/*\1)/g, '')
+    this.groupInfo.prefix = prefix.replace(/(\/)(?=\/*\1)/g, "");
 
     return this;
   }
@@ -156,10 +176,12 @@ export default class VueRouterService implements RouterInterface {
     }
   }
 
-  private _resetCurrentMeta() {
-    this.currentMeta = {
+  private _resetGroup() {
+    this.currentGroupLevel--;
+    this.groupInfo = {
       prefix: "",
-      middleware: []
+      middleware: [],
+      template: null
     };
   }
 }

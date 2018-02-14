@@ -1,21 +1,18 @@
-import * as camelCase from "camelcase";
-
 export default class Route {
   private path;
-  private meta;
   private name;
   private alias;
   private props;
+  private meta = {};
   private component;
   private components;
+  private groupLevel;
   private _props = false;
 
-  constructor(path, components, meta, props = {}) {
+  constructor(path, components, groupLevel, props = {}) {
     this.path = path;
-    this.meta = meta || {};
-    if (meta.template && meta.template) {
-      meta.template.component = require(`@views/${meta.template.template}`);
-    }
+
+    this.groupLevel = groupLevel;
 
     if (Object.keys(props).length) {
       this._props = true;
@@ -47,9 +44,6 @@ export default class Route {
         };
       }
     }
-    let prefix = this.meta.prefix ? this.meta.prefix + "/" : "";
-    let name = `${prefix}${path}`;
-    this.name = camelCase(name.replace(/\//g, ' '));
   }
 
   public setName(name: string): this {
