@@ -12,22 +12,16 @@
     "axios": "^0.17.1",
     "camelcase": "^4.1.0",
     "dashify": "^1.0.0",
-    "inversify": "^4.9.0",
+    "inversify": "^4.10.0",
     "nprogress": "^0.2.0",
-    "object-assign-deep": "^0.3.1",
     "reflect-metadata": "^0.1.12",
-    "validator": "^9.2.0"
+    "validator": "^9.4.0"
   },
   "devDependencies": {
     "@types/node": "^8.5.9",
     "@types/webpack-env": "^1.13.3",
     "awesome-typescript-loader": "^3.4.1",
     "typescript": "^2.6.2"
-  },
-  "peerDependencies": {
-    "vue": "^2.5.3",
-    "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
   },
   "scripts": {
     "build": "tsc -p .",

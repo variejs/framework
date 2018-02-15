@@ -39,24 +39,37 @@ export default class VueRouterService implements RouterInterface {
         wildCardRoutes: this.wildCardRoutes
       });
     }).then(({ routes, wildCardRoutes }) => {
-      let groups = [];
+      if (wildCardRoutes.length) {
+        let groups = [];
 
-      wildCardRoutes.forEach(route => {
-        groups = JSON.parse(JSON.stringify(route.groups));
+        wildCardRoutes.forEach(route => {
+          if (route.groups) {
+            groups = JSON.parse(JSON.stringify(route.groups));
 
-        groups.forEach(group => {
-          group.children = [];
-          group.component = require(`@views/${group.layout}`);
+            groups.forEach(group => {
+              group.children = [];
+              group.component = require(`@views/${group.layout}`);
+            });
+
+            groups[route.groupLevel].children.push(route);
+
+            for (
+              let groupIndex = route.groupLevel;
+              groupIndex > 0;
+              groupIndex--
+            ) {
+              groups[groupIndex - 1].children.push(groups[groupIndex]);
+            }
+          } else {
+            routes.push(route);
+          }
         });
 
-        groups[route.groupLevel].children.push(route);
-
-        for (let groupIndex = route.groupLevel; groupIndex > 0; groupIndex--) {
-          groups[groupIndex - 1].children.push(groups[groupIndex]);
+        if (groups.length) {
+          routes.push(groups[0]);
         }
-      });
+      }
 
-      routes.push(groups[0]);
       $config.set("router.routes", routes);
       this.router = new VueRouter($config.get("router"));
       this.registerMiddleware();
@@ -118,11 +131,7 @@ export default class VueRouterService implements RouterInterface {
     });
   }
 
-  public group(path, routes) {
-    this.groupInfo.path = path;
-    if (this.currentGroupLevel > -1) {
-      this.groupInfo.path = this.groupInfo.path.replace(/^\/*/g, "");
-    }
+  public group(routes) {
     this.groups.push(JSON.parse(JSON.stringify(this.groupInfo)));
     this.currentGroupLevel++;
     routes();
@@ -138,6 +147,9 @@ export default class VueRouterService implements RouterInterface {
 
   public prefix(prefix) {
     this.groupInfo.path = prefix;
+    if (this.currentGroupLevel > -1) {
+      this.groupInfo.path = this.groupInfo.path.replace(/^\/*/g, "");
+    }
     return this;
   }
 
@@ -164,6 +176,7 @@ export default class VueRouterService implements RouterInterface {
   private _resetGroup() {
     this.currentGroupLevel--;
     this.groupInfo = {
+      path: "/",
       meta: {
         middleware: []
       },
@@ -173,7 +186,7 @@ export default class VueRouterService implements RouterInterface {
 
     if (this.currentGroupLevel === -1 && this.groups.length) {
       this.groups.forEach(group => {
-        group.component = require(`@views/${group.layout}`);
+        group.component = require(`@views/${group.layout}`).default;
       });
 
       for (

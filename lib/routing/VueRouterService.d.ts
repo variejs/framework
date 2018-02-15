@@ -16,7 +16,7 @@ export default class VueRouterService implements RouterInterface {
     route(path: string, component: string | object, props?: {}): Route;
     middleware(middleware: any): this;
     redirect(path: any, redirect: any): void;
-    group(path: any, routes: any): this;
+    group(routes: any): this;
     layout(layout: any): this;
     prefix(prefix: any): this;
     private registerMiddleware();

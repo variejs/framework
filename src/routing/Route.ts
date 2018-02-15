@@ -23,7 +23,7 @@ export default class Route {
 
       for (let name in components) {
         let component = components[name];
-        this.components[name] = require(`@views/${component}`);
+        this.components[name] = require(`@views/${component}`).default;
         if (this._props) {
           this.components[name] = {
             props: props,
@@ -33,7 +33,7 @@ export default class Route {
         }
       }
     } else {
-      this.component = require(`@views/${components}`);
+      this.component = require(`@views/${components}`).default;
       if (this._props) {
         this.component = {
           props: props,
