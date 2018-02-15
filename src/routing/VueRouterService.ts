@@ -4,10 +4,7 @@ import VueRouter from "vue-router";
 import { injectable } from "inversify";
 import Middleware from "@routes/middleware";
 import RouterInterface from "./RouterInterface";
-import setByDot from "./../utilities/setByDot";
-import getByDot from "./../utilities/getByDot";
 import * as camelCase from "camelcase";
-import { isObject } from "util";
 
 @injectable()
 export default class VueRouterService implements RouterInterface {
@@ -34,7 +31,6 @@ export default class VueRouterService implements RouterInterface {
       this.requireAll(require.context("@routes", false, /^\.\/.*\.(ts)$/));
       resolve(this.routes);
     }).then(routes => {
-      console.info(routes)
       $config.set("router.routes", routes);
       this.router = new VueRouter($config.get("router"));
       this.registerMiddleware();
@@ -42,18 +38,26 @@ export default class VueRouterService implements RouterInterface {
   }
 
   public route(path, component: string | {}, props = {}): Route {
-    let route = new Route(
-      path,
-      component,
-      props
-    );
+    let route = new Route(path, component, props);
 
-    if(this.currentGroupLevel > -1) {
-      this.groups[this.currentGroupLevel].children.push(route)
+    if (this.currentGroupLevel > -1) {
+      route.path = route.path.replace(/^\/*/g, "");
+      this.groups[this.currentGroupLevel].children.push(route);
+
+      let tempName = "";
+      let groupIndex = this.currentGroupLevel;
+      for (groupIndex; groupIndex > -1; groupIndex--) {
+        tempName = `${this.groups[groupIndex].path} ${tempName}`;
+      }
+      tempName = `${tempName} ${route.path}`;
+
+      route.setName(camelCase(tempName.replace(/\//g, "")));
+
       return route;
     }
 
     this.routes.push(route);
+    route.setName(camelCase(route.path.replace(/\/g/, " ")));
 
     return route;
   }
@@ -72,8 +76,10 @@ export default class VueRouterService implements RouterInterface {
 
   public group(path, routes) {
     this.groupInfo.path = path;
-    let groupInfo = JSON.parse(JSON.stringify(this.groupInfo));
-    this.groups.push(groupInfo);
+    if (this.currentGroupLevel > -1) {
+      this.groupInfo.path = this.groupInfo.path.replace(/^\/*/g, "");
+    }
+    this.groups.push(JSON.parse(JSON.stringify(this.groupInfo)));
     this.currentGroupLevel++;
     routes();
     this._resetGroup();
@@ -82,7 +88,7 @@ export default class VueRouterService implements RouterInterface {
   }
 
   public template(template) {
-    this.groupInfo.component = require(`@views/${template}`);
+    this.groupInfo.component = template;
     return this;
   }
 
@@ -115,18 +121,28 @@ export default class VueRouterService implements RouterInterface {
   private _resetGroup() {
     this.currentGroupLevel--;
     this.groupInfo = {
-      meta : {
-        middleware: [],
+      meta: {
+        middleware: []
       },
-      component : null,
-      children : [],
+      component: null,
+      children: []
     };
 
-    if(this.currentGroupLevel === -1 && this.groups.length) {
-      for(let groupIndex = this.groups.length - 1; groupIndex > 0; groupIndex--) {
-          this.groups[groupIndex - 1].children = [this.groups[groupIndex]]
+    if (this.currentGroupLevel === -1 && this.groups.length) {
+      this.groups.forEach(group => {
+        group.component = require(`@views/${group.component}`);
+      });
+
+      for (
+        let groupIndex = this.groups.length - 1;
+        groupIndex > 0;
+        groupIndex--
+      ) {
+        this.groups[groupIndex - 1].children.push(this.groups[groupIndex]);
       }
-      this.routes.push(this.groups[0])
+      this.routes.push(this.groups[0]);
+
+      this.groups = [];
     }
   }
 }

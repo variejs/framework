@@ -14,6 +14,7 @@
     "dashify": "^1.0.0",
     "inversify": "^4.9.0",
     "nprogress": "^0.2.0",
+    "object-assign-deep": "^0.3.1",
     "reflect-metadata": "^0.1.12",
     "validator": "^9.2.0"
   },
