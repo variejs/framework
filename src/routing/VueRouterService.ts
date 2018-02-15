@@ -1,20 +1,21 @@
 import Vue from "vue";
 import Route from "./Route";
 import VueRouter from "vue-router";
+import * as camelCase from "camelcase";
 import { injectable } from "inversify";
 import Middleware from "@routes/middleware";
 import RouterInterface from "./RouterInterface";
-import * as camelCase from "camelcase";
 
 @injectable()
 export default class VueRouterService implements RouterInterface {
   public routes = [];
   public router: VueRouter;
-  protected groupInfo = null;
+
+  protected groups = [];
   protected groupMeta = [];
-  public loaded = false;
-  public oldMeta = {};
-  public groups = [];
+  protected groupInfo = null;
+  protected currentGroupLevel = 0;
+
   constructor() {
     Vue.use(VueRouter);
     this._resetGroup();
@@ -24,7 +25,9 @@ export default class VueRouterService implements RouterInterface {
     return this.router;
   }
 
-  private currentGroupLevel = 0;
+  private requireAll(requireContext) {
+    return requireContext.keys().map(requireContext);
+  }
 
   private buildRouter() {
     return new Promise(resolve => {
@@ -68,6 +71,7 @@ export default class VueRouterService implements RouterInterface {
   }
 
   public redirect(path, redirect) {
+    // TODO - we need to use the same logic as in route
     this.routes.push({
       path: path,
       redirect: redirect
@@ -97,10 +101,7 @@ export default class VueRouterService implements RouterInterface {
     return this;
   }
 
-  private requireAll(requireContext) {
-    return requireContext.keys().map(requireContext);
-  }
-
+  // TODO - need to test to test
   private registerMiddleware() {
     let middleware = Middleware;
 

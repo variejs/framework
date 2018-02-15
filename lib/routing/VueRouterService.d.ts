@@ -4,14 +4,13 @@ import RouterInterface from "./RouterInterface";
 export default class VueRouterService implements RouterInterface {
     routes: never[];
     router: VueRouter;
-    protected groupInfo: null;
+    protected groups: never[];
     protected groupMeta: never[];
-    loaded: boolean;
-    oldMeta: {};
-    groups: never[];
+    protected groupInfo: null;
+    protected currentGroupLevel: number;
     constructor();
     getRouter(): any;
-    private currentGroupLevel;
+    private requireAll(requireContext);
     private buildRouter();
     route(path: any, component: string | {}, props?: {}): Route;
     middleware(middleware: any): this;
@@ -19,7 +18,6 @@ export default class VueRouterService implements RouterInterface {
     group(path: any, routes: any): this;
     template(template: any): this;
     prefix(prefix: any): this;
-    private requireAll(requireContext);
     private registerMiddleware();
     private _resetGroup();
 }
