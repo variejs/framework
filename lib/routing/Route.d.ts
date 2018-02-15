@@ -7,7 +7,7 @@ export default class Route {
     private component;
     private components;
     private _props;
-    constructor(path: any, components: any, props?: {});
+    constructor(path: string, components: object | Array<string>, props?: {});
     setName(name: string): this;
     setMeta(data: Object): this;
     setAlias(alias: any): void;

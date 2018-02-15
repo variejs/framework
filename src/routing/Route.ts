@@ -1,14 +1,14 @@
 export default class Route {
-  private path;
-  private name;
-  private alias;
-  private props;
+  private path: string;
+  private name: string;
+  private alias: string;
+  private props: object;
   private meta = {};
   private component;
-  private components;
+  private components: object;
   private _props = false;
 
-  constructor(path, components, props = {}) {
+  constructor(path: string, components: object | Array<string>, props = {}) {
     this.path = path;
 
     if (Object.keys(props).length) {
