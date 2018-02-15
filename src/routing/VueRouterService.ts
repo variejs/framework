@@ -16,6 +16,8 @@ export default class VueRouterService implements RouterInterface {
   protected groupInfo = null;
   protected currentGroupLevel = 0;
 
+  protected wildCardRoutes = [];
+
   constructor() {
     Vue.use(VueRouter);
     this._resetGroup();
@@ -32,20 +34,48 @@ export default class VueRouterService implements RouterInterface {
   private buildRouter() {
     return new Promise(resolve => {
       this.requireAll(require.context("@routes", false, /^\.\/.*\.(ts)$/));
-      resolve(this.routes);
-    }).then(routes => {
+      resolve({
+        routes: this.routes,
+        wildCardRoutes: this.wildCardRoutes
+      });
+    }).then(({ routes, wildCardRoutes }) => {
+      let groups = [];
+
+      wildCardRoutes.forEach(route => {
+        groups = JSON.parse(JSON.stringify(route.groups));
+
+        groups.forEach(group => {
+          group.children = [];
+          group.component = require(`@views/${group.layout}`);
+        });
+
+        groups[route.groupLevel].children.push(route);
+
+        for (let groupIndex = route.groupLevel; groupIndex > 0; groupIndex--) {
+          groups[groupIndex - 1].children.push(groups[groupIndex]);
+        }
+      });
+
+      routes.push(groups[0]);
       $config.set("router.routes", routes);
       this.router = new VueRouter($config.get("router"));
       this.registerMiddleware();
     });
   }
 
-  public route(path, component: string | {}, props = {}): Route {
+  public route(path: string, component: string | object, props = {}): Route {
     let route = new Route(path, component, props);
 
     if (this.currentGroupLevel > -1) {
       route.path = route.path.replace(/^\/*/g, "");
-      this.groups[this.currentGroupLevel].children.push(route);
+
+      if (route.path === "*") {
+        route.groups = this.groups;
+        route.groupLevel = this.currentGroupLevel;
+        this.wildCardRoutes.push(route);
+      } else {
+        this.groups[this.currentGroupLevel].children.push(route);
+      }
 
       let tempName = "";
       let groupIndex = this.currentGroupLevel;
@@ -55,23 +85,33 @@ export default class VueRouterService implements RouterInterface {
       tempName = `${tempName} ${route.path}`;
 
       route.setName(camelCase(tempName.replace(/\//g, "")));
+      route.meta.middleware = this.groups[
+        this.currentGroupLevel
+      ].meta.middleware;
 
       return route;
     }
 
-    this.routes.push(route);
+    if (route.path === "*") {
+      this.wildCardRoutes.push(route);
+    } else {
+      route.setMeta(this.groupInfo);
+      this.routes.push(route);
+    }
+
     route.setName(camelCase(route.path.replace(/\/g/, " ")));
 
     return route;
   }
 
   public middleware(middleware) {
-    this.groupInfo.middleware = this.groupInfo.middleware.concat(middleware);
+    this.groupInfo.meta.middleware = this.groupInfo.meta.middleware.concat(
+      middleware
+    );
     return this;
   }
 
   public redirect(path, redirect) {
-    // TODO - we need to use the same logic as in route
     this.routes.push({
       path: path,
       redirect: redirect
@@ -91,8 +131,8 @@ export default class VueRouterService implements RouterInterface {
     return this;
   }
 
-  public template(template) {
-    this.groupInfo.component = template;
+  public layout(layout) {
+    this.groupInfo.layout = layout;
     return this;
   }
 
@@ -101,7 +141,6 @@ export default class VueRouterService implements RouterInterface {
     return this;
   }
 
-  // TODO - need to test to test
   private registerMiddleware() {
     let middleware = Middleware;
 
@@ -112,7 +151,10 @@ export default class VueRouterService implements RouterInterface {
           to.meta.middleware &&
           to.meta.middleware.indexOf(middlewareName) > -1
         ) {
-          return middlewareFunction(to, from, next);
+          if (middlewareFunction(to, from, next)) {
+            next();
+          }
+          return false;
         }
         next();
       });
@@ -125,13 +167,13 @@ export default class VueRouterService implements RouterInterface {
       meta: {
         middleware: []
       },
-      component: null,
+      layout: null,
       children: []
     };
 
     if (this.currentGroupLevel === -1 && this.groups.length) {
       this.groups.forEach(group => {
-        group.component = require(`@views/${group.component}`);
+        group.component = require(`@views/${group.layout}`);
       });
 
       for (

@@ -8,15 +8,16 @@ export default class VueRouterService implements RouterInterface {
     protected groupMeta: never[];
     protected groupInfo: null;
     protected currentGroupLevel: number;
+    protected wildCardRoutes: never[];
     constructor();
     getRouter(): any;
     private requireAll(requireContext);
     private buildRouter();
-    route(path: any, component: string | {}, props?: {}): Route;
+    route(path: string, component: string | object, props?: {}): Route;
     middleware(middleware: any): this;
     redirect(path: any, redirect: any): void;
     group(path: any, routes: any): this;
-    template(template: any): this;
+    layout(layout: any): this;
     prefix(prefix: any): this;
     private registerMiddleware();
     private _resetGroup();
