@@ -9,7 +9,7 @@ export default class CommonServiceProvider extends ServiceProvider {
     try {
       let files = require.context("@components", true, /^\.\/.*\.(vue)$/);
       files.keys().forEach(filename => {
-        Vue.component(this.getComponentName(filename), files(filename));
+        Vue.component(this.getComponentName(filename), files(filename).default);
       });
     } catch (e) {
       console.warn(

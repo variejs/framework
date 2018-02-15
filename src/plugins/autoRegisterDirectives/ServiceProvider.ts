@@ -1,4 +1,3 @@
-import Vue from "vue";
 import ServiceProvider from "../../support/ServiceProvider";
 
 export default class CommonServiceProvider extends ServiceProvider {

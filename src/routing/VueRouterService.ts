@@ -48,7 +48,7 @@ export default class VueRouterService implements RouterInterface {
 
             groups.forEach(group => {
               group.children = [];
-              group.component = require(`@views/${group.layout}`);
+              group.component = require(`@views/${group.layout}`).default;
             });
 
             groups[route.groupLevel].children.push(route);
