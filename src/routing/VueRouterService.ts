@@ -39,39 +39,16 @@ export default class VueRouterService implements RouterInterface {
         wildCardRoutes: this.wildCardRoutes
       });
     }).then(({ routes, wildCardRoutes }) => {
-      // TODO - will have to redo these
-      // if (wildCardRoutes.length) {
-      //   let groups = [];
-      //
-      //   wildCardRoutes.forEach(route => {
-      //     if (route.groups) {
-      //       groups = JSON.parse(JSON.stringify(route.groups));
-      //
-      //       groups.forEach(group => {
-      //         group.children = [];
-      //         group.component = require(`@views/${group.layout}`).default;
-      //       });
-      //
-      //       groups[route.groupLevel].children.push(route);
-      //
-      //       for (
-      //         let groupIndex = route.groupLevel;
-      //         groupIndex > 0;
-      //         groupIndex--
-      //       ) {
-      //         groups[groupIndex - 1].children.push(groups[groupIndex]);
-      //       }
-      //     } else {
-      //       routes.push(route);
-      //     }
-      //   });
-      //
-      //   if (groups.length) {
-      //     routes.push(groups[0]);
-      //   }
-      // }
+      if (wildCardRoutes.length) {
+        wildCardRoutes.forEach(route => {
+          if (route.group) {
+            route.group.children.push(route);
+          } else {
+            routes.push(route);
+          }
+        });
+      }
 
-      console.info(routes);
       $config.set("router.routes", routes);
       this.router = new VueRouter($config.get("router"));
       this.registerMiddleware();
@@ -85,8 +62,7 @@ export default class VueRouterService implements RouterInterface {
       route.path = route.path.replace(/^\/*/g, "");
 
       if (route.path === "*") {
-        route.groups = this.groups;
-        route.groupLevel = this.currentGroupLevel;
+        route.group = this.groups[this.currentGroupLevel];
         this.wildCardRoutes.push(route);
       } else {
         this.groups[this.currentGroupLevel].children.push(route);
