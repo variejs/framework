@@ -39,37 +39,39 @@ export default class VueRouterService implements RouterInterface {
         wildCardRoutes: this.wildCardRoutes
       });
     }).then(({ routes, wildCardRoutes }) => {
-      if (wildCardRoutes.length) {
-        let groups = [];
+      // TODO - will have to redo these
+      // if (wildCardRoutes.length) {
+      //   let groups = [];
+      //
+      //   wildCardRoutes.forEach(route => {
+      //     if (route.groups) {
+      //       groups = JSON.parse(JSON.stringify(route.groups));
+      //
+      //       groups.forEach(group => {
+      //         group.children = [];
+      //         group.component = require(`@views/${group.layout}`).default;
+      //       });
+      //
+      //       groups[route.groupLevel].children.push(route);
+      //
+      //       for (
+      //         let groupIndex = route.groupLevel;
+      //         groupIndex > 0;
+      //         groupIndex--
+      //       ) {
+      //         groups[groupIndex - 1].children.push(groups[groupIndex]);
+      //       }
+      //     } else {
+      //       routes.push(route);
+      //     }
+      //   });
+      //
+      //   if (groups.length) {
+      //     routes.push(groups[0]);
+      //   }
+      // }
 
-        wildCardRoutes.forEach(route => {
-          if (route.groups) {
-            groups = JSON.parse(JSON.stringify(route.groups));
-
-            groups.forEach(group => {
-              group.children = [];
-              group.component = require(`@views/${group.layout}`).default;
-            });
-
-            groups[route.groupLevel].children.push(route);
-
-            for (
-              let groupIndex = route.groupLevel;
-              groupIndex > 0;
-              groupIndex--
-            ) {
-              groups[groupIndex - 1].children.push(groups[groupIndex]);
-            }
-          } else {
-            routes.push(route);
-          }
-        });
-
-        if (groups.length) {
-          routes.push(groups[0]);
-        }
-      }
-
+      console.info(routes);
       $config.set("router.routes", routes);
       this.router = new VueRouter($config.get("router"));
       this.registerMiddleware();
@@ -132,11 +134,10 @@ export default class VueRouterService implements RouterInterface {
   }
 
   public group(routes) {
-    this.groups.push(JSON.parse(JSON.stringify(this.groupInfo)));
     this.currentGroupLevel++;
+    this.groups.push(JSON.parse(JSON.stringify(this.groupInfo)));
     routes();
     this._resetGroup();
-
     return this;
   }
 
@@ -174,7 +175,6 @@ export default class VueRouterService implements RouterInterface {
   }
 
   private _resetGroup() {
-    this.currentGroupLevel--;
     this.groupInfo = {
       path: "/",
       meta: {
@@ -184,21 +184,21 @@ export default class VueRouterService implements RouterInterface {
       children: []
     };
 
-    if (this.currentGroupLevel === -1 && this.groups.length) {
-      this.groups.forEach(group => {
-        group.component = require(`@views/${group.layout}`).default;
-      });
-
-      for (
-        let groupIndex = this.groups.length - 1;
-        groupIndex > 0;
-        groupIndex--
-      ) {
-        this.groups[groupIndex - 1].children.push(this.groups[groupIndex]);
+    if (this.groups.length) {
+      if (this.currentGroupLevel === 0) {
+        let baseGroup = this.groups[0];
+        baseGroup.component = require(`@views/${baseGroup.layout}`).default;
+        this.routes.push(baseGroup);
+        this.groups = [];
+      } else {
+        let childGroup = this.groups[this.currentGroupLevel];
+        let parentGroup = this.groups[this.currentGroupLevel - 1];
+        childGroup.component = require(`@views/${childGroup.layout}`).default;
+        parentGroup.children.push(childGroup);
+        this.groups.splice(this.currentGroupLevel, 1);
       }
-      this.routes.push(this.groups[0]);
-
-      this.groups = [];
     }
+
+    this.currentGroupLevel--;
   }
 }

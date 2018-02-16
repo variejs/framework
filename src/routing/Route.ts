@@ -1,12 +1,12 @@
 export default class Route {
+  private meta = {};
+  private component;
   private path: string;
   private name: string;
   private alias: string;
   private props: object;
-  private meta = {};
-  private component;
-  private components: object;
   private _props = false;
+  private components: object;
 
   constructor(path: string, components: object | Array<string>, props = {}) {
     this.path = path;
@@ -27,7 +27,7 @@ export default class Route {
         if (this._props) {
           this.components[name] = {
             props: props,
-            template: this.components[name]
+            component: this.components[name]
           };
           this.props[name] = true;
         }
@@ -37,7 +37,7 @@ export default class Route {
       if (this._props) {
         this.component = {
           props: props,
-          template: this.component
+          component: this.component
         };
       }
     }
