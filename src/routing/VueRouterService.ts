@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Route from "./Route";
 import VueRouter from "vue-router";
-import * as camelCase from "camelcase";
 import { injectable } from "inversify";
 import Middleware from "@routes/middleware";
 import RouterInterface from "./RouterInterface";
@@ -71,11 +70,11 @@ export default class VueRouterService implements RouterInterface {
       let tempName = "";
       let groupIndex = this.currentGroupLevel;
       for (groupIndex; groupIndex > -1; groupIndex--) {
-        tempName = `${this.groups[groupIndex].path} ${tempName}`;
+        tempName = `${this.groups[groupIndex].path}.${tempName}`;
       }
-      tempName = `${tempName} ${route.path}`;
 
-      route.setName(camelCase(tempName.replace(/\//g, "")));
+      this.convertRoutePathToRouteName(route, tempName + route.path);
+
       route.meta.middleware = this.groups[
         this.currentGroupLevel
       ].meta.middleware;
@@ -90,9 +89,19 @@ export default class VueRouterService implements RouterInterface {
       this.routes.push(route);
     }
 
-    route.setName(camelCase(route.path.replace(/\/g/, " ")));
-
+    this.convertRoutePathToRouteName(route);
     return route;
+  }
+
+  private convertRoutePathToRouteName(route : Route, path? : string) {
+    path = JSON.parse(JSON.stringify(path ?  path : route.path))
+    // https://regex101.com/r/uV1OfL/3
+    route.setName(
+      path
+        .replace(/\:/g, '')
+        .replace(/(^\/|\/$)/, "")
+        .replace(/\//g, ".")
+    );
   }
 
   public middleware(middleware) {
