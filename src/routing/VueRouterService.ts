@@ -93,12 +93,12 @@ export default class VueRouterService implements RouterInterface {
     return route;
   }
 
-  private convertRoutePathToRouteName(route : Route, path? : string) {
-    path = JSON.parse(JSON.stringify(path ?  path : route.path))
+  private convertRoutePathToRouteName(route: Route, path?: string) {
+    path = JSON.parse(JSON.stringify(path ? path : route.path));
     // https://regex101.com/r/uV1OfL/3
     route.setName(
       path
-        .replace(/\:/g, '')
+        .replace(/\:/g, "")
         .replace(/(^\/|\/$)/, "")
         .replace(/\//g, ".")
     );
