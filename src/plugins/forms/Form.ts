@@ -2,8 +2,9 @@ import Vue from "vue";
 import ValidationServiceInterface from "../../validation/ValidationServiceInterface";
 
 class Form {
-  private _rules: object;
-  private _messages: object;
+  public rules: object;
+  public messages: object;
+
   private _originalData: any;
   private _validator: ValidationServiceInterface;
 
@@ -12,15 +13,14 @@ class Form {
       this._validator = validator;
     }
 
-    for (const field in data) {
-      this[field] = data[field];
-    }
+    Object.assign(this, data);
+
     this.setOriginaldata();
   }
 
   public validation({ rules, messages }) {
-    this._rules = rules;
-    this._messages = messages;
+    this.rules = rules;
+    this.messages = messages;
     return this;
   }
 
@@ -28,8 +28,8 @@ class Form {
     if (this._validator) {
       let errors = this._validator.validate(
         this.data(),
-        this._rules,
-        this._messages
+        this.rules,
+        this.messages
       );
       if (Object.keys(errors).length) {
         return false;
@@ -39,7 +39,7 @@ class Form {
   }
 
   public errors() {
-    return this._validator.validate(this.data(), this._rules, this._messages);
+    return this._validator.validate(this.data(), this.rules, this.messages);
   }
 
   public reset() {

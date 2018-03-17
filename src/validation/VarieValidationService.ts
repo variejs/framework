@@ -1,10 +1,10 @@
-import Validator from "./Validator";
+import Validation from "./Validation";
 import { injectable } from "inversify";
 import ValidationServiceInterface from "./ValidationServiceInterface";
 
 @injectable()
 export default class ValidationService implements ValidationServiceInterface {
   public validate(data: object, schema: object, messages = {}) {
-    return new Validator(data, schema, messages).validate();
+    return new Validation(data, schema, messages).validate();
   }
 }

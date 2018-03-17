@@ -1,7 +1,7 @@
 import ValidationServiceInterface from "../../validation/ValidationServiceInterface";
 declare class Form {
-    private _rules;
-    private _messages;
+    rules: object;
+    messages: object;
     private _originalData;
     private _validator;
     constructor(data: object, validator?: ValidationServiceInterface);
