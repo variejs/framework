@@ -1,7 +1,5 @@
-import { isBoolean } from "util";
-
 export default {
   passes(value: any) {
-    return isBoolean(value);
+    return value === true || value === false || value === 0 || value === 1;
   }
 };
