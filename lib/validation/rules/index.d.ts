@@ -62,6 +62,10 @@ declare const _default: {
         passes(value: any, attributes: any): any;
         replacers(): string[];
     };
+    nullable: {
+        validatesAll: boolean;
+        passes(value: any): boolean;
+    };
     numeric: {
         passes(value: any): any;
     };

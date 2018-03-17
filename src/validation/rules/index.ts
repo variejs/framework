@@ -16,6 +16,7 @@ import integer from "./integer";
 import max from "./max";
 import mimetypes from "./mimetypes";
 import min from "./min";
+import nullable from "./nullable";
 import numeric from "./numeric";
 import regex from "./regex";
 import required from "./required";
@@ -49,6 +50,7 @@ export default {
   max,
   mimetypes,
   min,
+  nullable,
   numeric,
   regex,
   required,

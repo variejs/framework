@@ -65,6 +65,10 @@ export default class Validation {
           );
           break;
         }
+
+        if(ruleClass.validatesAll) {
+          break;
+        }
       }
     }
   }
@@ -80,6 +84,9 @@ export default class Validation {
     parameters: any
   ) {
     let ruleFunctions = this._getRule(rule);
+    if(!message) {
+      return `The ${field} fails the validation.`;
+    }
     message = message.replace(":field", uncamelize(field.replace(".", "s ")));
     if (ruleFunctions.replacers) {
       ruleFunctions.replacers().forEach((replacer, index) => {

@@ -58,11 +58,17 @@ export default class AxiosHttpService implements HttpServiceInterface {
 
     this._middleware[middleware.constructor.name] = {
       request: this.axios.interceptors.request.use(config => {
-        return middleware.request(config);
+        if (middleware.request) {
+          return middleware.request(config);
+        }
+        return config;
       }),
       response: this.axios.interceptors.response.use(
         function(response) {
-          return middleware.response(response);
+          if (middleware.response) {
+            return middleware.response(response);
+          }
+          return response;
         },
         function(error) {
           if (middleware.responseError) {
