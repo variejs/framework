@@ -11,23 +11,23 @@ class NotificationService {
     @inject("$config") $config: ConfigInterface,
     @inject("$store") $store: Store
   ) {
-    this.__config = $config;
     this.__store = $store.getStore();
+    this.__config = $config.get('notifications');
   }
 
-  public showError(message: string, title: string, duration?: number) {
+  public showError(message: string, title: string = 'Error', duration?: number) {
     this._makeAlert(message, title, duration, "error");
   }
 
-  public showInfo(message: string, title: string, duration?: number) {
+  public showInfo(message: string, title: string = 'Info', duration?: number) {
     this._makeAlert(message, title, duration, "info");
   }
 
-  public showSuccess(message: string, title: string, duration?: number) {
+  public showSuccess(message: string, title: string = 'Success', duration?: number) {
     this._makeAlert(message, title, duration, "success");
   }
 
-  public showWarning(message: string, title: string, duration?: number) {
+  public showWarning(message: string, title: string = 'Warning', duration?: number) {
     this._makeAlert(message, title, duration, "warning");
   }
 
@@ -40,7 +40,6 @@ class NotificationService {
     if (duration === undefined) {
       duration = this.__config.duration;
     }
-
     this.__store.dispatch("varie/notifications/add", {
       message: message,
       duration: duration,

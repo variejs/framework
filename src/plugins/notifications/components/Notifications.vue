@@ -14,7 +14,7 @@
         padding: 10px;
         color: #fff;
         display: flex;
-        flex-direction: column-reverse;
+        flex-direction: column;
         position: relative;
 
 		&.error {
@@ -33,16 +33,16 @@
 			background-color: #D4B483;
 		}
 
-        &-text {
+        &-heading {
             font-weight: bold;
             font-size: 18px;
             text-transform: uppercase;
+            margin: 0 0 4px;
         }
 
-        &-heading {
+        &-text {
             font-weight: bold;
             font-size: 14px;
-            margin-bottom: 0 px;
         }
 
 		&-close {
@@ -64,16 +64,13 @@
 		}
 	}
 
-	/* Enter and leave animations can use different */
-	/* durations and timing functions.              */
 	.notification-animation-enter-active {
 		transition: all .3s ease;
 	}
 	.notification-animation-leave-active {
 		transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 	}
-	.notification-animation-enter, .notification-animation-leave-to
-		/* .notification-animation-leave-active below version 2.1.8 */ {
+	.notification-animation-enter, .notification-animation-leave-to {
 		transform: translateX(10px);
 		opacity: 0;
 	}

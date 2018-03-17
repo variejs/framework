@@ -1,8 +1,8 @@
 import Vue from "vue";
 import Notifications from "./index";
 import NotificationsConfig from "./config";
-import ServiceProvider from "../../support/ServiceProvider";
 import NotificationService from "./NotificationService";
+import ServiceProvider from "../../support/ServiceProvider";
 import NotificationServiceInterface from "./NotificationServiceInterface";
 
 export default class NotificationsServiceProvider extends ServiceProvider {
