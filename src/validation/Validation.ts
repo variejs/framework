@@ -56,7 +56,7 @@ export default class Validation {
           throw `We cannot find the rule ${rule}`;
         }
 
-        if (!ruleClass.passes(this._getValue(field), parameters, this._data)) {
+        if (!ruleClass.passes(this._getValue(field), parameters, this._data) && rule !== 'nullable') {
           this.errors[field] = this._makeReplacements(
             this._getMessage(rule, field),
             rule,
@@ -66,7 +66,7 @@ export default class Validation {
           break;
         }
 
-        if (ruleClass.validatesAll) {
+        if (rule === 'nullable') {
           break;
         }
       }

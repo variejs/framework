@@ -64,7 +64,6 @@ declare const _default: {
             replacers(): string[];
         };
         nullable: {
-            validatesAll: boolean;
             passes(value: any): boolean;
         };
         numeric: {
