@@ -1,12 +1,19 @@
 import { Store } from "vuex";
+import { inject, injectable } from "inversify";
+import ConfigInterface from "../../config/ConfigInterface";
 
+@injectable()
 class NotificationService {
-  constructor(config, store) {
-    this.__store = store;
-    this.__config = config;
-  }
-
   protected __store: Store<object>;
+  protected __config: ConfigInterface;
+
+  constructor(
+    @inject("$config") $config: ConfigInterface,
+    @inject("$store") $store: Store
+  ) {
+    this.__config = $config;
+    this.__store = $store.getStore();
+  }
 
   public showError(message: string, title: string, duration?: number) {
     this._makeAlert(message, title, duration, "error");
@@ -33,6 +40,7 @@ class NotificationService {
     if (duration === undefined) {
       duration = this.__config.duration;
     }
+
     this.__store.dispatch("varie/notifications/add", {
       message: message,
       duration: duration,

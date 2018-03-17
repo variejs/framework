@@ -4,9 +4,9 @@ declare class Notifications {
         duration: number;
         component: any;
     };
-    private _service;
-    install(Vue: VueConstructor, {store}: {
+    install(Vue: VueConstructor, {store, service}: {
         store: any;
+        service: any;
     }): void;
 }
 export default Notifications;

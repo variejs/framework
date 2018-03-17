@@ -8,9 +8,8 @@ class Notifications {
     component: any;
   };
 
-  private _service: NotificationService;
+  public install(Vue: VueConstructor, { store, service }) {
 
-  public install(Vue: VueConstructor, { store }) {
     this.__config = $config.get("notifications");
 
     for (let name in NotificationStores) {
@@ -18,14 +17,12 @@ class Notifications {
       store.registerModule(["varie", name], module);
     }
 
-    this._service = new NotificationService(this.__config, store);
-
     Vue.component("notifications", this.__config.component);
 
     Vue.mixin({
       computed: {
         notificationService: (): NotificationService => {
-          return this._service;
+          return service;
         }
       }
     });
