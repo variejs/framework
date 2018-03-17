@@ -50,13 +50,13 @@ export default class Validator {
         if (tempRule[1]) {
           parameters = tempRule[1].split(",");
         }
-        if (
-          !this._getRule(rule).passes(
-            this._getValue(field),
-            parameters,
-            this._data
-          )
-        ) {
+
+        let ruleClass = this._getRule(rule);
+        if (ruleClass === undefined) {
+          throw `We cannot find the rule ${rule}`;
+        }
+
+        if (!ruleClass.passes(this._getValue(field), parameters, this._data)) {
           this.errors[field] = this._makeReplacements(
             this._getMessage(rule, field),
             rule,

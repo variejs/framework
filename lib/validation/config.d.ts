@@ -49,7 +49,7 @@ declare const _default: {
             passes(value: any): boolean;
         };
         integer: {
-            passes(value: any): any;
+            passes(value: any): boolean;
         };
         max: {
             passes(value: any, attributes: any): any;
@@ -102,6 +102,9 @@ declare const _default: {
         };
         size: {
             passes(value: any, parameters: []): Boolean;
+        };
+        string: {
+            passes(value: any): Boolean;
         };
         url: {
             passes(value: any): Boolean;

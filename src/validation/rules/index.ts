@@ -11,7 +11,7 @@ import boolean from "./boolean";
 import date from "./date";
 import different from "./different";
 import email from "./email";
-import image from "./image"; // TODO
+import image from "./image";
 import integer from "./integer";
 import max from "./max";
 import mimetypes from "./mimetypes";
@@ -26,6 +26,7 @@ import required_with_all from "./required_with_all";
 import required_without from "./required_without";
 import required_without_all from "./required_without_all";
 import same from "./same";
+import string from "./string";
 import size from "./size";
 import url from "./url";
 
@@ -59,5 +60,6 @@ export default {
   required_without_all,
   same,
   size,
+  string,
   url
 };
