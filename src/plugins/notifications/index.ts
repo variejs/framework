@@ -9,7 +9,6 @@ class Notifications {
   };
 
   public install(Vue: VueConstructor, { store, service }) {
-
     this.__config = $config.get("notifications");
 
     for (let name in NotificationStores) {

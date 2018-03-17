@@ -9,7 +9,7 @@ export default class NotificationsServiceProvider extends ServiceProvider {
   public boot() {
     Vue.use(new Notifications(), {
       store: this.app.make("$store").getStore(),
-      service : this.app.make('$notifications'),
+      service: this.app.make("$notifications")
     });
   }
 
