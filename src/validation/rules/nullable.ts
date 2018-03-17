@@ -1,8 +1,8 @@
-import isEmpty from '../../utilities/isEmpty'
+import isEmpty from "../../utilities/isEmpty";
 
 export default {
-  validatesAll : true,
+  validatesAll: true,
   passes(value: any) {
     return isEmpty(value);
-  },
+  }
 };
