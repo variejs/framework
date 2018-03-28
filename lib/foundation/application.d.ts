@@ -1,5 +1,5 @@
-import ApplicationInterface from "./ApplicationInterface";
 import "reflect-metadata";
+import ApplicationInterface from "./ApplicationInterface";
 export declare class Application implements ApplicationInterface {
     private providers;
     private $container;

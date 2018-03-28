@@ -1,10 +1,8 @@
-import ApplicationInterface from "./ApplicationInterface";
-
 declare const global: any;
-
-import ContainerMixin from "./ContainerMixin";
 import "reflect-metadata";
 import { Container } from "inversify";
+import ContainerMixin from "./ContainerMixin";
+import ApplicationInterface from "./ApplicationInterface";
 
 export class Application implements ApplicationInterface {
   private providers = [];
