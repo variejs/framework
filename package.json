@@ -12,7 +12,8 @@
     "axios": "^0.17.1",
     "camelcase": "^4.1.0",
     "dashify": "^1.0.0",
-    "inversify": "^4.10.0",
+    "inversify": "^4.13.0",
+    "inversify-inject-decorators": "^3.1.0",
     "nprogress": "^0.2.0",
     "reflect-metadata": "^0.1.12",
     "validator": "^9.4.0"

@@ -5,4 +5,5 @@ export default interface ApplicationInterface {
   make<T>(abstract: string): T;
   bind<T>(abstract: string, concrete: any): void;
   singleton<T>(abstract: string, concrete: any): void;
+  $container : Container;
 };
