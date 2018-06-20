@@ -19,10 +19,10 @@ Varie is built with simplicity in mind, making it easier to get your product out
 
 ## Contributions
 1. Setup
-    1. git clone git@github.com:CodePier/varie-framework.git 
+    1. git clone git@github.com:variejs/framework.git 
         * run yarn install
         * run `npm link` inside the varie-framework folder
-    2. git clone git@github.com:CodePier/varie.git
+    2. git clone git@github.com:variejs/varie.git
         * run yarn install
         * run `npm link varie` inside the varie folder
 2. Building
