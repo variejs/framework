@@ -1,6 +1,6 @@
 import { Store } from "vuex";
 import StateServiceInterface from "./StateServiceInterface";
-import ApplicationInterface from '../foundation/ApplicationInterface';
+import ApplicationInterface from "../foundation/ApplicationInterface";
 export default class VuexService implements StateServiceInterface {
     private store;
     private files;

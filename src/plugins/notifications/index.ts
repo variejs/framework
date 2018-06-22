@@ -1,5 +1,5 @@
-import NotificationStores from "./store";
 import { VueConstructor } from "vue/types/vue";
+import NotificationStore from "./store/notifications";
 import NotificationService from "./NotificationService";
 
 class Notifications {
@@ -11,10 +11,7 @@ class Notifications {
   public install(Vue: VueConstructor, { store, service }) {
     this.__config = $config.get("notifications");
 
-    for (let name in NotificationStores) {
-      let module = NotificationStores[name];
-      store.registerModule(["varie", name], module);
-    }
+    store.registerModule(["varie", "notifications"], new NotificationStore());
 
     Vue.component("notifications", this.__config.component);
 

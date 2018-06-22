@@ -1,20 +1,17 @@
 import Vue from "vue";
 import Vuex, { Store } from "vuex";
-import { inject, injectable } from 'inversify'
+import { inject, injectable } from "inversify";
 import StateServiceInterface from "./StateServiceInterface";
 import * as camelCase from "camelcase";
-import ApplicationInterface from '../foundation/ApplicationInterface'
+import ApplicationInterface from "../foundation/ApplicationInterface";
 
 @injectable()
 export default class VuexService implements StateServiceInterface {
-
   private store = null;
   private files = null;
-  private app : ApplicationInterface;
+  private app: ApplicationInterface;
 
-  constructor(
-    @inject('app') app : ApplicationInterface
-  ) {
+  constructor(@inject("app") app: ApplicationInterface) {
     Vue.use(Vuex);
     this.app = app;
     this.store = new Vuex.Store<any>({});
@@ -35,7 +32,7 @@ export default class VuexService implements StateServiceInterface {
         this.createStore(filename, this.getModule(filename));
       });
     } catch (e) {
-      console.warn(e)
+      console.warn(e);
       console.warn(
         "You have loaded the store module without having a store folder, please add `app/store` folder!"
       );
@@ -45,7 +42,9 @@ export default class VuexService implements StateServiceInterface {
   }
 
   private getModule(filename) {
-    let moduleAbstractName = camelCase(`store ${this.getModuleName(filename).join(' ')}`);
+    let moduleAbstractName = camelCase(
+      `store ${this.getModuleName(filename).join(" ")}`
+    );
     $app.$container.bind(moduleAbstractName).to(this.files(filename).default);
     let module = this.app.make(moduleAbstractName);
     module.modules = {};
@@ -53,11 +52,11 @@ export default class VuexService implements StateServiceInterface {
     return module;
   }
 
-  private createStore(filename : string, module : Function) {
+  private createStore(filename: string, module: Function) {
     this.store.registerModule(this.getModuleName(filename), module);
   }
 
-  private getModuleName(filename : string) {
+  private getModuleName(filename: string) {
     return filename
       .replace(/^\.\//, "")
       .replace(/index\.ts/, "")
@@ -66,5 +65,4 @@ export default class VuexService implements StateServiceInterface {
       .replace(/modules\//g, "")
       .split("/");
   }
-
 }
