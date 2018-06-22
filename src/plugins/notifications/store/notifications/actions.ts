@@ -17,8 +17,4 @@ export default class Actions {
   ) => {
     context.commit("remove", notification);
   };
-
-  test = (context: ActionContext<NotificationsState, RootState>) => {
-    console.info("here");
-  };
 }
