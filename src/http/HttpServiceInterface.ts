@@ -8,4 +8,4 @@ export default interface HttpServiceInterface {
   options(url: string, config?: object);
   registerMiddleware(middleware: () => void);
   unregisterMiddleware(middleware: () => void);
-};
+}

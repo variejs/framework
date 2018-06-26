@@ -1,3 +1,5 @@
 import { Application } from "./foundation/application";
 
-export { Application };
+const application = new Application();
+
+export { application };

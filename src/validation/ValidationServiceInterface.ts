@@ -1,1 +1,1 @@
-export default interface ValidationServiceInterface {};
+export default interface ValidationServiceInterface {}

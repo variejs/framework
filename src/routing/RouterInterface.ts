@@ -8,4 +8,4 @@ export default interface RouterInterface {
   prefix(prefix: string): RouterInterface;
   layout(layout: string): this;
   redirect(path: string, redirect: string): this;
-};
+}

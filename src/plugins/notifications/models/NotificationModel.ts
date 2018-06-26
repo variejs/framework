@@ -4,4 +4,4 @@ export default interface NotificationModel {
   severity: string;
   id: null | number | string;
   duration: number | undefined | null;
-};
+}
