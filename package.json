@@ -1,6 +1,6 @@
 {
   "name": "varie",
-  "version": "0.0.44",
+  "version": "0.0.45",
   "description": "VueJS Framework",
   "main": "./lib/index.js",
   "typings": "./lib/index",
@@ -28,5 +28,9 @@
     "build": "tsc -p .",
     "watch": "tsc -p . --watch",
     "pretty": "prettier --write './src/**/*.*(ts|js|json)'"
-  }
+  },
+  "files" : [
+    "lib",
+    "src"
+  ]
 }
