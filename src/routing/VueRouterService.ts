@@ -11,7 +11,6 @@ export default class VueRouterService implements RouterInterface {
   public router: VueRouter;
 
   protected groups = [];
-  protected groupMeta = [];
   protected groupInfo = null;
   protected currentGroupLevel = 0;
 
@@ -126,8 +125,8 @@ export default class VueRouterService implements RouterInterface {
     return this;
   }
 
-  public layout(layout) {
-    this.groupInfo.layout = layout;
+  public area(area) {
+    this.groupInfo.area = area;
     return this;
   }
 
@@ -136,6 +135,11 @@ export default class VueRouterService implements RouterInterface {
     if (this.currentGroupLevel > -1) {
       this.groupInfo.path = this.groupInfo.path.replace(/^\/*/g, "");
     }
+    return this;
+  }
+
+  public layout(layout) {
+    this.groupInfo.meta.layout = layout;
     return this;
   }
 
@@ -165,20 +169,24 @@ export default class VueRouterService implements RouterInterface {
       meta: {
         middleware: []
       },
-      layout: null,
+      area: null,
       children: []
     };
 
     if (this.groups.length) {
       if (this.currentGroupLevel === 0) {
         let baseGroup = this.groups[0];
-        baseGroup.component = require(`@views/${baseGroup.layout}`).default;
+        if(baseGroup.area) {
+          baseGroup.component = require(`@views/${baseGroup.area}`).default;
+        }
         this.routes.push(baseGroup);
         this.groups = [];
       } else {
         let childGroup = this.groups[this.currentGroupLevel];
         let parentGroup = this.groups[this.currentGroupLevel - 1];
-        childGroup.component = require(`@views/${childGroup.layout}`).default;
+        if(childGroup.area) {
+          childGroup.component = require(`@views/${childGroup.area}`).default;
+        }
         parentGroup.children.push(childGroup);
         this.groups.splice(this.currentGroupLevel, 1);
       }

@@ -6,6 +6,7 @@ export default interface RouterInterface {
   group(routes: Array<any> | Object): RouterInterface;
   middleware(middleware: Array<any>): RouterInterface;
   prefix(prefix: string): RouterInterface;
-  layout(layout: string): this;
+  area(area: string): this;
   redirect(path: string, redirect: string): this;
+  layout(layout : string): this;
 }

@@ -1,6 +1,6 @@
 import ServiceProvider from "../../support/ServiceProvider";
 
-export default class CommonServiceProvider extends ServiceProvider {
+export default class AutoRegisterDirectivesServiceProvider extends ServiceProvider {
   public register() {}
 
   public boot() {

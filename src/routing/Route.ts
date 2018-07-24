@@ -55,5 +55,11 @@ export default class Route {
 
   public setAlias(alias) {
     this.alias = alias;
+    return this;
+  }
+
+  public setLayout(layout) {
+    this.layout = layout;
+    return this;
   }
 }
