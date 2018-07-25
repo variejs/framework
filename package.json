@@ -14,7 +14,6 @@
     "dashify": "^1.0.0",
     "inversify": "^4.13.0",
     "inversify-inject-decorators": "^3.1.0",
-    "nprogress": "^0.2.0",
     "reflect-metadata": "^0.1.12",
     "validator": "^10.4.0"
   },
@@ -26,8 +25,8 @@
     "typescript": "^2.9.2"
   },
   "scripts": {
-    "build": "tsc -p .",
-    "watch": "tsc -p . --watch",
+    "build": "tsc",
+    "watch": "tsc --watch",
     "precommit": "lint-staged"
   },
   "lint-staged": {
@@ -38,7 +37,8 @@
   },
   "files": [
     "lib",
-    "src"
+    "src",
+    "BaseLayout.vue"
   ],
   "sideEffects": false
 }
