@@ -7,7 +7,8 @@
     export default {
       computed: {
         layout() {
-          let route = this.$route.matched
+          let matched = Object.assign([], this.$route.matched);
+          let route = matched
           .reverse()
           .find((route) => route.meta.layout);
           return `${
