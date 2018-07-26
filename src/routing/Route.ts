@@ -59,7 +59,7 @@ export default class Route {
   }
 
   public setLayout(layout) {
-    this.layout = layout;
+    this.meta.layout = layout;
     return this;
   }
 }
