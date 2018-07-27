@@ -2,11 +2,12 @@ import Vue from "vue";
 import ValidationServiceInterface from "../../validation/ValidationServiceInterface";
 
 class Form {
-  public rules: object;
-  public messages: object;
+  public rules: object = {};
+  public messages: object = {};
 
   private _originalData: any;
-  private _validator: ValidationServiceInterface;
+
+  protected _validator;
 
   constructor(data: object, validator?: ValidationServiceInterface) {
     if (validator) {
@@ -15,7 +16,7 @@ class Form {
 
     Object.assign(this, data);
 
-    this.setOriginaldata();
+    this.setOriginalData();
   }
 
   public validation({ rules, messages }) {
@@ -46,21 +47,21 @@ class Form {
     for (const field in this._originalData) {
       Vue.set(this, field, this._originalData[field]);
     }
-    this.setOriginaldata();
+    this.setOriginalData();
   }
 
   public data() {
     let data = {};
     let tempData = Object.assign({}, this);
-    for (const field in tempData) {
+    for (let field in tempData) {
       if (field.indexOf("_") != 0) {
-        data[field] = this[field];
+        data[`${field}`] = this[field];
       }
     }
     return data;
   }
 
-  public setOriginaldata() {
+  public setOriginalData() {
     this._originalData = Object.assign({}, this.data());
   }
 

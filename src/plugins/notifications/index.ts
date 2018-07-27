@@ -5,12 +5,14 @@ import NotificationService from "./NotificationService";
 class Notifications {
   protected __config: {
     duration: number;
-    component: any;
+    component: object;
   };
 
-  public install(Vue: VueConstructor, { store, service }) {
+  constructor() {
     this.__config = $config.get("notifications");
+  }
 
+  public install(Vue: VueConstructor, { store, service }) {
     store.registerModule(["varie", "notifications"], new NotificationStore());
 
     Vue.component("notifications", this.__config.component);

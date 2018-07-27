@@ -1,4 +1,4 @@
-import * as isEmail from "validator/lib/isEmail";
+import isEmail from "validator/lib/isEmail";
 
 export default {
   passes(value: any) {

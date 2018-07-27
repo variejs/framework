@@ -1,16 +1,14 @@
-import { isArray, isObject } from "util";
-import * as isLength from "validator/lib/isLength";
-import * as isNumeric from "validator/lib/isNumeric";
+import isLength from "validator/lib/isLength";
 
 export default {
-  passes(value: any, attributes: any) {
+  passes(value: { size: number }, attributes: Array<any>) {
     if (value) {
       let min = attributes[0];
 
-      if (isObject(value)) {
-        return value.size >= min * 1024;
-      } else if (isArray(value)) {
+      if (Array.isArray(value)) {
         return value.length >= min;
+      } else if (typeof value === "object") {
+        return value.size >= min * 1024;
       }
 
       return isLength(value, { min: min });

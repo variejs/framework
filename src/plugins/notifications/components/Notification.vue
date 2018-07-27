@@ -11,22 +11,22 @@
 </template>
 
 <script lang="ts">
-	import Vue from 'vue';
-    export default Vue.extend({
-      props : {
-        notification : Object
-      },
-      created() {
-        setTimeout(() => {
-          if(this.notification.duration && this.notification.duration > 0) {
-            this.close()
-          }
-        }, this.notification.duration);
-      },
-      methods : {
-        close() {
-          this.$store.dispatch('varie/notifications/remove', this.notification);
-        }
+import Vue from "vue";
+export default Vue.extend({
+  props: {
+    notification: Object
+  },
+  created() {
+    setTimeout(() => {
+      if (this.notification.duration && this.notification.duration > 0) {
+        this.close();
       }
-    })
+    }, this.notification.duration);
+  },
+  methods: {
+    close() {
+      this.$store.dispatch("varie/notifications/remove", this.notification);
+    }
+  }
+});
 </script>

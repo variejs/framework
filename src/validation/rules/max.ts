@@ -1,15 +1,14 @@
-import { isArray, isObject } from "util";
-import * as isLength from "validator/lib/isLength";
+import isLength from "validator/lib/isLength";
 
 export default {
-  passes(value: any, attributes: any) {
+  passes(value: { size: number }, attributes: Array<any>) {
     if (value) {
       let max = attributes[0];
 
-      if (isObject(value)) {
-        return value.size <= max * 1024;
-      } else if (isArray(value)) {
+      if (Array.isArray(value)) {
         return value.length <= max;
+      } else if (typeof value === "object") {
+        return value.size <= max * 1024;
       }
 
       return isLength(value, { max: max });

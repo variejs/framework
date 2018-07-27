@@ -1,7 +1,7 @@
-import * as isAfter from "validator/lib/isAfter";
+import isAfter from "validator/lib/isAfter";
 
 export default {
-  passes(value: any, parameters: any) {
+  passes(value: any, parameters: Array<any>) {
     if (value) {
       return isAfter(value, parameters[0]);
     }

@@ -2,21 +2,27 @@
   "compilerOptions": {
     "outDir": "./lib/",
     "moduleResolution": "node",
-    "lib": ["es2017", "dom"],
+    "lib": ["es2017", "dom", "dom.iterable"],
     "target": "es5",
     "strict": true,
     "types": [
       "vue",
       "vuex",
       "node",
+      "validator",
       "vue-router",
       "webpack-env",
       "reflect-metadata"
     ],
     "declaration" : true,
+    "noImplicitAny": false,
     "inlineSourceMap" : true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators" : true
+    "experimentalDecorators" : true,
+    "allowSyntheticDefaultImports" : true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": [
+    "src/validation/directive/Validate.ts"
+  ]
 }
