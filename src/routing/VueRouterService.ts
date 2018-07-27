@@ -122,7 +122,6 @@ export default class VueRouterService implements RouterInterface {
 
   private convertRoutePathToRouteName(route: Route, path?: string) {
     path = JSON.stringify(path ? path : route.path);
-    console.info(path);
     // https://regex101.com/r/uV1OfL/3
     route.setName(
       path

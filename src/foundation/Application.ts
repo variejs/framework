@@ -10,7 +10,7 @@ export class Application implements ApplicationInterface {
   public providers: Array<ServiceProviderInterface> = [];
 
   private $providerPromises: Array<Promise<{}>> = [];
-  private $appProviders = require("@config/app").default;
+  private $appProviders = require("@config/app").default.providers;
 
   constructor() {
     this.$container = new Container();
@@ -45,7 +45,7 @@ export class Application implements ApplicationInterface {
   }
 
   private registerConfiguredProviders() {
-    for (let provider in this.$appProviders.providers) {
+    for (let provider in this.$appProviders) {
       let providerPromise = new Promise(resolve => {
         let appProvider = this.getAppProvider(provider);
         if (appProvider instanceof Promise) {
