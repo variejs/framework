@@ -1,7 +1,7 @@
 import { getByDot } from "./../../utilities";
 
 export default {
-  passes(value: any, parameters: [], data: {}): Boolean {
+  passes(value: any, parameters: Array<any>, data: {}): Boolean {
     if (!value) {
       let validLength = 0;
       parameters.forEach(parameter => {

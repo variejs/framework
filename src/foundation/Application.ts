@@ -3,11 +3,14 @@ import "reflect-metadata";
 import { Container } from "inversify";
 import ContainerMixin from "./ContainerMixin";
 import ApplicationInterface from "./ApplicationInterface";
+import ServiceProviderInterface from "../support/ServiceProviderInterface";
 
 export class Application implements ApplicationInterface {
-  private providers = [];
-  private $container: Container;
-  private $providerPromises = [];
+  public $container: Container;
+  public providers: Array<ServiceProviderInterface> = [];
+
+  private $providerPromises: Array<Promise<{}>> = [];
+  private $appProviders = require("@config/app").default;
 
   constructor() {
     this.$container = new Container();
@@ -16,12 +19,12 @@ export class Application implements ApplicationInterface {
   }
 
   public boot(): Promise<ApplicationInterface> {
-    new ContainerMixin().registerMixin(this);
+    new ContainerMixin().registerMixin(global.$app);
 
     return new Promise(resolve => {
       this.registerConfiguredProviders().then(() => {
         this.bootProviders();
-        return resolve(this);
+        return resolve(global.$app);
       });
     });
   }
@@ -42,14 +45,11 @@ export class Application implements ApplicationInterface {
   }
 
   private registerConfiguredProviders() {
-    let appConfig = require("@config/app").default;
-
-    for (let provider in appConfig.providers) {
-      provider = appConfig.providers[provider];
+    for (let provider in this.$appProviders.providers) {
       let providerPromise = new Promise(resolve => {
-        let registering = new provider(this).register();
-        if (registering instanceof Promise) {
-          return registering.then(() => {
+        let appProvider = this.getAppProvider(provider);
+        if (appProvider instanceof Promise) {
+          return appProvider.then(() => {
             return resolve();
           });
         }
@@ -60,10 +60,15 @@ export class Application implements ApplicationInterface {
     return Promise.all(this.$providerPromises);
   }
 
+  private getAppProvider(provider: string): ServiceProviderInterface {
+    return new this.$appProviders[provider](this).register();
+  }
+
   private bootProviders() {
-    for (let provider in this.providers) {
-      provider = this.providers[provider];
-      provider.boot();
-    }
+    Object.values(this.providers).forEach(
+      (provider: ServiceProviderInterface) => {
+        provider.boot();
+      }
+    );
   }
 }

@@ -1,15 +1,16 @@
 import Vue from "vue";
-import Vuex, { Store } from "vuex";
+import * as camelCase from "camelcase";
+import Vuex, { Module, Store } from "vuex";
 import { inject, injectable } from "inversify";
 import StateServiceInterface from "./StateServiceInterface";
-import * as camelCase from "camelcase";
 import ApplicationInterface from "../foundation/ApplicationInterface";
 
 @injectable()
 export default class VuexService implements StateServiceInterface {
-  private store = null;
-  private files = null;
+  private files;
   private app: ApplicationInterface;
+
+  protected store: Store<any>;
 
   constructor(@inject("app") app: ApplicationInterface) {
     Vue.use(Vuex);
@@ -46,13 +47,13 @@ export default class VuexService implements StateServiceInterface {
       `store ${this.getModuleName(filename).join(" ")}`
     );
     $app.$container.bind(moduleAbstractName).to(this.files(filename).default);
-    let module = this.app.make(moduleAbstractName);
+    let module: Module<any, any> = this.app.make(moduleAbstractName);
     module.modules = {};
     module.namespaced = true;
     return module;
   }
 
-  private createStore(filename: string, module: Function) {
+  private createStore(filename: string, module: Module<any, any>) {
     this.store.registerModule(this.getModuleName(filename), module);
   }
 

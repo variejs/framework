@@ -4,8 +4,7 @@ import ConfigInterface from "./ConfigInterface";
 
 @injectable()
 export default class Config implements ConfigInterface {
-  public _configs = {};
-
+  private _configs = {};
   constructor() {
     let files = require.context("@config", true, /^\.\/.*\.(ts)$/);
 

@@ -3,14 +3,16 @@ import Vue from "vue";
 function checkForErrors(el: HTMLElement, vNode) {
   if (!vNode.value.isValid()) {
     let errors = vNode.value.errors();
-    if (errors && errors[el.name]) {
+    if (errors && errors[el.attributes["name"]]) {
       if (!hasValidationErrorElement(el)) {
         el.insertAdjacentHTML(
           "afterend",
           `<div class="validation-error"></div>`
         );
       }
-      return (el.nextSibling.innerHTML = errors[el.name]);
+      if (el.nextSibling) {
+        return (el.nextSibling.innerHTML = errors[el.attributes["name"]]);
+      }
     }
   }
   removeErrors(el);
@@ -18,7 +20,9 @@ function checkForErrors(el: HTMLElement, vNode) {
 
 function removeErrors(el: HTMLElement) {
   if (hasValidationErrorElement(el)) {
-    el.nextSibling.remove();
+    if (el.nextSibling) {
+      el.nextSibling.remove();
+    }
   }
 }
 

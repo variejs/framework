@@ -1,14 +1,24 @@
 export default class Route {
-  private meta = {};
-  private component;
-  private path: string;
-  private name: string;
-  private alias: string;
-  private props: object;
-  private _props = false;
-  private components: object;
+  public path;
+  public name;
+  public alias;
+  public props;
+  public layout;
+  public meta: {
+    middleware?: Array<any>;
+  } = {};
+  public components;
 
-  constructor(path: string, components: object | Array<string>, props = {}) {
+  public group; // TOOD - Should we make this private?
+
+  protected component;
+  protected _props = false;
+
+  constructor(
+    path: string,
+    components: string | object | Array<string>,
+    props = {}
+  ) {
     this.path = path;
 
     if (Object.keys(props).length) {
@@ -48,7 +58,7 @@ export default class Route {
     return this;
   }
 
-  public setMeta(data: Object): this {
+  public setMeta(data): this {
     this.meta = Object.assign(this.meta, data);
     return this;
   }

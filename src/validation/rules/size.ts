@@ -1,15 +1,17 @@
-import { isArray, isObject } from "util";
-import * as isLength from "validator/lib/isLength";
+import isLength from "validator/lib/isLength";
 
 export default {
-  passes(value: any, parameters: []): Boolean {
+  passes(
+    value: { size: number } | Array<any>,
+    parameters: Array<number>
+  ): Boolean {
     if (value) {
       let size = parameters[0];
 
-      if (isObject(value)) {
-        return value.size === size * 1024;
-      } else if (isArray(value)) {
+      if (Array.isArray(value)) {
         return value.length === size;
+      } else if (typeof value === "object") {
+        return value.size === size * 1024;
       }
 
       return isLength(value, size);

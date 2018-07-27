@@ -1,14 +1,13 @@
-import { isArray, isObject } from "util";
-import * as isNumeric from "validator/lib/isNumeric";
+import isNumeric from "validator/lib/isNumeric";
 import { getByDot, uncamelize } from "./../utilities";
 
 export default class Validation {
-  public errors = {};
+  public errors: object = {};
 
-  private _rules = {};
-  private _data: object;
-  private _schema: object;
-  private _messages: object;
+  protected _data: object;
+  protected _schema: object;
+  protected _messages: object;
+  protected _rules: object = {};
 
   /**
    * The size related validation rules.
@@ -30,7 +29,7 @@ export default class Validation {
 
   private validateSchema(schema: any, key?: string) {
     for (let field in schema) {
-      if (isObject(schema[field])) {
+      if (typeof schema[field] === "object") {
         this.validateSchema(schema[field], key ? `${key}.${field}` : field);
       } else {
         let ruleField = key ? `${key}.${field}` : field;
@@ -41,12 +40,12 @@ export default class Validation {
   }
 
   private _checkRules(field: string, rules: string) {
-    rules = rules.split("|");
-    if (rules.length) {
-      for (let ruleIndex in rules) {
+    let rulesArray = rules.split("|");
+    if (rulesArray.length) {
+      for (let ruleIndex in rulesArray) {
         let tempRule = rules[ruleIndex].split(":");
         let rule = tempRule[0];
-        let parameters = null;
+        let parameters: Array<any> = [];
         if (tempRule[1]) {
           parameters = tempRule[1].split(",");
         }
@@ -92,7 +91,7 @@ export default class Validation {
     }
     message = message.replace(":field", uncamelize(field.replace(".", "s ")));
     if (ruleFunctions.replacers) {
-      ruleFunctions.replacers().forEach((replacer, index) => {
+      ruleFunctions.replacers().forEach((replacer: string, index: number) => {
         message = message.replace(
           `:${replacer}`,
           uncamelize(parameters[index].replace(".", "s "))
@@ -135,9 +134,9 @@ export default class Validation {
     let locale = $config.get("app.locale");
     let value = getByDot(this._data, field);
 
-    if (isObject(value)) {
+    if (typeof value === "object") {
       type = "file";
-    } else if (isArray(value)) {
+    } else if (Array.isArray(value)) {
       type = "array";
     } else if (isNumeric(value)) {
       type = "numeric";

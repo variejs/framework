@@ -1,9 +1,7 @@
-import { isArray } from "util";
-
 export default {
-  passes(files: any, parameters: any) {
+  passes(files: File | Array<File>, parameters: Array<any>) {
     if (files) {
-      if (!isArray(files)) {
+      if (!Array.isArray(files)) {
         files = [files];
       }
       let validLength = 0;

@@ -1,15 +1,19 @@
 import { Store } from "vuex";
 import { inject, injectable } from "inversify";
 import ConfigInterface from "../../config/ConfigInterface";
+import StateServiceInterface from "../../state/StateServiceInterface";
 
 @injectable()
 class NotificationService {
   protected __store: Store<object>;
-  protected __config: ConfigInterface;
+  protected __config: {
+    duration: number;
+    component: object;
+  };
 
   constructor(
     @inject("$config") $config: ConfigInterface,
-    @inject("$store") $store: Store
+    @inject("$store") $store: StateServiceInterface
   ) {
     this.__store = $store.getStore();
     this.__config = $config.get("notifications");

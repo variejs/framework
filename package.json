@@ -1,6 +1,6 @@
 {
   "name": "varie",
-  "version": "0.0.51",
+  "version": "0.0.52",
   "description": "VueJS Framework",
   "main": "./lib/index.js",
   "typings": "./lib/index",
@@ -15,10 +15,14 @@
     "inversify": "^4.13.0",
     "inversify-inject-decorators": "^3.1.0",
     "reflect-metadata": "^0.1.12",
-    "validator": "^10.4.0"
+    "validator": "^10.4.0",
+    "vue": "^2.5.16",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@types/node": "^10.3.6",
+    "@types/validator": "^9.4.1",
     "@types/webpack-env": "^1.13.6",
     "husky": "^0.14.3",
     "lint-staged": "^7.2.0",

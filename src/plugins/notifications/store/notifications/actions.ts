@@ -1,4 +1,5 @@
 import { ActionContext } from "vuex";
+// @ts-ignore - unreachable
 import RootState from "@store/rootState";
 import { NotificationsState } from "./stateInterface";
 import NotificationModel from "./../../../notifications/models/NotificationModel";

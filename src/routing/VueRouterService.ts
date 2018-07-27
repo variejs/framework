@@ -2,23 +2,48 @@ import Vue from "vue";
 import Route from "./Route";
 import VueRouter from "vue-router";
 import { injectable } from "inversify";
+// @ts-ignore - unreachable
 import Middleware from "@routes/middleware";
 import RouterInterface from "./RouterInterface";
 
+interface GroupInfo {
+  area: null;
+  path: string;
+  component: string | object;
+  children: Array<Route | GroupInfo>;
+  meta: {
+    layout: string;
+    middleware: Array<any>;
+  };
+}
+
+interface RedirectRoute {
+  path: string;
+  redirect: string;
+}
+
 @injectable()
 export default class VueRouterService implements RouterInterface {
-  public routes = [];
-  public router: VueRouter;
+  public router;
+  public routes: Array<Route | RedirectRoute | GroupInfo> = [];
 
-  protected groups = [];
-  protected groupInfo = null;
-  protected currentGroupLevel = 0;
+  protected groups: Array<GroupInfo> = [];
+  protected groupInfo: GroupInfo = {
+    path: "/",
+    meta: {
+      middleware: [],
+      layout: "public"
+    },
+    area: null,
+    children: [],
+    component: "<router-view/>"
+  };
+  protected currentGroupLevel = -1;
 
-  protected wildCardRoutes = [];
+  protected wildCardRoutes: Array<Route> = [];
 
   constructor() {
     Vue.use(VueRouter);
-    this._resetGroup();
   }
 
   public getRouter() {
@@ -29,8 +54,11 @@ export default class VueRouterService implements RouterInterface {
     return requireContext.keys().map(requireContext);
   }
 
-  private buildRouter() {
-    return new Promise(resolve => {
+  public buildRouter() {
+    return new Promise<{
+      routes: Array<Route | RedirectRoute | GroupInfo>;
+      wildCardRoutes: Array<Route>;
+    }>(resolve => {
       this.requireAll(require.context("@routes", false, /^\.\/.*\.(ts)$/));
       resolve({
         routes: this.routes,
@@ -93,7 +121,8 @@ export default class VueRouterService implements RouterInterface {
   }
 
   private convertRoutePathToRouteName(route: Route, path?: string) {
-    path = JSON.parse(JSON.stringify(path ? path : route.path));
+    path = JSON.stringify(path ? path : route.path);
+    console.info(path);
     // https://regex101.com/r/uV1OfL/3
     route.setName(
       path
@@ -103,21 +132,22 @@ export default class VueRouterService implements RouterInterface {
     );
   }
 
-  public middleware(middleware) {
+  public middleware(middleware: Array<any>) {
     this.groupInfo.meta.middleware = this.groupInfo.meta.middleware.concat(
       middleware
     );
     return this;
   }
 
-  public redirect(path, redirect) {
+  public redirect(path: string, redirect: string) {
     this.routes.push({
       path: path,
       redirect: redirect
     });
+    return this;
   }
 
-  public group(routes) {
+  public group(routes: Function) {
     this.currentGroupLevel++;
     this.groups.push(JSON.parse(JSON.stringify(this.groupInfo)));
     routes();
@@ -130,7 +160,7 @@ export default class VueRouterService implements RouterInterface {
     return this;
   }
 
-  public prefix(prefix) {
+  public prefix(prefix: string) {
     this.groupInfo.path = prefix;
     if (this.currentGroupLevel > -1) {
       this.groupInfo.path = this.groupInfo.path.replace(/^\/*/g, "");
@@ -167,16 +197,18 @@ export default class VueRouterService implements RouterInterface {
     this.groupInfo = {
       path: "/",
       meta: {
-        middleware: []
+        middleware: [],
+        layout: "public"
       },
       area: null,
-      children: []
+      children: [],
+      component: "<router-view/>"
     };
 
     if (this.groups.length) {
       if (this.currentGroupLevel === 0) {
-        let baseGroup = this.groups[0];
-        if(baseGroup.area) {
+        let baseGroup: GroupInfo = this.groups[0];
+        if (baseGroup.area) {
           baseGroup.component = require(`@views/${baseGroup.area}`).default;
         }
         this.routes.push(baseGroup);
@@ -184,7 +216,7 @@ export default class VueRouterService implements RouterInterface {
       } else {
         let childGroup = this.groups[this.currentGroupLevel];
         let parentGroup = this.groups[this.currentGroupLevel - 1];
-        if(childGroup.area) {
+        if (childGroup.area) {
           childGroup.component = require(`@views/${childGroup.area}`).default;
         }
         parentGroup.children.push(childGroup);
