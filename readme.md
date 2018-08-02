@@ -2,32 +2,24 @@
 
 > **Note:** This repository contains the core code of the Varie framework. If you want to build an application using Varie, visit the main [Varie repository](https://github.com/variejs/varie).
 
-Varie is a framework built ontop of VueJS, and was built in effort to build simple, but powerful vue applications.
+Varie is a Typescript framework for rapidly building powerful and elegant Vue.js applications. Bringing
+in concepts from other languages to speed up your development. Whether working in
+a small / large teams, Varie elevates your starting point to ramp into
+development.
 
-### Features : 
- 
-- A simple routing Engine built on top of Vue Router
-- Routing Middleware
-- State management - Vuex with a bit of magic
-- A dependency injection container 
-- Web pack configuration made easy (Mix)
-- HTTP Middleware
-- Plugins
-- And more!
+### Notable Features
 
-Varie is built with simplicity in mind, making it easier to get your product out the door.
+- Validation
+- CLI Plugin
+- Fluent Router
+- Request Middleware
+- Customizable Bundler
+- Auto Loading Store System
+- Dependency Injection (DI)
 
-## Contributions
-1. Setup
-    1. git clone git@github.com:variejs/framework.git 
-        * run yarn install
-        * run `npm link` inside the varie-framework folder
-    2. git clone git@github.com:variejs/varie.git
-        * run yarn install
-        * run `npm link varie` inside the varie folder
-2. Building
-    1. `npm run dev` - builds the framework / application once
-    2. `npm run watch` - watches for change and rebuilds the application
+## Contributing
+
+Thank you for considering contributing to the Varie framework! The contribution guide can be found in the [Varie documentation](https://varie.io/docs/latest/contribution-guide).
 
 ## License
 

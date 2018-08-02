@@ -4,9 +4,9 @@ export default class Route {
   public alias;
   public props;
 
-  public meta : {
-    layout? : string,
-    middleware?: Array<any>,
+  public meta: {
+    layout?: string;
+    middleware?: Array<any>;
   } = {};
 
   public components;

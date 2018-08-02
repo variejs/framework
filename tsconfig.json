@@ -14,15 +14,13 @@
       "webpack-env",
       "reflect-metadata"
     ],
-    "declaration" : true,
+    "declaration": true,
     "noImplicitAny": false,
-    "inlineSourceMap" : true,
+    "inlineSourceMap": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators" : true,
-    "allowSyntheticDefaultImports" : true
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*"],
-  "exclude": [
-    "src/validation/directive/Validate.ts"
-  ]
+  "exclude": ["src/validation/directive/Validate.ts"]
 }
