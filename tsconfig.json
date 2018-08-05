@@ -21,6 +21,5 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["src/validation/directive/Validate.ts"]
+  "include": ["src/**/*"]
 }
