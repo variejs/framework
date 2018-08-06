@@ -1,4 +1,4 @@
-import toDate from "validator/lib/toDate";
+import * as toDate from "validator/lib/toDate";
 
 export default {
   passes(value: any) {

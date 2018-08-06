@@ -1,5 +1,5 @@
-import toDate from "validator/lib/toDate";
-import isAfter from "validator/lib/isAfter";
+import * as toDate from "validator/lib/toDate";
+import * as isAfter from "validator/lib/isAfter";
 
 export default {
   passes(value: any, parameters: Array<any>) {

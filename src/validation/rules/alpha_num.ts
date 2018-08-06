@@ -1,4 +1,4 @@
-import isAlphanumeric from "validator/lib/isAlphanumeric";
+import * as isAlphanumeric from "validator/lib/isAlphanumeric";
 
 export default {
   passes(value: any) {

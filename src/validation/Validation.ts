@@ -1,4 +1,4 @@
-import isNumeric from "validator/lib/isNumeric";
+import * as isNumeric from "validator/lib/isNumeric";
 import { getByDot, uncamelize } from "./../utilities";
 
 export default class Validation {
@@ -43,7 +43,7 @@ export default class Validation {
     let rulesArray = rules.split("|");
     if (rulesArray.length) {
       for (let ruleIndex in rulesArray) {
-        let tempRule = rules[ruleIndex].split(":");
+        let tempRule = rulesArray[ruleIndex].split(":");
         let rule = tempRule[0];
         let parameters: Array<any> = [];
         if (tempRule[1]) {
