@@ -1,9 +1,9 @@
 import Vue from "vue";
 
-function checkForErrors(el: HTMLElement, vNode) {
+function checkForErrors(el: HTMLInputElement, vNode) {
   if (!vNode.value.isValid()) {
     let errors = vNode.value.errors();
-    if (errors && errors[el.attributes["name"]]) {
+    if (errors && errors[el.name]) {
       if (!hasValidationErrorElement(el)) {
         el.insertAdjacentHTML(
           "afterend",
@@ -11,14 +11,14 @@ function checkForErrors(el: HTMLElement, vNode) {
         );
       }
       if (el.nextSibling) {
-        return (el.nextSibling.innerHTML = errors[el.attributes["name"]]);
+        return (el.nextSibling.innerHTML = errors[el.name]);
       }
     }
   }
   removeErrors(el);
 }
 
-function removeErrors(el: HTMLElement) {
+function removeErrors(el: HTMLInputElement) {
   if (hasValidationErrorElement(el)) {
     if (el.nextSibling) {
       el.nextSibling.remove();
@@ -26,7 +26,7 @@ function removeErrors(el: HTMLElement) {
   }
 }
 
-function hasValidationErrorElement(el: HTMLElement) {
+function hasValidationErrorElement(el: HTMLInputElement) {
   let sibling = el.nextSibling;
   if (sibling && sibling.classList) {
     return sibling.classList.contains("validation-error");
@@ -35,8 +35,8 @@ function hasValidationErrorElement(el: HTMLElement) {
 }
 
 Vue.directive("form", {
-  inserted: (form: HTMLElement, vNode) => {
-    form.querySelectorAll("*[validate]").forEach(el => {
+  inserted: (form: HTMLInputElement, vNode) => {
+    form.querySelectorAll("*[validate]").forEach((el: HTMLInputElement) => {
       switch (el.type) {
         case "radio":
         case "checkbox":
