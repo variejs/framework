@@ -14,7 +14,7 @@ export class Application implements ApplicationInterface {
 
   constructor() {
     this.$container = new Container();
-    this.$container.bind("app").toConstantValue(this);
+    this.constant('app', this);
     global.$app = this;
   }
 
@@ -38,6 +38,10 @@ export class Application implements ApplicationInterface {
       .bind(abstract)
       .to(concrete)
       .inSingletonScope();
+  }
+
+  public constant(key: string, constant: any) {
+      this.$container.bind(key).toConstantValue(constant);
   }
 
   public make<T>(abstract: string): T {
