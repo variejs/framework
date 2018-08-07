@@ -4,6 +4,7 @@ import after_or_equal from "./after_or_equal";
 import alpha from "./alpha";
 import alpha_num from "./alpha_num";
 import array from "./array";
+import confirmed from "./confirmed";
 import before from "./before";
 import before_or_equal from "./before_or_equal";
 import between from "./between";
@@ -42,6 +43,7 @@ export default {
   before_or_equal,
   between,
   boolean,
+  confirmed,
   date,
   different,
   email,
