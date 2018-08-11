@@ -36,7 +36,9 @@ export default class VueRouterService implements RouterInterface {
     },
     area: null,
     children: [],
-    component: "<router-view/>"
+    component: {
+      template: "<router-view/>"
+    }
   };
   protected currentGroupLevel = -1;
 
@@ -201,7 +203,9 @@ export default class VueRouterService implements RouterInterface {
       },
       area: null,
       children: [],
-      component: "<router-view/>"
+      component: {
+        template: "<router-view/>"
+      }
     };
 
     if (this.groups.length) {

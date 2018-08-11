@@ -56,7 +56,12 @@ export default class Validation {
         }
 
         if (
-          !ruleClass.passes(this._getValue(field), parameters, this._data, field) &&
+          !ruleClass.passes(
+            this._getValue(field),
+            parameters,
+            this._data,
+            field
+          ) &&
           rule !== "nullable"
         ) {
           this.errors[field] = this._makeReplacements(
