@@ -9,6 +9,7 @@ export default class Config implements ConfigInterface {
   private _configs = {
     env: __ENV_VARIABLES__
   };
+
   constructor() {
     let files = require.context("@config", true, /^\.\/.*\.(ts)$/);
 
