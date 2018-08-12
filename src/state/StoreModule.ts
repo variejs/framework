@@ -9,6 +9,10 @@ export default class StoreModule {
   public mutations = {};
   public namespaced = true;
 
+  setName(name) {
+    this.name = name;
+  }
+
   addState(state) {
     this.state = Object.assign({}, this.state, state);
     return this;
