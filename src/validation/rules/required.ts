@@ -1,7 +1,7 @@
 import { isEmpty } from "./../../utilities";
 
 export default {
-  passes(value: any): Boolean {
+  passes(value: any): boolean {
     return !isEmpty(value);
   }
 };

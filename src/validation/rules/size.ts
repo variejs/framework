@@ -4,7 +4,7 @@ export default {
   passes(
     value: { size: number } | Array<any>,
     parameters: Array<number>
-  ): Boolean {
+  ): boolean {
     if (value) {
       let size = parameters[0];
 

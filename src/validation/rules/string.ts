@@ -1,5 +1,5 @@
 export default {
-  passes(value: any): Boolean {
+  passes(value: any): boolean {
     return typeof value === "string";
   }
 };

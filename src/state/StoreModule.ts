@@ -1,12 +1,13 @@
 import { injectable } from "inversify";
+type GenericObject = { [key: string]: any };
 
 @injectable()
 export default class StoreModule {
   public name;
-  public state = {};
-  public actions = {};
-  public getters = {};
-  public mutations = {};
+  public state: GenericObject = {};
+  public actions: GenericObject = {};
+  public getters: GenericObject = {};
+  public mutations: GenericObject = {};
   public namespaced = true;
 
   setName(name) {

@@ -1,7 +1,7 @@
 import { getByDot } from "./../../utilities";
 
 export default {
-  passes(value: any, parameters: Array<any>, data: {}): Boolean {
+  passes(value: any, parameters: Array<any>, data: {}): boolean {
     if (!value) {
       if (getByDot(data, parameters[0]) === parameters[1]) {
         return false;
