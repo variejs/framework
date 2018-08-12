@@ -27,17 +27,17 @@ export default class VuexService implements StateServiceInterface {
   }
 
   private buildModules() {
-    // try {
-    this.files = require.context("@store", true, /^\.\/.*index\.(ts)$/);
-    this.files.keys().forEach(filename => {
-      this.createStore(filename, this.getModule(filename));
-    });
-    // } catch (e) {
-    // console.warn(e);
-    // console.warn(
-    //   "You have loaded the store module without having a store folder, please add `app/store` folder!"
-    // );
-    // }
+    try {
+      this.files = require.context("@store", true, /^\.\/.*index\.(ts)$/);
+      this.files.keys().forEach(filename => {
+        this.createStore(filename, this.getModule(filename));
+      });
+    } catch (e) {
+      console.warn(e);
+      console.warn(
+        "You have loaded the store module without having a store folder, please add `app/store` folder!"
+      );
+    }
 
     return this.store;
   }
