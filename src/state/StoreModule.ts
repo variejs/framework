@@ -11,6 +11,7 @@ export default class StoreModule {
 
   setName(name) {
     this.name = name;
+    return this;
   }
 
   addState(state) {
