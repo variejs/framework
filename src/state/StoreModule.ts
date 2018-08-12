@@ -2,7 +2,7 @@ import { injectable } from "inversify";
 
 @injectable()
 export default class StoreModule {
-  public name = "Piles";
+  public name;
   public state = {};
   public actions = {};
   public getters = {};
