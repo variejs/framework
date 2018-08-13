@@ -1,3 +1,7 @@
-import { NavigationGuard } from "vue-router";
+import { Route } from "vue-router";
+import { injectable } from "inversify";
 
-export default interface RouteMiddlewareInterface extends NavigationGuard {}
+@injectable()
+export default interface RouteMiddlewareInterface {
+  passes(to: Route, from: Route, next: () => void): boolean;
+}

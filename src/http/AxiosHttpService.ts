@@ -61,7 +61,7 @@ export default class AxiosHttpService implements HttpServiceInterface {
   }
 
   public registerMiddleware(Middleware) {
-    let middlewareName = `middleware${Middleware.constructor.name}`;
+    let middlewareName = `middleware${Middleware.name}`;
     $app.$container.bind(middlewareName).to(Middleware);
     let middleware = this.app.make<HttpMiddlewareInterface>(middlewareName);
 

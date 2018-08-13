@@ -2,9 +2,9 @@ import Vue from "vue";
 import Route from "./Route";
 import VueRouter from "vue-router";
 import { inject, injectable } from "inversify";
-// @ts-ignore - unreachable
-import Middleware from "@routes/middleware";
 import RouterInterface from "./RouterInterface";
+// @ts-ignore - unreachable
+import RouteMiddlewares from "@routes/middleware";
 import RouteMiddlewareInterface from "./RouteMiddlewareInterface";
 import ApplicationInterface from "../foundation/ApplicationInterface";
 
@@ -178,18 +178,17 @@ export default class VueRouterService implements RouterInterface {
     return this;
   }
 
-  private registerMiddleware() {
-    for (let middlewareName in Middleware) {
-      let containerMiddlewareName = `middleware${Middleware.constructor.name}`;
-      $app.$container.bind(containerMiddlewareName).to(Middleware);
+  public registerMiddleware() {
+    RouteMiddlewares.forEach(routeMiddleware => {
+      let containerMiddlewareName = `middleware${routeMiddleware.name}`;
+      $app.$container.bind(containerMiddlewareName).to(routeMiddleware);
       let middleware = this.app.make<RouteMiddlewareInterface>(
         containerMiddlewareName
       );
-
       this.router.beforeResolve((to, from, next) => {
         if (
           to.meta.middleware &&
-          to.meta.middleware.indexOf(middlewareName) > -1
+          to.meta.middleware.indexOf(routeMiddleware.name) > -1
         ) {
           if (middleware.passes(to, from, next)) {
             next();
@@ -198,7 +197,7 @@ export default class VueRouterService implements RouterInterface {
         }
         next();
       });
-    }
+    });
   }
 
   private _resetGroup() {
