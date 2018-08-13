@@ -1,10 +1,12 @@
 import Vue from "vue";
 import Route from "./Route";
 import VueRouter from "vue-router";
-import { injectable } from "inversify";
-// @ts-ignore - unreachable
-import Middleware from "@routes/middleware";
+import { inject, injectable } from "inversify";
 import RouterInterface from "./RouterInterface";
+// @ts-ignore - unreachable
+import RouteMiddlewares from "@routes/middleware";
+import RouteMiddlewareInterface from "./RouteMiddlewareInterface";
+import ApplicationInterface from "../foundation/ApplicationInterface";
 
 interface GroupInfo {
   area: null;
@@ -24,6 +26,8 @@ interface RedirectRoute {
 
 @injectable()
 export default class VueRouterService implements RouterInterface {
+  private app: ApplicationInterface;
+
   public router;
   public routes: Array<Route | RedirectRoute | GroupInfo> = [];
 
@@ -41,10 +45,10 @@ export default class VueRouterService implements RouterInterface {
     }
   };
   protected currentGroupLevel = -1;
-
   protected wildCardRoutes: Array<Route> = [];
 
-  constructor() {
+  constructor(@inject("app") app: ApplicationInterface) {
+    this.app = app;
     Vue.use(VueRouter);
   }
 
@@ -174,24 +178,26 @@ export default class VueRouterService implements RouterInterface {
     return this;
   }
 
-  private registerMiddleware() {
-    let middleware = Middleware;
-
-    for (let middlewareName in middleware) {
-      let middlewareFunction = middleware[middlewareName];
+  public registerMiddleware() {
+    RouteMiddlewares.forEach(routeMiddleware => {
+      let containerMiddlewareName = `middleware${routeMiddleware.name}`;
+      $app.$container.bind(containerMiddlewareName).to(routeMiddleware);
+      let middleware = this.app.make<RouteMiddlewareInterface>(
+        containerMiddlewareName
+      );
       this.router.beforeResolve((to, from, next) => {
         if (
           to.meta.middleware &&
-          to.meta.middleware.indexOf(middlewareName) > -1
+          to.meta.middleware.indexOf(routeMiddleware.name) > -1
         ) {
-          if (middlewareFunction(to, from, next)) {
+          if (middleware.passes(to, from, next)) {
             next();
           }
           return false;
         }
         next();
       });
-    }
+    });
   }
 
   private _resetGroup() {
