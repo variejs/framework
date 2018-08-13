@@ -1,10 +1,12 @@
 import Vue from "vue";
 import Route from "./Route";
 import VueRouter from "vue-router";
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 // @ts-ignore - unreachable
 import Middleware from "@routes/middleware";
 import RouterInterface from "./RouterInterface";
+import RouteMiddlewareInterface from "./RouteMiddlewareInterface";
+import ApplicationInterface from "../foundation/ApplicationInterface";
 
 interface GroupInfo {
   area: null;
@@ -24,6 +26,8 @@ interface RedirectRoute {
 
 @injectable()
 export default class VueRouterService implements RouterInterface {
+  private app: ApplicationInterface;
+
   public router;
   public routes: Array<Route | RedirectRoute | GroupInfo> = [];
 
@@ -41,10 +45,10 @@ export default class VueRouterService implements RouterInterface {
     }
   };
   protected currentGroupLevel = -1;
-
   protected wildCardRoutes: Array<Route> = [];
 
-  constructor() {
+  constructor(@inject("app") app: ApplicationInterface) {
+    this.app = app;
     Vue.use(VueRouter);
   }
 
@@ -175,16 +179,19 @@ export default class VueRouterService implements RouterInterface {
   }
 
   private registerMiddleware() {
-    let middleware = Middleware;
+    for (let middlewareName in Middleware) {
+      let containerMiddlewareName = `middleware${Middleware.constructor.name}`;
+      $app.$container.bind(containerMiddlewareName).to(Middleware);
+      let middleware = this.app.make<RouteMiddlewareInterface>(
+        containerMiddlewareName
+      );
 
-    for (let middlewareName in middleware) {
-      let middlewareFunction = middleware[middlewareName];
       this.router.beforeResolve((to, from, next) => {
         if (
           to.meta.middleware &&
           to.meta.middleware.indexOf(middlewareName) > -1
         ) {
-          if (middlewareFunction(to, from, next)) {
+          if (middleware.passes(to, from, next)) {
             next();
           }
           return false;
