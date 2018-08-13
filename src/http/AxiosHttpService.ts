@@ -1,8 +1,8 @@
 import axios from "axios";
 import { inject, injectable } from "inversify";
 import HttpServiceInterface from "./HttpServiceInterface";
-import ApplicationInterface from "../foundation/ApplicationInterface";
 import HttpMiddlewareInterface from "./HttpMiddlewareInterface";
+import ApplicationInterface from "../foundation/ApplicationInterface";
 
 @injectable()
 export default class AxiosHttpService implements HttpServiceInterface {
