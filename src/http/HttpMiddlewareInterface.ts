@@ -1,7 +1,5 @@
-import { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
-
 export default interface HttpMiddlewareInterface {
-  request(config: AxiosRequestConfig);
-  response(response: AxiosResponse);
-  responseError(responseError: AxiosError);
+  request<T>(config: T): T;
+  response<T>(response: T): T;
+  responseError<T>(responseError: T): T;
 }
