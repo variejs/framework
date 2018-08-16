@@ -20,10 +20,10 @@ class Form {
   }
 
   public fill(data) {
-    for(let key in this.data) {
-        if(data.hasOwnProperty(key)) {
-            this.data[key] = data[key]
-        }
+    for (let key in data) {
+      if (this.hasOwnProperty(key)) {
+        this[key] = data[key];
+      }
     }
     this.setOriginalData();
   }
