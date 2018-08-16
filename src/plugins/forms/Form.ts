@@ -19,6 +19,15 @@ class Form {
     this.setOriginalData();
   }
 
+  public fill(data) {
+    for(let key in this.data) {
+        if(data.hasOwnProperty(key)) {
+            this.data[key] = data[key]
+        }
+    }
+    this.setOriginalData();
+  }
+
   public validation({ rules, messages }) {
     this.rules = rules;
     this.messages = messages;
