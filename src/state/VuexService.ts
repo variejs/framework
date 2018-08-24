@@ -7,7 +7,6 @@ import ApplicationInterface from "../foundation/ApplicationInterface";
 
 @injectable()
 export default class VuexService implements StateServiceInterface {
-  private files;
   private app: ApplicationInterface;
 
   protected store: Store<any>;
@@ -16,7 +15,6 @@ export default class VuexService implements StateServiceInterface {
     Vue.use(Vuex);
     this.app = app;
     this.store = new Vuex.Store<any>({});
-    this.store = this.buildModules();
     this.store.registerModule("varie", {
       namespaced: true
     });
@@ -26,44 +24,20 @@ export default class VuexService implements StateServiceInterface {
     return this.store;
   }
 
-  private buildModules() {
-    try {
-      this.files = require.context("@store", true, /^\.\/.*index\.(ts)$/);
-      this.files.keys().forEach(filename => {
-        this.createStore(filename, this.getModule(filename));
-      });
-    } catch (e) {
-      console.warn(e);
-      console.warn(
-        "You have loaded the store module without having a store folder, please add `app/store` folder!"
-      );
-    }
+  public registerStore(Store: Store, paths: Array<string> = []) {
+    paths.push(Store.name.toLowerCase());
+    let store = this.bindStore(Store);
 
-    return this.store;
+    this.store.registerModule(paths, store);
+
+    store.$modules.forEach(module => {
+      this.registerStore(module, paths);
+    });
   }
 
-  private getModule(filename) {
-    let moduleAbstractName = camelCase(
-      `store ${this.getModuleName(filename).join(" ")}`
-    );
-    $app.$container.bind(moduleAbstractName).to(this.files(filename).default);
-    let module: Module<any, any> = this.app.make(moduleAbstractName);
-    module.modules = {};
-    module.namespaced = true;
-    return module;
-  }
-
-  private createStore(filename: string, module: Module<any, any>) {
-    this.store.registerModule(this.getModuleName(filename), module);
-  }
-
-  private getModuleName(filename: string) {
-    return filename
-      .replace(/^\.\//, "")
-      .replace(/index\.ts/, "")
-      .replace(/index\.js/, "")
-      .replace(/\/$/, "")
-      .replace(/modules\//g, "")
-      .split("/");
+  private bindStore(store) {
+    let moduleAbstractName = camelCase(`store ${store.name}`);
+    $app.$container.bind(moduleAbstractName).to(store);
+    return this.app.make<Module<any, any>>(moduleAbstractName);
   }
 }

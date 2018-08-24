@@ -1,5 +1,6 @@
-import { injectable } from "inversify";
+import { Store } from "vuex";
 type GenericObject = { [key: string]: any };
+import { injectable, inject } from "inversify";
 
 @injectable()
 export default class StoreModule {
@@ -9,6 +10,9 @@ export default class StoreModule {
   public getters: GenericObject = {};
   public mutations: GenericObject = {};
   public namespaced = true;
+
+  protected $store;
+  protected $modules: Array<Store> = [];
 
   setName(name) {
     this.name = name;
@@ -41,6 +45,11 @@ export default class StoreModule {
       getters = getters();
     }
     this.getters = Object.assign({}, this.getters, getters);
+    return this;
+  }
+
+  addModule(store) {
+    this.$modules.push(store);
     return this;
   }
 }

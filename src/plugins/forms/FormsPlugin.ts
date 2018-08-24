@@ -4,7 +4,8 @@ import { VueConstructor } from "vue/types/vue";
 
 @injectable()
 class Forms {
-  @inject("$validator") private _validator;
+  @inject("$validator")
+  private _validator;
 
   public install(Vue: VueConstructor) {
     Vue.mixin({
