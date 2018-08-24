@@ -4,7 +4,8 @@
     </component>
 </template>
 <script>
-export default {
+    import Vue from 'vue';
+    export default Vue.extend({
   computed: {
     layout() {
       let matched = Object.assign([], this.$route.matched);
