@@ -11,7 +11,7 @@ export default class Route {
 
   public components;
 
-  public group; // TOOD - Should we make this private?
+  public group;
 
   protected component;
   protected _props = false;
@@ -27,6 +27,7 @@ export default class Route {
       this._props = true;
     }
 
+    // TODO - check if it is a component already
     if (typeof components === "object") {
       if (this._props) {
         this.props = {};

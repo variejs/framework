@@ -11,6 +11,7 @@ function checkForErrors(el: HTMLInputElement, vNode) {
         );
       }
       if (el.nextSibling) {
+        // @ts-ignore
         return (el.nextSibling.innerHTML = errors[el.name]);
       }
     }
@@ -21,6 +22,7 @@ function checkForErrors(el: HTMLInputElement, vNode) {
 function removeErrors(el: HTMLInputElement) {
   if (hasValidationErrorElement(el)) {
     if (el.nextSibling) {
+      // @ts-ignore
       el.nextSibling.remove();
     }
   }
@@ -28,14 +30,18 @@ function removeErrors(el: HTMLInputElement) {
 
 function hasValidationErrorElement(el: HTMLInputElement) {
   let sibling = el.nextSibling;
+  // @ts-ignore
   if (sibling && sibling.classList) {
+    // @ts-ignore
     return sibling.classList.contains("validation-error");
   }
   return false;
 }
 
+// @ts-ignore
 Vue.directive("form", {
   inserted: (form: HTMLInputElement, vNode) => {
+    // @ts-ignore
     form.querySelectorAll("*[validate]").forEach((el: HTMLInputElement) => {
       switch (el.type) {
         case "radio":

@@ -15,7 +15,10 @@
     "inversify": "^4.13.0",
     "inversify-inject-decorators": "^3.1.0",
     "reflect-metadata": "^0.1.12",
-    "validator": "^10.4.0"
+    "validator": "^10.4.0",
+    "vue": "^2.5.17",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@types/node": "^10.3.6",
