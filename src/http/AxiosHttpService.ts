@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosAdapter, AxiosInstance } from "axios";
 import { inject, injectable } from "inversify";
 import HttpServiceInterface from "./HttpServiceInterface";
 import HttpMiddlewareInterface from "./HttpMiddlewareInterface";
@@ -6,7 +6,7 @@ import ApplicationInterface from "../foundation/ApplicationInterface";
 
 @injectable()
 export default class AxiosHttpService implements HttpServiceInterface {
-  private axios;
+  private axios: AxiosInstance;
   private _middleware = {};
   private app: ApplicationInterface;
 
@@ -20,40 +20,31 @@ export default class AxiosHttpService implements HttpServiceInterface {
   }
 
   public delete(url: string, config = {}) {
-    return this._makeRequest("delete", config, url);
+    return this.axios.delete(url, config);
   }
 
   public get(url: string, config = {}) {
-    return this._makeRequest("get", config, url);
+    return this.axios.get(url, config);
   }
 
   public head(url: string, config = {}) {
-    return this._makeRequest("head", config, url);
+    return this.axios.head(url, config);
   }
 
   public options(url: string, config = {}) {
-    return this._makeRequest("options", config, url);
+    return this.options(url, config);
   }
 
   public post(url: string, data: object, config = {}) {
-    return this._makeRequest("post", config, url, data);
+    return this.axios.post(url, data, config);
   }
 
   public put(url: string, data: object, config = {}) {
-    return this._makeRequest("put", config, url, data);
+    return this.axios.put(url, data, config);
   }
 
   public patch(url: string, data: object, config = {}) {
-    return this._makeRequest("patch", config, url, data);
-  }
-
-  private _makeRequest(
-    method: string,
-    config = {},
-    url: string,
-    data?: object
-  ) {
-    return this.axios[method](url, data, config);
+    return this.axios.patch(url, data, config);
   }
 
   public registerMiddleware(Middleware) {
