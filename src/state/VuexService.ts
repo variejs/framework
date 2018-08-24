@@ -1,7 +1,7 @@
 import Vue from "vue";
+import Vuex, { Store } from "vuex";
 import StoreModule from "./StoreModule";
 import * as camelCase from "camelcase";
-import Vuex, { Store } from "vuex";
 import { inject, injectable } from "inversify";
 import StateServiceInterface from "./StateServiceInterface";
 import ApplicationInterface from "../foundation/ApplicationInterface";
@@ -26,11 +26,9 @@ export default class VuexService implements StateServiceInterface {
   }
 
   public registerStore(Store: StoreModule, paths: Array<string> = []) {
-    paths.push(Store.name.toLowerCase());
     let store = this.bindStore(Store);
-
+    paths.push(store.name || Store.name.toLowerCase());
     this.store.registerModule(paths, store);
-
     store.$modules.forEach(module => {
       this.registerStore(module, paths);
     });
