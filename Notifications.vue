@@ -87,7 +87,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import Notification from "./Notification.vue";
+import Notification from "./components/Notification.vue";
 export default Vue.extend({
   components: {
     Notification

@@ -1,6 +1,3 @@
-// @ts-ignore
-import NotificationsComponent from "varie/src/plugins/notifications/components/Notifications.vue";
-
 export default {
   /*
   |--------------------------------------------------------------------------
@@ -13,14 +10,4 @@ export default {
   */
 
   duration: 0,
-
-  /*
-  |--------------------------------------------------------------------------
-  | Component
-  |--------------------------------------------------------------------------
-  |
-  | You can set a different component to use for the notification package
-  |
-  */
-  component: NotificationsComponent
 };

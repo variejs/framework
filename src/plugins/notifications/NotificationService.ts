@@ -8,7 +8,6 @@ class NotificationService {
   protected __store: Store<object>;
   protected __config: {
     duration: number;
-    component: object;
   };
 
   constructor(
