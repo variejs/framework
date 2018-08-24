@@ -17,10 +17,6 @@ export default class AxiosHttpService implements HttpServiceInterface {
     this.app = app;
     let config = $config.get("http");
     this.axios = axios.create(config);
-
-    require("@app/middleware").default.forEach(middleware => {
-      this.registerMiddleware(middleware);
-    });
   }
 
   public delete(url: string, config = {}) {
