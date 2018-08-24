@@ -77,7 +77,7 @@ export default class AxiosHttpService implements HttpServiceInterface {
         },
         function(error) {
           if (middleware.responseError) {
-            return middleware.responseError(error);
+            return Promise.reject(middleware.responseError(error));
           }
           return Promise.reject(error);
         }
