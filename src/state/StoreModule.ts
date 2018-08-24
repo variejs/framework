@@ -11,8 +11,9 @@ export default class StoreModule {
   public mutations: GenericObject = {};
   public namespaced = true;
 
+  public $modules: Array<StoreModule> = [];
+
   protected $store;
-  protected $modules: Array<Store> = [];
 
   setName(name) {
     this.name = name;

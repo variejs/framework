@@ -3,6 +3,7 @@ import Route from "./Route";
 import VueRouter from "vue-router";
 import { inject, injectable } from "inversify";
 import RouterInterface from "./RouterInterface";
+import RoutesInterface from "./RoutesInterface";
 // @ts-ignore - unreachable
 import RouteMiddlewares from "@routes/middleware";
 import RouteMiddlewareInterface from "./RouteMiddlewareInterface";
@@ -56,8 +57,9 @@ export default class VueRouterService implements RouterInterface {
     return this.router;
   }
 
-  private requireAll(requireContext) {
-    return requireContext.keys().map(requireContext);
+  public register(routes, ...services) {
+    routes(this, services);
+    return this;
   }
 
   public buildRouter() {
@@ -65,7 +67,6 @@ export default class VueRouterService implements RouterInterface {
       routes: Array<Route | RedirectRoute | GroupInfo>;
       wildCardRoutes: Array<Route>;
     }>(resolve => {
-      this.requireAll(require.context("@routes", false, /^\.\/.*\.(ts)$/));
       resolve({
         routes: this.routes,
         wildCardRoutes: this.wildCardRoutes
@@ -181,7 +182,7 @@ export default class VueRouterService implements RouterInterface {
   public registerMiddleware() {
     RouteMiddlewares.forEach(routeMiddleware => {
       let containerMiddlewareName = `middleware${routeMiddleware.name}`;
-      $app.$container.bind(containerMiddlewareName).to(routeMiddleware);
+      this.app.bind<RouteMiddlewareInterface>(containerMiddlewareName, routeMiddleware);
       let middleware = this.app.make<RouteMiddlewareInterface>(
         containerMiddlewareName
       );

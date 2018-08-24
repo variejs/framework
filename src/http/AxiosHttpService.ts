@@ -1,8 +1,8 @@
-import axios, { AxiosAdapter, AxiosInstance } from "axios";
+import axios, { AxiosInstance } from "axios";
 import { inject, injectable } from "inversify";
 import HttpServiceInterface from "./HttpServiceInterface";
-import HttpMiddlewareInterface from "./HttpMiddlewareInterface";
 import ApplicationInterface from "../foundation/ApplicationInterface";
+import AxiosHttpMiddlewareInterface from "./AxiosHttpMiddlewareInterface";
 
 @injectable()
 export default class AxiosHttpService implements HttpServiceInterface {
@@ -49,8 +49,10 @@ export default class AxiosHttpService implements HttpServiceInterface {
 
   public registerMiddleware(Middleware) {
     let middlewareName = `middleware${Middleware.name}`;
-    $app.$container.bind(middlewareName).to(Middleware);
-    let middleware = this.app.make<HttpMiddlewareInterface>(middlewareName);
+    this.app.bind<AxiosHttpMiddlewareInterface>(middlewareName, Middleware);
+    let middleware = this.app.make<AxiosHttpMiddlewareInterface>(
+      middlewareName
+    );
 
     this._middleware[middleware.constructor.name] = {
       request: this.axios.interceptors.request.use(config => {

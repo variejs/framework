@@ -1,4 +1,5 @@
 import Route from "./Route";
+import RoutesInterface from "./RoutesInterface";
 
 export default interface RouterInterface {
   getRouter(): any;
@@ -9,4 +10,5 @@ export default interface RouterInterface {
   area(area: string): this;
   redirect(path: string, redirect: string): this;
   layout(layout: string): this;
+  register(RouteClass: RoutesInterface);
 }

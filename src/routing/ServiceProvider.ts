@@ -3,12 +3,17 @@ import VueRouterService from "./VueRouterService";
 import ServiceProvider from "../support/ServiceProvider";
 
 export default class RoutingServiceProvider extends ServiceProvider {
+  public $router;
+
   public boot() {
-    return this.app.make<VueRouterService>("$router").buildRouter();
+    this.$router = this.app.make("$router");
+    // @ts-ignore
+    this.map();
+    this.$router.buildRouter();
   }
 
   public register() {
     this.mergeConfigFrom(RouterConfig, "router");
-    this.app.singleton("$router", VueRouterService);
+    this.app.singleton<VueRouterService>("$router", VueRouterService);
   }
 }
