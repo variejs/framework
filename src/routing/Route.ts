@@ -50,16 +50,10 @@ export default class Route {
     if (typeof components === "object") {
       this.components = {};
       for (let name in components) {
-        this.components[name] = this.getComponent(components[name]);
+        this.components[name] = components[name];
       }
     } else {
-      this.component = this.getComponent(components);
+      this.component = components;
     }
-  }
-
-  private getComponent(component) {
-    return typeof component === "function"
-      ? component
-      : require(`@views/${component}`).default;
   }
 }

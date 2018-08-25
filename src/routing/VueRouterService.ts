@@ -1,18 +1,18 @@
 import Vue from "vue";
 import Route from "./Route";
 import VueRouter from "vue-router";
+import clone from "./../utilities/clone";
 import { inject, injectable } from "inversify";
 import RouterInterface from "./RouterInterface";
-import RoutesInterface from "./RoutesInterface";
 // @ts-ignore - unreachable
 import RouteMiddlewares from "@routes/middleware";
 import RouteMiddlewareInterface from "./RouteMiddlewareInterface";
 import ApplicationInterface from "../foundation/ApplicationInterface";
 
 interface GroupInfo {
-  area: null;
   path: string;
-  component: string | object;
+  component: object;
+  area: null | object;
   children: Array<Route | GroupInfo>;
   meta: {
     layout: string;
@@ -155,13 +155,13 @@ export default class VueRouterService implements RouterInterface {
 
   public group(routes: Function) {
     this.currentGroupLevel++;
-    this.groups.push(JSON.parse(JSON.stringify(this.groupInfo)));
+    this.groups.push(clone(this.groupInfo));
     routes();
     this._resetGroup();
     return this;
   }
 
-  public area(area) {
+  public area(area: object) {
     this.groupInfo.area = area;
     return this;
   }
@@ -222,7 +222,7 @@ export default class VueRouterService implements RouterInterface {
       if (this.currentGroupLevel === 0) {
         let baseGroup: GroupInfo = this.groups[0];
         if (baseGroup.area) {
-          baseGroup.component = require(`@views/${baseGroup.area}`).default;
+          baseGroup.component = baseGroup.area;
         }
         this.routes.push(baseGroup);
         this.groups = [];
@@ -230,7 +230,7 @@ export default class VueRouterService implements RouterInterface {
         let childGroup = this.groups[this.currentGroupLevel];
         let parentGroup = this.groups[this.currentGroupLevel - 1];
         if (childGroup.area) {
-          childGroup.component = require(`@views/${childGroup.area}`).default;
+          childGroup.component = childGroup.area;
         }
         parentGroup.children.push(childGroup);
         this.groups.splice(this.currentGroupLevel, 1);

@@ -1,6 +1,6 @@
 {
   "name": "varie",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "VueJS Framework",
   "main": "./lib/index.js",
   "typings": "./lib/index",
@@ -11,6 +11,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "camelcase": "^5.0.0",
+    "clone-deep": "^4.0.0",
     "dashify": "^1.0.0",
     "inversify": "^4.13.0",
     "inversify-inject-decorators": "^3.1.0",
