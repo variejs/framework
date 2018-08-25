@@ -24,7 +24,7 @@ export default class RoutingServiceProvider extends ServiceProvider {
     }
 
     this.app.singleton<ValidationServiceInterface>(
-      "$validator",
+      "validationService",
       VarieValidationService
     );
   }

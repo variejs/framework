@@ -8,7 +8,9 @@ export default class Validator extends Form {
   public messages = {};
 
   // TODO - should re-think how this validator is used , not a fan of how I thought of it the first time
-  constructor(@inject("$validator") $validator: ValidationServiceInterface) {
-    super({}, $validator);
+  constructor(
+    @inject("validationService") validationService: ValidationServiceInterface
+  ) {
+    super({}, validationService);
   }
 }

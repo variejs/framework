@@ -63,29 +63,21 @@ export default class VueRouterService implements RouterInterface {
   }
 
   public buildRouter() {
-    return new Promise<{
-      routes: Array<Route | RedirectRoute | GroupInfo>;
-      wildCardRoutes: Array<Route>;
-    }>(resolve => {
-      resolve({
-        routes: this.routes,
-        wildCardRoutes: this.wildCardRoutes
+    if (this.wildCardRoutes.length) {
+      this.wildCardRoutes.forEach(route => {
+        if (route.group) {
+          route.group.children.push(route);
+        } else {
+          this.routes.push(route);
+        }
       });
-    }).then(({ routes, wildCardRoutes }) => {
-      if (wildCardRoutes.length) {
-        wildCardRoutes.forEach(route => {
-          if (route.group) {
-            route.group.children.push(route);
-          } else {
-            routes.push(route);
-          }
-        });
-      }
-
-      $config.set("router.routes", routes);
-      this.router = new VueRouter($config.get("router"));
-      this.registerMiddleware();
-    });
+    }
+    this.router = new VueRouter(
+      Object.assign({}, $config.get("router"), {
+        routes: this.routes
+      })
+    );
+    this.registerMiddleware();
   }
 
   public route(path: string, component: string | object, props = {}): Route {

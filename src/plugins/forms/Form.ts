@@ -9,9 +9,9 @@ class Form {
 
   protected _validator;
 
-  constructor(data: object, validator?: ValidationServiceInterface) {
-    if (validator) {
-      this._validator = validator;
+  constructor(data: object, validationService?: ValidationServiceInterface) {
+    if (validationService) {
+      this._validator = validationService;
     }
 
     Object.assign(this, data);

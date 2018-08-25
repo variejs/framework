@@ -6,7 +6,7 @@ export default class RoutingServiceProvider extends ServiceProvider {
   public $router;
 
   public boot() {
-    this.$router = this.app.make("$router");
+    this.$router = this.app.make("routerService");
     // @ts-ignore
     this.map();
     this.$router.buildRouter();
@@ -14,6 +14,6 @@ export default class RoutingServiceProvider extends ServiceProvider {
 
   public register() {
     this.mergeConfigFrom(RouterConfig, "router");
-    this.app.singleton<VueRouterService>("$router", VueRouterService);
+    this.app.singleton<VueRouterService>("routerService", VueRouterService);
   }
 }
