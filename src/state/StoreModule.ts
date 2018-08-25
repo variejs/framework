@@ -11,6 +11,7 @@ export default class StoreModule {
   public mutations: GenericObject = {};
   public namespaced = true;
 
+  public modules = {};
   public $modules: Array<StoreModule> = [];
 
   protected $store;

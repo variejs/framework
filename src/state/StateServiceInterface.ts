@@ -1,4 +1,4 @@
 export default interface StateServiceInterface {
   getStore(): any;
-  registerStore(store: any): any;
+  registerStore(store: any): StateServiceInterface;
 }

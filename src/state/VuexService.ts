@@ -25,13 +25,23 @@ export default class VuexService implements StateServiceInterface {
     return this.store;
   }
 
-  public registerStore(Store: StoreModule, paths: Array<string> = []) {
+  public registerStore(Store: StoreModule, topLevel = true) {
     let store = this.bindStore(Store);
-    paths.push(store.name || Store.name.toLowerCase());
-    this.store.registerModule(paths, store);
-    store.$modules.forEach(module => {
-      this.registerStore(module, paths);
+    store.$modules.forEach(Module => {
+      this.registerStore(Module, false);
+      let module = this.app.make<StoreModule>(
+        camelCase(`store ${Module.name}`)
+      );
+      store.modules[camelCase(module.name || Module.name)] = this.app.make(
+        camelCase(`store ${Module.name}`)
+      );
     });
+
+    if (topLevel) {
+      this.store.registerModule(camelCase(store.name || Store.name), store);
+    }
+
+    return this;
   }
 
   private bindStore(Store: StoreModule): StoreModule {

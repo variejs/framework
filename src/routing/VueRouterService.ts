@@ -182,7 +182,10 @@ export default class VueRouterService implements RouterInterface {
   public registerMiddleware() {
     RouteMiddlewares.forEach(routeMiddleware => {
       let containerMiddlewareName = `middleware${routeMiddleware.name}`;
-      this.app.bind<RouteMiddlewareInterface>(containerMiddlewareName, routeMiddleware);
+      this.app.bind<RouteMiddlewareInterface>(
+        containerMiddlewareName,
+        routeMiddleware
+      );
       let middleware = this.app.make<RouteMiddlewareInterface>(
         containerMiddlewareName
       );
