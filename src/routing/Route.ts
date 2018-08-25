@@ -14,7 +14,6 @@ export default class Route {
   public group;
 
   protected component;
-  protected _props = false;
 
   constructor(
     path: string,
@@ -22,38 +21,9 @@ export default class Route {
     props = {}
   ) {
     this.path = path;
+    this.props = props;
 
-    if (Object.keys(props).length) {
-      this._props = true;
-    }
-
-    // TODO - check if it is a component already
-    if (typeof components === "object") {
-      if (this._props) {
-        this.props = {};
-      }
-      this.components = {};
-
-      for (let name in components) {
-        let component = components[name];
-        this.components[name] = require(`@views/${component}`).default;
-        if (this._props) {
-          this.components[name] = {
-            props: props,
-            component: this.components[name]
-          };
-          this.props[name] = true;
-        }
-      }
-    } else {
-      this.component = require(`@views/${components}`).default;
-      if (this._props) {
-        this.component = {
-          props: props,
-          component: this.component
-        };
-      }
-    }
+    this.registerComponents(components);
   }
 
   public setName(name: string): this {
@@ -74,5 +44,22 @@ export default class Route {
   public setLayout(layout) {
     this.meta.layout = layout;
     return this;
+  }
+
+  private registerComponents(components) {
+    if (typeof components === "object") {
+      this.components = {};
+      for (let name in components) {
+        this.components[name] = this.getComponent(components[name]);
+      }
+    } else {
+      this.component = this.getComponent(components);
+    }
+  }
+
+  private getComponent(component) {
+    return typeof component === "function"
+      ? component
+      : require(`@views/${component}`).default;
   }
 }
