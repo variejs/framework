@@ -1,5 +1,6 @@
 import * as isNumeric from "validator/lib/isNumeric";
 import { getByDot, uncamelize } from "./../utilities";
+import ConfigInterface from "../config/ConfigInterface";
 
 export default class Validation {
   public errors: object = {};
@@ -9,6 +10,8 @@ export default class Validation {
   protected _messages: object;
   protected _rules: object = {};
 
+  private $config;
+
   /**
    * The size related validation rules.
    *
@@ -16,11 +19,17 @@ export default class Validation {
    */
   private _sizeRules = ["between", "min", "max", "size"];
 
-  constructor(data: object, schema: object, messages: object) {
+  constructor(
+    data: object,
+    schema: object,
+    messages: object,
+    $config: ConfigInterface
+  ) {
     this._data = data;
     this._schema = schema;
+    this.$config = $config;
     this._messages = messages;
-    this._rules = $config.get("validation.rules");
+    this._rules = this.$config.get("validation.rules");
   }
 
   public validate() {
@@ -136,7 +145,7 @@ export default class Validation {
 
   private _getSizeMessage(field: string, rule: string) {
     let type = "string";
-    let locale = $config.get("app.locale");
+    let locale = this.$config.get("app.locale");
     let value = getByDot(this._data, field);
 
     if (typeof value === "object") {
@@ -147,11 +156,11 @@ export default class Validation {
       type = "numeric";
     }
 
-    return $config.get(`validation.${locale}.${rule}.${type}`);
+    return this.$config.get(`validation.${locale}.${rule}.${type}`);
   }
 
   private _getMessageFromLocale(rule: string) {
-    let locale = $config.get("app.locale");
-    return $config.get(`validation.${locale}.${rule}`);
+    let locale = this.$config.get("app.locale");
+    return this.$config.get(`validation.${locale}.${rule}`);
   }
 }

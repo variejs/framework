@@ -6,6 +6,7 @@ import { inject, injectable } from "inversify";
 import RouterInterface from "./RouterInterface";
 // @ts-ignore - unreachable
 import RouteMiddlewares from "@routes/middleware";
+import ConfigInterface from "../config/ConfigInterface";
 import RouteMiddlewareInterface from "./RouteMiddlewareInterface";
 import ApplicationInterface from "../foundation/ApplicationInterface";
 
@@ -28,6 +29,7 @@ interface RedirectRoute {
 @injectable()
 export default class VueRouterService implements RouterInterface {
   private app: ApplicationInterface;
+  private $config: ConfigInterface;
 
   public router;
   public routes: Array<Route | RedirectRoute | GroupInfo> = [];
@@ -48,8 +50,12 @@ export default class VueRouterService implements RouterInterface {
   protected currentGroupLevel = -1;
   protected wildCardRoutes: Array<Route> = [];
 
-  constructor(@inject("app") app: ApplicationInterface) {
+  constructor(
+    @inject("app") app: ApplicationInterface,
+    @inject("$config") $config: ConfigInterface
+  ) {
     this.app = app;
+    this.$config = $config;
     Vue.use(VueRouter);
   }
 
@@ -73,7 +79,7 @@ export default class VueRouterService implements RouterInterface {
       });
     }
     this.router = new VueRouter(
-      Object.assign({}, $config.get("router"), {
+      Object.assign({}, this.$config.get("router"), {
         routes: this.routes
       })
     );

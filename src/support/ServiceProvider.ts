@@ -1,4 +1,5 @@
 import { injectable } from "inversify";
+import ConfigInterface from "../config/ConfigInterface";
 import ServiceProviderInterface from "./ServiceProviderInterface";
 import ApplicationInterface from "./../foundation/ApplicationInterface";
 
@@ -12,7 +13,7 @@ export default class ServiceProvider implements ServiceProviderInterface {
   }
 
   protected mergeConfigFrom(frameworkConfig: any, key: string) {
-    let appConfig = $config.get(key);
+    let appConfig = this.app.make<ConfigInterface>("$config").get(key);
 
     for (let appConfigKey in appConfig) {
       if (appConfig[appConfigKey]) {
