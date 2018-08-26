@@ -4,6 +4,7 @@ import { Container } from "inversify";
 import ContainerMixin from "./ContainerMixin";
 import ApplicationInterface from "./ApplicationInterface";
 import ServiceProviderInterface from "../support/ServiceProviderInterface";
+import Vue from "vue";
 
 export class Application implements ApplicationInterface {
   public $container: Container;
@@ -13,18 +14,19 @@ export class Application implements ApplicationInterface {
   private $appProviders = require("@config/app").default.providers;
 
   constructor() {
+    global.$app = this;
+    Vue.prototype["$app"] = this;
     this.$container = new Container();
     this.constant("app", this);
-    global.$app = this;
   }
 
   public boot(): Promise<ApplicationInterface> {
-    new ContainerMixin().registerMixin(global.$app);
+    new ContainerMixin().registerMixin(this);
 
     return new Promise(resolve => {
       this.registerConfiguredProviders().then(() => {
         this.bootProviders();
-        return resolve(global.$app);
+        return resolve(this);
       });
     });
   }
