@@ -18,7 +18,7 @@ class Form {
 
   public fill(data) {
     for (let key in data) {
-      this[key] = data[key]
+      this[key] = data[key];
     }
   }
 
@@ -47,10 +47,12 @@ class Form {
   }
 
   public reset() {
-    for (let field in this) {
-        if (field.indexOf("_") != 0) {
-            delete(this[field]);
-        }
+    let tempData = Object.assign({}, this);
+    for (let field in tempData) {
+      if (field.indexOf("_") != 0) {
+        // @ts-ignore
+        this[field] = undefined;
+      }
     }
     this.fill(this._originalData);
   }

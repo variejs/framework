@@ -47,7 +47,7 @@ export default class Route {
   }
 
   private registerComponents(components) {
-    if (typeof(components) === "object" && !components.__file) {
+    if (typeof components === "object" && !components.__file) {
       this.components = {};
       for (let name in components) {
         this.components[name] = components[name];
