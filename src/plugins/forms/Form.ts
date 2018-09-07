@@ -1,3 +1,5 @@
+import Vue from "vue";
+import filterEmpty from "./../../utilities/filterEmpty";
 import ValidationServiceInterface from "../../validation/ValidationServiceInterface";
 
 class Form {
@@ -13,13 +15,23 @@ class Form {
       this._validator = validationService;
     }
     this.fill(data);
-    this.setOriginalData();
+    this.setAsOriginalData();
   }
 
   public fill(data) {
     for (let key in data) {
-      this[key] = data[key];
+      Vue.set(this, key, data[key]);
     }
+    return this;
+  }
+
+  public merge(data) {
+    for (let key in data) {
+      if (this.hasOwnProperty(key)) {
+        Vue.set(this, key, data[key]);
+      }
+    }
+    return this;
   }
 
   public validation({ rules, messages }) {
@@ -42,21 +54,6 @@ class Form {
     return true;
   }
 
-  public errors() {
-    return this._validator.validate(this.data(), this._rules, this._messages);
-  }
-
-  public reset() {
-    let tempData = Object.assign({}, this);
-    for (let field in tempData) {
-      if (field.indexOf("_") != 0) {
-        // @ts-ignore
-        this[field] = undefined;
-      }
-    }
-    this.fill(this._originalData);
-  }
-
   public data() {
     let data = {};
     let tempData = Object.assign({}, this);
@@ -65,11 +62,29 @@ class Form {
         data[`${field}`] = this[field];
       }
     }
-    return data;
+    return filterEmpty(data);
   }
 
-  public setOriginalData() {
-    this._originalData = Object.assign({}, this.data());
+  public setAsOriginalData() {
+    this._originalData = this.data();
+    return this;
+  }
+
+  public reset() {
+    for (let field in this.data()) {
+      this.remove(field);
+    }
+    this.fill(this._originalData);
+    return this;
+  }
+
+  public remove(key) {
+    Vue.delete(this, key);
+    return this;
+  }
+
+  public errors() {
+    return this._validator.validate(this.data(), this._rules, this._messages);
   }
 
   public isDirty() {
