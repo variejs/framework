@@ -5,9 +5,9 @@ import ServiceProvider from "../../support/ServiceProvider";
 
 export default class NotificationsServiceProvider extends ServiceProvider {
   public boot() {
-    Vue.use(this.app.make<PluginObject<any>>("$FormsPlugin"));
+    Vue.use(this.app.make<PluginObject<any>>("FormService"));
   }
   public register() {
-    this.app.singleton("$FormsPlugin", FormsPlugin);
+    this.app.singleton("FormService", FormsPlugin);
   }
 }

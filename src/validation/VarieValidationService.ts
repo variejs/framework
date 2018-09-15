@@ -4,13 +4,13 @@ import ValidationServiceInterface from "./ValidationServiceInterface";
 
 @injectable()
 export default class ValidationService implements ValidationServiceInterface {
-  private $config;
+  private configService;
 
-  constructor(@inject("$config") $config) {
-    this.$config = $config;
+  constructor(@inject("ConfigService") configService) {
+    this.configService = configService;
   }
 
   public validate(data: object, schema: object, messages = {}) {
-    return new Validation(data, schema, messages, this.$config).validate();
+    return new Validation(data, schema, messages, this.configService).validate();
   }
 }

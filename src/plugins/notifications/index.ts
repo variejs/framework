@@ -3,7 +3,7 @@ import NotificationStore from "./store/notifications";
 import NotificationService from "./NotificationService";
 import ConfigInterface from "../../config/ConfigInterface";
 
-class Notifications {
+export default class Notifications {
   protected __config: {
     duration: number;
   };
@@ -24,5 +24,3 @@ class Notifications {
     });
   }
 }
-
-export default Notifications;

@@ -13,7 +13,7 @@ export default class ServiceProvider implements ServiceProviderInterface {
   }
 
   protected mergeConfigFrom(frameworkConfig: any, key: string) {
-    let appConfig = this.app.make<ConfigInterface>("$config").get(key);
+    let appConfig = this.app.make<ConfigInterface>("ConfigService").get(key);
 
     for (let appConfigKey in appConfig) {
       if (appConfig[appConfigKey]) {

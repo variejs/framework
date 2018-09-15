@@ -29,7 +29,7 @@ interface RedirectRoute {
 @injectable()
 export default class VueRouterService implements RouterInterface {
   private app: ApplicationInterface;
-  private $config: ConfigInterface;
+  private configService: ConfigInterface;
 
   public router;
   public routes: Array<Route | RedirectRoute | GroupInfo> = [];
@@ -52,10 +52,10 @@ export default class VueRouterService implements RouterInterface {
 
   constructor(
     @inject("app") app: ApplicationInterface,
-    @inject("$config") $config: ConfigInterface
+    @inject("ConfigService") configService: ConfigInterface
   ) {
     this.app = app;
-    this.$config = $config;
+    this.configService = configService;
     Vue.use(VueRouter);
   }
 
@@ -79,7 +79,7 @@ export default class VueRouterService implements RouterInterface {
       });
     }
     this.router = new VueRouter(
-      Object.assign({}, this.$config.get("router"), {
+      Object.assign({}, this.configService.get("router"), {
         routes: this.routes
       })
     );

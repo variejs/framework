@@ -11,8 +11,8 @@ class NotificationService {
   };
 
   constructor(
-    @inject("$config") $config: ConfigInterface,
-    @inject("storeService") storeService: StateServiceInterface
+    @inject("ConfigService") $config: ConfigInterface,
+    @inject("StoreService") storeService: StateServiceInterface
   ) {
     this.__store = storeService.getStore();
     this.__config = $config.get("notifications");

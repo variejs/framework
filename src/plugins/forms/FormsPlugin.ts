@@ -4,13 +4,13 @@ import { VueConstructor } from "vue/types/vue";
 
 @injectable()
 class Forms {
-  @inject("validationService") private _validator;
+  @inject("ValidationService") private validateService;
 
   public install(Vue: VueConstructor) {
     Vue.mixin({
       methods: {
         createForm: (data: object) => {
-          return new Form(data, this._validator);
+          return new Form(data, this.validateService);
         }
       }
     });

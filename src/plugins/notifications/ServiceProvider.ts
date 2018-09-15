@@ -8,16 +8,16 @@ import NotificationServiceInterface from "./NotificationServiceInterface";
 
 export default class NotificationsServiceProvider extends ServiceProvider {
   public boot() {
-    Vue.use(new Notifications(this.app.make("$config")), {
-      store: this.app.make<VuexService>("storeService").getStore(),
-      service: this.app.make("notificationService")
+    Vue.use(new Notifications(this.app.make("ConfigService")), {
+      store: this.app.make<VuexService>("StoreService").getStore(),
+      service: this.app.make("NotificationService")
     });
   }
 
   public register() {
     this.mergeConfigFrom(NotificationsConfig, "notifications");
     this.app.singleton<NotificationServiceInterface>(
-      "notificationService",
+      "NotificationService",
       NotificationService
     );
   }

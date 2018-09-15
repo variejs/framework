@@ -12,7 +12,7 @@ export default class AxiosHttpService implements HttpServiceInterface {
 
   constructor(
     @inject("app") app: ApplicationInterface,
-    @inject("$config") $config
+    @inject("ConfigService") $config
   ) {
     this.app = app;
     let config = $config.get("http");
