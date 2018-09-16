@@ -6,9 +6,9 @@ export default interface RouterInterface {
   route(path: string, component: object): Route;
   group(routes: Function): this;
   middleware(middleware: Array<any>): this;
-  prefix(prefix: string);
+  prefix(prefix: string) : this;
   area(area: object): this;
   redirect(path: string, redirect: string): this;
   layout(layout: string): this;
-  register(RouteClass: RoutesInterface);
+  register(RouteClass: RoutesInterface) : this;
 }
