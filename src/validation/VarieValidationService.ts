@@ -11,6 +11,11 @@ export default class ValidationService implements ValidationServiceInterface {
   }
 
   public validate(data: object, schema: object, messages = {}) {
-    return new Validation(data, schema, messages, this.configService).validate();
+    return new Validation(
+      data,
+      schema,
+      messages,
+      this.configService
+    ).validate();
   }
 }

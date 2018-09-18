@@ -45,7 +45,10 @@ export default class VuexService implements StateServiceInterface {
   }
 
   private getStoreName(store: StoreModule) {
-    return camelCase(store.name || store.constructor.name);
+    if (!store.name) {
+      throw "Your store does not have a name";
+    }
+    return store.name;
   }
 
   private bindStore(Store: StoreModule) {

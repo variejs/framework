@@ -4,8 +4,6 @@ import VueRouter from "vue-router";
 import clone from "./../utilities/clone";
 import { inject, injectable } from "inversify";
 import RouterInterface from "./RouterInterface";
-// @ts-ignore - unreachable
-import RouteMiddlewares from "@routes/middleware";
 import ConfigInterface from "../config/ConfigInterface";
 import RouteMiddlewareInterface from "./RouteMiddlewareInterface";
 import ApplicationInterface from "../foundation/ApplicationInterface";
@@ -83,7 +81,7 @@ export default class VueRouterService implements RouterInterface {
         routes: this.routes
       })
     );
-    this.registerMiddleware();
+    this.setupMiddleware();
   }
 
   public route(path: string, component: string | object, props = {}): Route {
@@ -177,29 +175,32 @@ export default class VueRouterService implements RouterInterface {
     return this;
   }
 
-  public registerMiddleware() {
-    RouteMiddlewares.forEach(routeMiddleware => {
-      let containerMiddlewareName = `middleware${routeMiddleware.name}`;
-      this.app.bind<RouteMiddlewareInterface>(
-        containerMiddlewareName,
-        routeMiddleware
-      );
-      let middleware = this.app.make<RouteMiddlewareInterface>(
-        containerMiddlewareName
-      );
-      this.router.beforeResolve((to, from, next) => {
+  public setupMiddleware() {
+    this.router.beforeResolve((to, from, next) => {
+      for (let middleware in to.meta.middleware) {
         if (
-          to.meta.middleware &&
-          to.meta.middleware.indexOf(routeMiddleware.name) > -1
+          !this.registerMiddleware(to.meta.middleware[middleware]).passes(
+            to,
+            from,
+            next
+          )
         ) {
-          if (middleware.passes(to, from, next)) {
-            next();
-          }
           return false;
         }
-        next();
-      });
+      }
+      next();
     });
+  }
+
+  private registerMiddleware(middleware) {
+    let containerMiddlewareName = `routerMiddleware${middleware.name}`;
+    if (!this.app.$container.isBound(containerMiddlewareName)) {
+      this.app.bind<RouteMiddlewareInterface>(
+        containerMiddlewareName,
+        middleware
+      );
+    }
+    return this.app.make<RouteMiddlewareInterface>(containerMiddlewareName);
   }
 
   private _resetGroup() {
