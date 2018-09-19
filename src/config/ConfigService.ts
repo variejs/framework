@@ -1,14 +1,12 @@
 import { injectable } from "inversify";
-import { getByDot, setByDot } from "./../utilities";
 import ConfigInterface from "./ConfigInterface";
+import { getByDot, setByDot } from "./../utilities";
 
 declare const __ENV_VARIABLES__: object;
 
 @injectable()
 export default class Config implements ConfigInterface {
-  private _configs = {
-    env: __ENV_VARIABLES__
-  };
+  private _configs = __ENV_VARIABLES__;
 
   constructor() {
     let files = require.context("@config", true, /^\.\/.*\.(ts)$/);
@@ -20,7 +18,7 @@ export default class Config implements ConfigInterface {
         .replace(/\.js/, "")
         .replace(/\.ts/, "");
 
-      this._configs[configName] = files(filename).default;
+      this._configs[configName] = Object.assign({}, this._configs[configName], files(filename).default);
     }
   }
 
