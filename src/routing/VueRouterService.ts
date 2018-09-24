@@ -228,6 +228,12 @@ export default class VueRouterService implements RouterInterface {
       } else {
         let childGroup = this.groups[this.currentGroupLevel];
         let parentGroup = this.groups[this.currentGroupLevel - 1];
+
+        if (parentGroup) {
+          this.groupInfo.meta.layout = parentGroup.meta.layout;
+          this.groupInfo.meta.middleware = parentGroup.meta.middleware;
+        }
+
         if (childGroup.area) {
           childGroup.component = childGroup.area;
         }

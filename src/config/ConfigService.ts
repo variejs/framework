@@ -18,7 +18,11 @@ export default class Config implements ConfigInterface {
         .replace(/\.js/, "")
         .replace(/\.ts/, "");
 
-      this._configs[configName] = Object.assign({}, this._configs[configName], files(filename).default);
+      this._configs[configName] = Object.assign(
+        {},
+        this._configs[configName],
+        files(filename).default
+      );
     }
   }
 
