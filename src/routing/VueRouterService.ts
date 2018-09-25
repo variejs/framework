@@ -7,6 +7,7 @@ import RouterInterface from "./RouterInterface";
 import ConfigInterface from "../config/ConfigInterface";
 import RouteMiddlewareInterface from "./RouteMiddlewareInterface";
 import ApplicationInterface from "../foundation/ApplicationInterface";
+import { error } from "util";
 
 interface GroupInfo {
   path: string;
@@ -177,22 +178,32 @@ export default class VueRouterService implements RouterInterface {
 
   public setupMiddleware() {
     this.router.beforeResolve((to, from, next) => {
-      for (let middleware in to.meta.middleware) {
-        if (
-          !this.registerMiddleware(to.meta.middleware[middleware]).passes(
-            to,
-            from,
-            next
-          )
-        ) {
-          return false;
-        }
-      }
-      next();
+      return to.meta.middleware.reduce(
+        (promise, currentValue, currentIndex) => {
+          return promise.then(
+            () => {
+              return this.getMiddleware(currentValue).handler(
+                to,
+                from,
+                options => {
+                  if (options) {
+                    next(options);
+                    throw "test";
+                  } else if (currentIndex === to.meta.middleware.length - 1) {
+                    next();
+                  }
+                }
+              );
+            },
+            () => {}
+          );
+        },
+        Promise.resolve()
+      );
     });
   }
 
-  private registerMiddleware(middleware) {
+  private getMiddleware(middleware) {
     let containerMiddlewareName = `routerMiddleware${middleware.name}`;
     if (!this.app.$container.isBound(containerMiddlewareName)) {
       this.app.bind<RouteMiddlewareInterface>(
