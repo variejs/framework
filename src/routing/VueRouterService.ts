@@ -177,29 +177,32 @@ export default class VueRouterService implements RouterInterface {
   }
 
   public setupMiddleware() {
+    let stopMiddleware = false;
     this.router.beforeResolve((to, from, next) => {
-      return to.meta.middleware.reduce(
-        (promise, currentValue, currentIndex) => {
-          return promise.then(
-            () => {
-              return this.getMiddleware(currentValue).handler(
-                to,
-                from,
-                options => {
-                  if (options) {
-                    next(options);
-                    throw "test";
-                  } else if (currentIndex === to.meta.middleware.length - 1) {
-                    next();
+      if (to.meta.middleware && to.meta.middleware.length) {
+        return to.meta.middleware.reduce(
+          (promise, currentValue, currentIndex) => {
+            return promise.then(() => {
+              if (stopMiddleware === false) {
+                return this.getMiddleware(currentValue).handler(
+                  to,
+                  from,
+                  options => {
+                    if (options) {
+                      next(options);
+                      stopMiddleware = true;
+                    } else if (currentIndex === to.meta.middleware.length - 1) {
+                      next();
+                    }
                   }
-                }
-              );
-            },
-            () => {}
-          );
-        },
-        Promise.resolve()
-      );
+                );
+              }
+            });
+          },
+          Promise.resolve()
+        );
+      }
+      next();
     });
   }
 
