@@ -177,8 +177,8 @@ export default class VueRouterService implements RouterInterface {
   }
 
   public setupMiddleware() {
-    let stopMiddleware = false;
     this.router.beforeResolve((to, from, next) => {
+      let stopMiddleware = false;
       if (to.meta.middleware && to.meta.middleware.length) {
         return to.meta.middleware.reduce(
           (promise, currentValue, currentIndex) => {
@@ -190,9 +190,11 @@ export default class VueRouterService implements RouterInterface {
                   options => {
                     if (options) {
                       next(options);
+                      console.info(options)
                       stopMiddleware = true;
+                      return ;
                     } else if (currentIndex === to.meta.middleware.length - 1) {
-                      next();
+                      return next();
                     }
                   }
                 );
