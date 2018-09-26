@@ -190,7 +190,6 @@ export default class VueRouterService implements RouterInterface {
                   options => {
                     if (options) {
                       next(options);
-                      console.info(options)
                       stopMiddleware = true;
                       return ;
                     } else if (currentIndex === to.meta.middleware.length - 1) {
