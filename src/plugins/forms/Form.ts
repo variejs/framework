@@ -6,6 +6,7 @@ class Form {
   public _rules: object = {};
   public _messages: object = {};
 
+  private _initialData : any;
   private _originalData: any;
 
   protected _validator;
@@ -16,6 +17,7 @@ class Form {
     }
     this.fill(data);
     this.setAsOriginalData();
+    this._initialData = this.data(false);
   }
 
   public fill(data) {
@@ -27,7 +29,7 @@ class Form {
 
   public merge(data) {
     for (let key in data) {
-      if (this.hasOwnProperty(key)) {
+      if (data[key] && this.hasOwnProperty(key)) {
         Vue.set(this, key, data[key]);
       }
     }
@@ -54,15 +56,24 @@ class Form {
     return true;
   }
 
-  public data() {
+  public data(removeEmpty = true) {
     let data = {};
     let tempData = Object.assign({}, this);
+
+    delete tempData._rules;
+    delete tempData._messages;
+    delete tempData._validator;
+    delete tempData._initialData;
+    delete tempData._originalData;
+
     for (let field in tempData) {
-      if (field.indexOf("_") != 0) {
-        data[`${field}`] = this[field];
-      }
+      data[`${field}`] = this[field];
     }
-    return filterEmpty(data);
+
+    if(removeEmpty) {
+      return filterEmpty(data);
+    }
+    return data;
   }
 
   public setAsOriginalData() {
@@ -75,6 +86,11 @@ class Form {
       this.remove(field);
     }
     this.fill(this._originalData);
+    return this;
+  }
+
+  initial() {
+    this.fill(this._initialData).setAsOriginalData();
     return this;
   }
 
