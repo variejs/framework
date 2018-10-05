@@ -11,7 +11,7 @@ export default Vue.extend({
       let matched = Object.assign([], this.$route.matched);
       let route = matched.reverse().find(route => route.meta.layout);
       return `${
-        typeof route === "object" ? route.meta.layout : "public"
+        typeof route === "object" ? route.meta.layout : $config.get('view.defaultLayout')
       }-layout`;
     }
   }
