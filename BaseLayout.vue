@@ -14,7 +14,7 @@ export default Vue.extend({
       return `${
         typeof route === "object"
           ? route.meta.layout
-          : this.ConfigService.get("view.defaultLayout", "public")
+          : this.configService.get("view.defaultLayout", "public")
       }-layout`;
     }
   }

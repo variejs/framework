@@ -1,4 +1,5 @@
 import Vue from "vue";
+import * as camelCase from "camelcase";
 import ApplicationInterface from "./ApplicationInterface";
 
 export default class ContainerMixin {
@@ -8,7 +9,7 @@ export default class ContainerMixin {
         // @ts-ignore
         let services = this.$options.$inject || [];
         services.forEach((service: string) => {
-          this[service] = app.make(service);
+          this[camelCase(service)] = app.make(service);
         });
       }
     });
