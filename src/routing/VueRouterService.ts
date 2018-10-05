@@ -38,7 +38,7 @@ export default class VueRouterService implements RouterInterface {
     path: "/",
     meta: {
       middleware: [],
-      layout: "public"
+      layout: this.configService.get("view.defaultLayout")
     },
     area: null,
     children: [],
@@ -223,7 +223,7 @@ export default class VueRouterService implements RouterInterface {
       path: "/",
       meta: {
         middleware: [],
-        layout: "public"
+        layout: this.configService.get("view.defaultLayout")
       },
       area: null,
       children: [],
