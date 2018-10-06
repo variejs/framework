@@ -6,7 +6,7 @@ class Form {
   public _rules: object = {};
   public _messages: object = {};
 
-  private _initialData : any;
+  private _initialData: any;
   private _originalData: any;
 
   protected _validator;
@@ -70,7 +70,7 @@ class Form {
       data[`${field}`] = this[field];
     }
 
-    if(removeEmpty) {
+    if (removeEmpty) {
       return filterEmpty(data);
     }
     return data;

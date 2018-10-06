@@ -7,7 +7,6 @@ import RouterInterface from "./RouterInterface";
 import ConfigInterface from "../config/ConfigInterface";
 import RouteMiddlewareInterface from "./RouteMiddlewareInterface";
 import ApplicationInterface from "../foundation/ApplicationInterface";
-import { error } from "util";
 
 interface GroupInfo {
   path: string;
@@ -33,7 +32,10 @@ export default class VueRouterService implements RouterInterface {
   public router;
   public routes: Array<Route | RedirectRoute | GroupInfo> = [];
 
+  protected groupInfo;
+  protected currentGroupLevel = 0;
   protected groups: Array<GroupInfo> = [];
+
   protected groupInfo: GroupInfo = {
     path: "/",
     meta: {
@@ -55,6 +57,7 @@ export default class VueRouterService implements RouterInterface {
   ) {
     this.app = app;
     this.configService = configService;
+    this._resetGroup();
     Vue.use(VueRouter);
   }
 
@@ -191,7 +194,7 @@ export default class VueRouterService implements RouterInterface {
                     if (options) {
                       next(options);
                       stopMiddleware = true;
-                      return ;
+                      return;
                     } else if (currentIndex === to.meta.middleware.length - 1) {
                       return next();
                     }
@@ -223,7 +226,7 @@ export default class VueRouterService implements RouterInterface {
       path: "/",
       meta: {
         middleware: [],
-        layout: this.configService.get("view.defaultLayout")
+        layout: this.configService.get("view.defaultLayout", "public")
       },
       area: null,
       children: [],
