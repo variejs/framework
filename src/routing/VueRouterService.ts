@@ -33,8 +33,8 @@ export default class VueRouterService implements RouterInterface {
   public routes: Array<Route | RedirectRoute | GroupInfo> = [];
 
   protected groupInfo;
+  protected currentGroupLevel = 0;
   protected groups: Array<GroupInfo> = [];
-  protected currentGroupLevel = -1;
   protected wildCardRoutes: Array<Route> = [];
 
   constructor(
