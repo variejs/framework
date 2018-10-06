@@ -16,10 +16,10 @@ export default class ServiceProvider implements ServiceProviderInterface {
     let appConfig = this.app.make<ConfigInterface>("ConfigService").get(key);
 
     for (let appConfigKey in appConfig) {
-      if (appConfig[appConfigKey]) {
-        if (typeof appConfig[appConfigKey] === "object") {
+      if (appConfig[appConfigKey] !== undefined) {
+        if (frameworkConfig[appConfigKey] instanceof Object && appConfig[appConfigKey] instanceof Object) {
           Object.assign(frameworkConfig[appConfigKey], appConfig[appConfigKey]);
-        } else if (appConfig[appConfigKey]) {
+        } else {
           frameworkConfig[appConfigKey] = appConfig[appConfigKey];
         }
       }
