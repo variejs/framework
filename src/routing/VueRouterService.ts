@@ -36,19 +36,8 @@ export default class VueRouterService implements RouterInterface {
   protected currentGroupLevel = 0;
   protected groups: Array<GroupInfo> = [];
 
-  protected groupInfo: GroupInfo = {
-    path: "/",
-    meta: {
-      middleware: [],
-      layout: this.configService.get("view.defaultLayout")
-    },
-    area: null,
-    children: [],
-    component: {
-      template: "<router-view/>"
-    }
-  };
-  protected currentGroupLevel = -1;
+  protected groupInfo: GroupInfo;
+  protected currentGroupLevel = 0;
   protected wildCardRoutes: Array<Route> = [];
 
   constructor(
