@@ -35,9 +35,6 @@ export default class VueRouterService implements RouterInterface {
   protected groupInfo;
   protected currentGroupLevel = 0;
   protected groups: Array<GroupInfo> = [];
-
-  protected groupInfo: GroupInfo;
-  protected currentGroupLevel = 0;
   protected wildCardRoutes: Array<Route> = [];
 
   constructor(
