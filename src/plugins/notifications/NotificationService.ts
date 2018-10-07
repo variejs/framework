@@ -5,8 +5,8 @@ import StateServiceInterface from "../../state/StateServiceInterface";
 
 @injectable()
 class NotificationService {
-  protected __store: Store<object>;
-  protected __config: {
+  protected store: Store<object>;
+  protected configService: {
     duration: number;
   };
 
@@ -14,8 +14,8 @@ class NotificationService {
     @inject("ConfigService") $config: ConfigInterface,
     @inject("StoreService") storeService: StateServiceInterface
   ) {
-    this.__store = storeService.getStore();
-    this.__config = $config.get("notifications");
+    this.store = storeService.getStore();
+    this.configService = $config.get("notifications");
   }
 
   public showError(
@@ -53,9 +53,9 @@ class NotificationService {
     severity?: string
   ) {
     if (duration === undefined) {
-      duration = this.__config.duration;
+      duration = this.configService.duration;
     }
-    this.__store.dispatch("varie/notifications/add", {
+    this.store.dispatch("varie/notifications/add", {
       message: message,
       duration: duration,
       severity: severity,

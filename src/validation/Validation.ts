@@ -10,7 +10,7 @@ export default class Validation {
   protected _messages: object;
   protected _rules: object = {};
 
-  private $config;
+  private configService;
 
   /**
    * The size related validation rules.
@@ -23,13 +23,13 @@ export default class Validation {
     data: object,
     schema: object,
     messages: object,
-    $config: ConfigInterface
+    configService: ConfigInterface
   ) {
     this._data = data;
     this._schema = schema;
-    this.$config = $config;
+    this.configService = configService;
     this._messages = messages;
-    this._rules = this.$config.get("validation.rules");
+    this._rules = this.configService.get("validation.rules");
   }
 
   public validate() {
@@ -145,7 +145,7 @@ export default class Validation {
 
   private _getSizeMessage(field: string, rule: string) {
     let type = "string";
-    let locale = this.$config.get("app.locale");
+    let locale = this.configService.get("app.locale");
     let value = getByDot(this._data, field);
 
     if (typeof value === "object") {
@@ -156,11 +156,11 @@ export default class Validation {
       type = "numeric";
     }
 
-    return this.$config.get(`validation.${locale}.${rule}.${type}`);
+    return this.configService.get(`validation.${locale}.${rule}.${type}`);
   }
 
   private _getMessageFromLocale(rule: string) {
-    let locale = this.$config.get("app.locale");
-    return this.$config.get(`validation.${locale}.${rule}`);
+    let locale = this.configService.get("app.locale");
+    return this.configService.get(`validation.${locale}.${rule}`);
   }
 }

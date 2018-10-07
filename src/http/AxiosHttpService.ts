@@ -12,11 +12,10 @@ export default class AxiosHttpService implements HttpServiceInterface {
 
   constructor(
     @inject("app") app: ApplicationInterface,
-    @inject("ConfigService") $config
+    @inject("ConfigService") configService
   ) {
     this.app = app;
-    let config = $config.get("http");
-    this.axios = axios.create(config);
+    this.axios = axios.create(configService.get("http"));
   }
 
   public delete(url: string, config = {}) {
