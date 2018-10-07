@@ -1,10 +1,10 @@
 import {inject, injectable} from "inversify";
-import AuthServiceInterface from "./AuthServiceInterface";
-import ConfigInterface from "../config/ConfigInterface";
-import HttpServiceInterface from "../http/HttpServiceInterface";
+import AuthServiceInterface from "varie/src/auth/AuthServiceInterface";
+import ConfigInterface from "varie/src/config/ConfigInterface";
+import HttpServiceInterface from "varie/src/http/HttpServiceInterface";
 import StateServiceInterface from "varie/src/state/StateServiceInterface";
 import AuthStore from "varie/lib/auth/AuthStore";
-import defaultconfig from "./config";
+import defaultconfig from "varie/src/auth/config";
 
 @injectable()
 export default class AuthService implements AuthServiceInterface {

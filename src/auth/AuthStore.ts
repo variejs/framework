@@ -1,13 +1,14 @@
 import StoreModule from "varie/lib/state/StoreModule";
 import { injectable, inject, unmanaged } from "inversify";
 import ConfigInterface from "varie/src/config/ConfigInterface";
+import HttpServiceInterface from "varie/src/http/HttpServiceInterface";
 
 @injectable()
 export default class AuthStore extends StoreModule {
-    protected config: ConfigInterface;
+    protected config;
 
     constructor(
-        @inject("HttpService") httpService,
+        @inject("HttpService") axios: HttpServiceInterface,
         @inject("ConfigService") config: ConfigInterface
     ) {
         super();
