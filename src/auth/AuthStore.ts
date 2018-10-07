@@ -26,7 +26,8 @@ export default class AuthStore extends StoreModule {
 
         guards.forEach(value => {
             state[value] = {
-                loggedIn: false
+                loggedIn: false,
+                user: null
             }
         })
 
