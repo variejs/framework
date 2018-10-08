@@ -6,16 +6,10 @@ export default class AutoRegisterLayoutsServiceProvider extends ServiceProvider 
   public register() {}
 
   public boot() {
-    try {
-      let files = require.context("@views/layouts", false, /^\.\/.*\.(vue)$/);
-      files.keys().forEach(filename => {
-        Vue.component(this.getComponentName(filename), files(filename).default);
-      });
-    } catch (e) {
-      console.warn(
-        "You are trying to auto load layouts, but do not have a views/layouts folder, please create `views/layouts` folder."
-      );
-    }
+    let files = require.context("@views/layouts", false, /^\.\/.*\.(vue)$/);
+    files.keys().forEach(filename => {
+      Vue.component(this.getComponentName(filename), files(filename).default);
+    });
   }
 
   private getComponentName(filename: string) {

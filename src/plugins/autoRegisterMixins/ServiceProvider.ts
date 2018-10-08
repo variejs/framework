@@ -5,15 +5,9 @@ export default class AutoRegisterMixinsServiceProvider extends ServiceProvider {
   public register() {}
 
   public boot() {
-    try {
-      let files = require.context("@app/mixins", true, /^\.\/.*\.(ts|js)$/);
-      files.keys().forEach(filename => {
-        Vue.mixin(files(filename));
-      });
-    } catch (e) {
-      console.warn(
-        "You are trying to auto load mixins, but do not have a mixins folder, please create `app/mixins` folder."
-      );
-    }
+    let files = require.context("@app/mixins", true, /^\.\/.*\.(ts|js)$/);
+    files.keys().forEach(filename => {
+      Vue.mixin(files(filename));
+    });
   }
 }

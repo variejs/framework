@@ -115,12 +115,13 @@ export default class VueRouterService implements RouterInterface {
 
   private convertRoutePathToRouteName(route: Route, path?: string) {
     path = JSON.stringify(path ? path : route.path);
-    // https://regex101.com/r/uV1OfL/3
     route.setName(
       path
+        .replace(/"/g, "")
         .replace(/\:/g, "")
         .replace(/(^\/|\/$)/, "")
         .replace(/\//g, ".")
+        .replace(/\.$/, "")
     );
   }
 
@@ -238,9 +239,6 @@ export default class VueRouterService implements RouterInterface {
           this.groupInfo.meta.middleware = parentGroup.meta.middleware;
         }
 
-        if (childGroup.area) {
-          childGroup.component = childGroup.area;
-        }
         parentGroup.children.push(childGroup);
         this.groups.splice(this.currentGroupLevel, 1);
       }
