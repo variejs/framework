@@ -43,7 +43,9 @@ export default class AuthStore extends StoreModule {
 
     protected getdMutations() {
         return {
-
+            setLoggedIn(state, value, guard) {
+                state.auth[guard].loggedIn = value;
+            }
         }
     }
 

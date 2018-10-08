@@ -10,6 +10,7 @@ import defaultconfig from "varie/src/auth/config";
 export default class AuthService implements AuthServiceInterface {
     protected config;
     protected axios;
+    protected authConfig;
     protected _guard;
     protected _guardName;
     protected store;
@@ -18,20 +19,103 @@ export default class AuthService implements AuthServiceInterface {
         @inject("ConfigService") config: ConfigInterface,
         @inject("HttpService") axios: HttpServiceInterface,
         @inject("StoreService") storeService: StateServiceInterface) {
-
+        
         storeService.registerStore(AuthStore);
 
+        this.config = config;
         this.axios = axios;
-        this.config = Object.assign(defaultconfig, config.get("auth"))
-        this.guard(this.config.defaults.guard);
+        this.authConfig = Object.assign(defaultconfig, config.get("auth"))
+        this.guard(this.authConfig.defaults.guard);
         this.store = storeService.getStore().state.auth;
+        this.boot();
+    }
+
+    protected boot() {
+        this.check();
+        this.user();
+    }
+
+    public login(data: object, guard?: string) {
+        if (guard) {
+            this.guard(guard);
+        }
+
+        return new Promise((resolve, reject) => {
+            let headers = Object.assign({}, this.getGuard().headers)
+
+            this.fetch('login', data)
+                .then(loginResponse => {
+                    this.setStorage({token: loginResponse.data});
+                    this.setLoggedIn(true);
+
+                    this.fetchUser()
+                        .then(response => {
+                            resolve({loginResponse, response});
+                        })
+                })
+                .catch(error => {
+                    this.removeStorage();
+                    reject(error);
+                })
+        });
+    }
+
+    public register(data: object, guard?: string) {
+        return new Promise((resolve, reject) => {
+            this.fetch('register', data)
+                .then(response => {
+
+                    if (this.getEndpoint('register').autoLogin)
+                    {
+                        this.setStorage({token: response.data});
+                    }
+
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error);
+                })
+        });
+    }
+
+    public logout(data: object = {}, guard?: string) {
+        return new Promise((resolve, reject) => {
+            let storage = this.getStorage(guard);
+            let _guard = this.getGuard();
+            let token = storage.token[_guard.accessTokenName];
+            let tokenType = _guard.tokenType;
+            let tokenName = _guard.tokenName;
+            let object = {};
+            object[tokenName] = token;
+
+            let headers = Object.assign({
+                'Authorization': tokenType+ ' ' + token
+            }, this.getGuard().headers);
+
+            this.fetch('logout', Object.assign(object, data), headers)
+                .then(response => {
+                    this.removeStorage();
+                    resolve(response);
+                })
+                .catch(error => {
+                    reject(error);
+                })
+        });
+    }
+
+    public user(guard?: string) {
+        if (guard) {
+            this.guard(guard);
+        }
+        
+        return this.getUser();
     }
 
     public fetchUser(guard?: string) {
         return new Promise((resolve, reject) => {
-            let _data = this.getData(guard);
+            let storage = this.getStorage(guard);
             let _guard = this.getGuard();
-            let token = _data.token[_guard.accessTokenName];
+            let token = storage.token[_guard.accessTokenName];
             let tokenType = _guard.tokenType;
             let tokenName = _guard.tokenName;
             let object = {};
@@ -52,25 +136,17 @@ export default class AuthService implements AuthServiceInterface {
         });
     }
 
-    public user(guard?: string) {
-        if (guard) {
-            this.guard(guard);
-        }
-
-        return this.store[this.getGuardName()].user;
-    }
-
     public check(guard?: string) {
-        let data = this.getData(guard);
+        let storage = this.getStorage(guard);
 
-        if (data instanceof Object === false) {
+        if (storage instanceof Object === false) {
             this.setLoggedIn(false);
 
             return this.loggedIn();
         }
 
         try {
-            if (new Date(data.token.expiresAt).getTime() < new Date().getTime()) {
+            if (new Date(storage.token.expiresAt).getTime() < new Date().getTime()) {
                 this.setLoggedIn(false);
 
                 return this.loggedIn();
@@ -86,17 +162,6 @@ export default class AuthService implements AuthServiceInterface {
         }
     }
 
-    public guard(guard: string) {
-        this._guardName = guard;
-        this._guard = this.config.guards[guard];
-
-        if (!this._guard) {
-            throw "Guard '" + guard + "' not exist";
-        }
-
-        return this;
-    }
-
     public loggedIn(guard?: string) {
         if (guard) {
             this.guard(guard);
@@ -105,110 +170,34 @@ export default class AuthService implements AuthServiceInterface {
         return this.store[this.getGuardName()].loggedIn
     }
 
-    public setUser(user: object, guard?: string) {
+    public guest(guard?: string) {
+        return ! this.user(guard);
+    }
+
+    public id(guard?: string) {
         if (guard) {
             this.guard(guard);
         }
 
-        this.store[this.getGuardName()].user = user;
+        return this.store[this.getGuardName()].user[this.authConfig.user.idPropertyName];
+    }
+
+    public guard(guard: string) {
+        this._guardName = guard;
+        this._guard = this.authConfig.guards[guard];
+
+        if (!this._guard) {
+            throw "Guard '" + guard + "' not exist";
+        }
 
         return this;
     }
-
-    public setLoggedIn(value: boolean, guard?: string) {
-        if (guard) {
-            this.guard(guard);
-        }
-
-        this.store[this.getGuardName()].loggedIn = value;
-
-        return this;
+    
+    public getToken(guard?: string) {
+        return this.getStorage(guard).token[this.getGuard().accessTokenName];
     }
 
-    public login(data: object, guard?: string) {
-        if (guard) {
-            this.guard(guard);
-        }
-
-        return new Promise((resolve, reject) => {
-            let headers = Object.assign({}, this.getGuard().headers)
-
-            this.fetch('login', data)
-                .then(response => {
-                    this.setData({token: response.data});
-                    this.setLoggedIn(true);
-                    
-                    this.fetchUser()
-                        .then(response => {
-                            resolve(response);
-                        })
-                })
-                .catch(error => {
-                    this.removeData();
-                    reject(error);
-                })
-        });
-    }
-
-    public logout(data: object = {}, guard?: string) {
-        return new Promise((resolve, reject) => {
-            let _data = this.getData(guard);
-            let _guard = this.getGuard();
-            let token = _data.token[_guard.accessTokenName];
-            let tokenType = _guard.tokenType;
-            let tokenName = _guard.tokenName;
-            let object = {};
-            object[tokenName] = token;
-
-            let headers = Object.assign({
-                'Authorization': tokenType+ ' ' + token
-            }, this.getGuard().headers);
-
-            this.fetch('logout', Object.assign(object, data), headers)
-                .then(response => {
-                    this.removeData();
-                    resolve(response);
-                })
-                .catch(error => {
-                    reject(error);
-                })
-        });
-    }
-
-    public register(data: object, guard?: string) {
-        return new Promise((resolve, reject) => {
-            this.fetch('register', data)
-                .then(response => {
-
-                    if (this.getEndpoint('register').autoLogin)
-                    {
-                        this.setData({token: response.data});
-                    }
-
-                    resolve(response);
-                })
-                .catch(error => {
-                    reject(error);
-                })
-        });
-    }
-
-
-    public getEndpoint(endpoint: string, guard?: string) {
-        if (guard) {
-            this.guard(guard);
-        }
-
-        try {
-            return this.getGuard().endpoints[endpoint];
-        } catch (e) {
-            console.error("Endpoint '" + endpoint + "' not found");
-
-            return null;
-        }
-    }
-
-    public getData(guard?: string) {
+    public getStorage(guard?: string) {
         try {
             if (guard) {
                 this.guard(guard);
@@ -222,15 +211,67 @@ export default class AuthService implements AuthServiceInterface {
         }
     }
 
-    public setData(data: object) {
-        let store  = Object.assign(this.getData() || {}, data)
+    protected setUser(user: object, guard?: string) {
+        if (guard) {
+            this.guard(guard);
+        }
 
-        localStorage.setItem(this.getStorageName(), JSON.stringify(store));
+        this.setStorage({user})
+
+        this.store[this.getGuardName()].user = user;
+
+        return this;
+    }
+    
+    protected getUser(guard?: string) {
+        if (guard) {
+            this.guard(guard);
+        }
+        
+        let storage = this.getStorage();
+
+        if (storage instanceof Object && storage.hasOwnProperty('user')) {
+            this.setUser(storage.user);
+
+            return this.store[this.getGuardName()].user;
+        }
+        
+        return null;
+    }
+
+    protected setLoggedIn(value: boolean, guard?: string) {
+        if (guard) {
+            this.guard(guard);
+        }
+
+        this.store[this.getGuardName()].loggedIn = value;
 
         return this;
     }
 
-    public removeData(guard?: string) {
+    protected getEndpoint(endpoint: string, guard?: string) {
+        if (guard) {
+            this.guard(guard);
+        }
+
+        try {
+            return this.getGuard().endpoints[endpoint];
+        } catch (e) {
+            console.error("Endpoint '" + endpoint + "' not found");
+
+            return null;
+        }
+    }
+
+    protected setStorage(data: object) {
+        let storage  = Object.assign(this.getStorage() || {}, data)
+
+        localStorage.setItem(this.getStorageName(), JSON.stringify(storage));
+
+        return this;
+    }
+
+    protected removeStorage(guard?: string) {
         if (guard) {
             this.guard(guard);
         }
@@ -239,6 +280,14 @@ export default class AuthService implements AuthServiceInterface {
         this.setLoggedIn(false);
 
         return this;
+    }
+
+    protected getGuard() {
+        return this._guard;
+    }
+
+    protected getGuardName() {
+        return this._guardName;
     }
 
     protected fetch(endpoint: string, data: object = {}, headers: object = {}) {
@@ -258,14 +307,6 @@ export default class AuthService implements AuthServiceInterface {
                 headers: headers
             })
         }
-    }
-
-    public getGuard() {
-        return this._guard;
-    }
-
-    public getGuardName() {
-        return this._guardName;
     }
 
     protected getStorageName(guard?: string) {
