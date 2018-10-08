@@ -118,10 +118,10 @@ export default class VueRouterService implements RouterInterface {
     route.setName(
       path
         .replace(/"/g, "")
-        .replace(/\:/g, "")
-        .replace(/(^\/|\/$)/, "")
         .replace(/\//g, ".")
-        .replace(/\.$/, "")
+        .replace(/\:.*\./g, "")
+        .replace(/^\.+/, "")
+        .replace(/\.+$/, "")
     );
   }
 
