@@ -1,30 +1,34 @@
 import {inject, injectable} from "inversify";
-import AuthServiceInterface from "varie/src/auth/AuthServiceInterface";
+import AuthServiceInterface from "./AuthServiceInterface";
 import ConfigInterface from "varie/src/config/ConfigInterface";
 import HttpServiceInterface from "varie/src/http/HttpServiceInterface";
 import StateServiceInterface from "varie/src/state/StateServiceInterface";
-import AuthStore from "varie/lib/auth/AuthStore";
-import defaultconfig from "varie/src/auth/config";
+import AuthStore from "./AuthStore";
+import defaultconfig from "./config";
+import AuthAppMiddleware from "./AuthAppMiddleware";
 
 @injectable()
 export default class AuthService implements AuthServiceInterface {
-    protected config;
-    protected axios;
+    protected configService;
+    protected httpService;
+    protected storeService;
     protected authConfig;
     protected _guard;
     protected _guardName;
     protected store;
 
     constructor(
-        @inject("ConfigService") config: ConfigInterface,
-        @inject("HttpService") axios: HttpServiceInterface,
-        @inject("StoreService") storeService: StateServiceInterface) {
-        
-        storeService.registerStore(AuthStore);
+        @inject("ConfigService") configService: ConfigInterface,
+        @inject("HttpService") httpService: HttpServiceInterface,
+        @inject("StoreService") storeService: StateServiceInterface) 
+    {
+        this.configService = configService;
+        this.httpService = httpService;
+        this.storeService = storeService;
 
-        this.config = config;
-        this.axios = axios;
-        this.authConfig = Object.assign(defaultconfig, config.get("auth"))
+        this.storeService.registerStore(AuthStore);
+
+        this.authConfig = Object.assign(defaultconfig, configService.get("auth"))
         this.guard(this.authConfig.defaults.guard);
         this.store = storeService.getStore().state.auth;
         this.boot();
@@ -41,9 +45,8 @@ export default class AuthService implements AuthServiceInterface {
         }
 
         return new Promise((resolve, reject) => {
-            let headers = Object.assign({}, this.getGuard().headers)
 
-            this.fetch('login', data)
+            this.fetch('login', data, {headers: this.getGuard().headers})
                 .then(loginResponse => {
                     this.setStorage({token: loginResponse.data});
                     this.setLoggedIn(true);
@@ -80,19 +83,7 @@ export default class AuthService implements AuthServiceInterface {
 
     public logout(data: object = {}, guard?: string) {
         return new Promise((resolve, reject) => {
-            let storage = this.getStorage(guard);
-            let _guard = this.getGuard();
-            let token = storage.token[_guard.accessTokenName];
-            let tokenType = _guard.tokenType;
-            let tokenName = _guard.tokenName;
-            let object = {};
-            object[tokenName] = token;
-
-            let headers = Object.assign({
-                'Authorization': tokenType+ ' ' + token
-            }, this.getGuard().headers);
-
-            this.fetch('logout', Object.assign(object, data), headers)
+            this.fetch('logout', data, this.getGuard().headers)
                 .then(response => {
                     this.removeStorage();
                     resolve(response);
@@ -107,25 +98,13 @@ export default class AuthService implements AuthServiceInterface {
         if (guard) {
             this.guard(guard);
         }
-        
+
         return this.getUser();
     }
 
     public fetchUser(guard?: string) {
         return new Promise((resolve, reject) => {
-            let storage = this.getStorage(guard);
-            let _guard = this.getGuard();
-            let token = storage.token[_guard.accessTokenName];
-            let tokenType = _guard.tokenType;
-            let tokenName = _guard.tokenName;
-            let object = {};
-            object[tokenName] = token;
-
-            let headers = Object.assign({
-                'Authorization': tokenType+ ' ' + token
-            }, this.getGuard().headers);
-
-            this.fetch('user', object, headers)
+            this.fetch('user', {}, this.getGuard().headers)
                 .then(response => {
                     this.setUser(response.data);
 
@@ -211,6 +190,21 @@ export default class AuthService implements AuthServiceInterface {
         }
     }
 
+    public getHeaders(guard?: string) {
+        if (guard) {
+            this.guard(guard);
+        }
+
+        let storage = this.getStorage();
+        let _guard = this.getGuard();
+        let token = storage.token[_guard.accessTokenName];
+        let tokenType = _guard.tokenType;
+
+        return {
+            'Authorization': tokenType+ ' ' + token
+        };
+    }
+
     protected setUser(user: object, guard?: string) {
         if (guard) {
             this.guard(guard);
@@ -257,7 +251,7 @@ export default class AuthService implements AuthServiceInterface {
         try {
             return this.getGuard().endpoints[endpoint];
         } catch (e) {
-            console.error("Endpoint '" + endpoint + "' not found");
+            throw "Endpoint '" + endpoint + "' not found";
 
             return null;
         }
@@ -298,12 +292,12 @@ export default class AuthService implements AuthServiceInterface {
         }
 
         if (_endpoint.method == "get" || _endpoint.method == "head" || _endpoint.method == "options") {
-            return this.axios[_endpoint.method](_endpoint.url, {
+            return this.httpService[_endpoint.method](_endpoint.url, {
                 params: data,
                 headers: headers
             })
         } else {
-            return this.axios[_endpoint.method](_endpoint.url, data, {
+            return this.httpService[_endpoint.method](_endpoint.url, data, {
                 headers: headers
             })
         }

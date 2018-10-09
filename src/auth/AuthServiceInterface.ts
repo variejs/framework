@@ -1,16 +1,15 @@
-import ConfigInterface from "varie/src/config/ConfigInterface";
-
-export default class AuthServiceInterface {
-    public login(data: object, guard?: string) {}
-    public register(data: object, guard?: string) {}
-    public logout(data: object = {}, guard?: string) {}
-    public user(guard?: string) {}
-    public fetchUser(guard?: string) {}
-    public check(guard?: string) {}
-    public loggedIn(guard?: string) {}
-    public guest(guard?: string) {}
-    public id(guard?: string) {}
-    public guard(guard: string) {}
-    public getToken(guard?: string) {}
-    public getStorage(guard?: string) {}
+export default interface AuthServiceInterface {
+    login(data: object, guard?: string): void;
+    register(data: object, guard?: string): void;
+    logout(data?: object, guard?: string): void;
+    user(guard?: string): void;
+    fetchUser(guard?: string): void;
+    check(guard?: string): void;
+    loggedIn(guard?: string): void;
+    guest(guard?: string): void;
+    id(guard?: string): void;
+    guard(guard: string): void;
+    getToken(guard?: string): void;
+    getStorage(guard?: string): void;
+    getHeaders(guard?: string): void;
 }

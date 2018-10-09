@@ -1,4 +1,4 @@
-import StoreModule from "varie/lib/state/StoreModule";
+import StoreModule from "../state/StoreModule";
 import { injectable, inject, unmanaged } from "inversify";
 import ConfigInterface from "varie/src/config/ConfigInterface";
 import HttpServiceInterface from "varie/src/http/HttpServiceInterface";
