@@ -11,9 +11,10 @@ export default class AuthAppMiddleware implements AxiosHttpMiddlewareInterface {
     this.authService = authService;
   }
   public request(config: AxiosRequestConfig) {
+    let guard = config.guard;
 
-    if (this.authService.loggedIn()) {
-        config.headers.common = Object.assign(config.headers.common, this.authService.getHeaders());
+    if (this.authService.loggedIn(guard) || this.authService.hasStorage(guard)) {
+        config.headers.common = Object.assign(config.headers.common, this.authService.getHeaders(guard));
     }
 
     return config;

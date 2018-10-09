@@ -4,7 +4,6 @@ import ConfigInterface from "varie/src/config/ConfigInterface";
 import HttpServiceInterface from "varie/src/http/HttpServiceInterface";
 import StateServiceInterface from "varie/src/state/StateServiceInterface";
 import AuthStore from "./AuthStore";
-import defaultconfig from "./config";
 import AuthAppMiddleware from "./AuthAppMiddleware";
 
 @injectable()
@@ -12,10 +11,10 @@ export default class AuthService implements AuthServiceInterface {
     protected configService;
     protected httpService;
     protected storeService;
-    protected authConfig;
     protected _guard;
     protected _guardName;
     protected store;
+    protected listeners = <any>[];
 
     constructor(
         @inject("ConfigService") configService: ConfigInterface,
@@ -25,11 +24,8 @@ export default class AuthService implements AuthServiceInterface {
         this.configService = configService;
         this.httpService = httpService;
         this.storeService = storeService;
-
-        this.storeService.registerStore(AuthStore);
-
-        this.authConfig = Object.assign(defaultconfig, configService.get("auth"))
-        this.guard(this.authConfig.defaults.guard);
+        this.guard(this.authConfig('defaults.guard'));
+        storeService.registerStore(AuthStore);
         this.store = storeService.getStore().state.auth;
         this.boot();
     }
@@ -45,53 +41,44 @@ export default class AuthService implements AuthServiceInterface {
         }
 
         return new Promise((resolve, reject) => {
-
             this.fetch('login', data, {headers: this.getGuard().headers})
                 .then(loginResponse => {
                     this.setStorage({token: loginResponse.data});
-                    this.setLoggedIn(true);
-
                     this.fetchUser()
-                        .then(response => {
-                            resolve({loginResponse, response});
+                        .then(userResponse => {
+                            this.setLoggedIn(true);
+
+                            resolve({loginResponse, userResponse});
+                        })
+                        .catch(error => {
+                            this.callListeners(error, 'user');
                         })
                 })
                 .catch(error => {
                     this.removeStorage();
+                    this.callListeners(error, 'login');
                     reject(error);
                 })
         });
     }
 
     public register(data: object, guard?: string) {
-        return new Promise((resolve, reject) => {
-            this.fetch('register', data)
-                .then(response => {
-
-                    if (this.getEndpoint('register').autoLogin)
-                    {
-                        this.setStorage({token: response.data});
-                    }
-
-                    resolve(response);
-                })
-                .catch(error => {
-                    reject(error);
-                })
-        });
+        return this.fetch('register', data)
+            .then(response => {
+                if (this.getEndpoint('register').autoLogin) {
+                    this.setStorage({token: response.data});
+                }
+            })
+            .catch(error => {
+                this.callListeners(error, 'register');
+            })
     }
 
     public logout(data: object = {}, guard?: string) {
-        return new Promise((resolve, reject) => {
-            this.fetch('logout', data, this.getGuard().headers)
-                .then(response => {
-                    this.removeStorage();
-                    resolve(response);
-                })
-                .catch(error => {
-                    reject(error);
-                })
-        });
+        return this.fetch('logout', data, this.getGuard().headers)
+            .then(response => {
+                this.removeStorage();
+            })
     }
 
     public user(guard?: string) {
@@ -109,8 +96,6 @@ export default class AuthService implements AuthServiceInterface {
                     this.setUser(response.data);
 
                     resolve(response);
-
-                    return response.data;
                 })
         });
     }
@@ -158,12 +143,12 @@ export default class AuthService implements AuthServiceInterface {
             this.guard(guard);
         }
 
-        return this.store[this.getGuardName()].user[this.authConfig.user.idPropertyName];
+        return this.store[this.getGuardName()].user[this.authConfig('user.idPropertyName')];
     }
 
     public guard(guard: string) {
         this._guardName = guard;
-        this._guard = this.authConfig.guards[guard];
+        this._guard = this.authConfig(`guards.${guard}`);
 
         if (!this._guard) {
             throw "Guard '" + guard + "' not exist";
@@ -203,6 +188,24 @@ export default class AuthService implements AuthServiceInterface {
         return {
             'Authorization': tokenType+ ' ' + token
         };
+    }
+
+    public onError(listener) {
+        this.listeners.push(listener);
+
+        return this;
+    }
+
+    protected callListeners(error, endpoint) {
+        for (let listener of this.listeners) {
+            try {
+                listener(error, this.getGuardName(), endpoint);
+            } catch (e) {}
+        }
+    }
+
+    protected authConfig(path: string = '') {
+        return this.configService.get(path ? 'auth.'+path : 'auth');
     }
 
     protected setUser(user: object, guard?: string) {
@@ -274,6 +277,10 @@ export default class AuthService implements AuthServiceInterface {
         this.setLoggedIn(false);
 
         return this;
+    }
+
+    protected hasStorage(guard?: string) {
+        return this.getStorage(guard) instanceof Object;
     }
 
     protected getGuard() {

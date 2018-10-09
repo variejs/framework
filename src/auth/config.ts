@@ -11,19 +11,22 @@ export default {
             endpoints: {
                 user: {
                     url: '/auth/me',
-                    method: 'post',
+                    method: 'post'
                 },
                 login: {
                     url: '/auth/login',
-                    method: 'post'
+                    method: 'post',
+                    redirect: false
                 },
                 logout: {
                     url: '/auth/logout',
-                    method: 'post'
+                    method: 'post',
+                    redirect: false
                 },
                 register: {
                     url: '/auth/register',
                     method: 'post',
+                    redirect: false,
                     autoLogin: false
                 }
             },
