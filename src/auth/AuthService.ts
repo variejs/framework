@@ -13,7 +13,7 @@ export default class AuthService implements AuthServiceInterface {
     protected storeService;
     protected _guard;
     protected _guardName;
-    protected store;
+    protected authStore;
     protected listeners = <any>[];
 
     constructor(
@@ -26,7 +26,7 @@ export default class AuthService implements AuthServiceInterface {
         this.storeService = storeService;
         this.guard(this.authConfig('defaults.guard'));
         storeService.registerStore(AuthStore);
-        this.store = storeService.getStore().state.auth;
+        this.authStore = storeService.getStore().state.auth;
         this.boot();
     }
 
@@ -101,7 +101,11 @@ export default class AuthService implements AuthServiceInterface {
     }
 
     public check(guard?: string) {
-        let storage = this.getStorage(guard);
+        if (guard) {
+            this.guard(guard);
+        }
+
+        let storage = this.getStorage();
 
         if (storage instanceof Object === false) {
             this.setLoggedIn(false);
@@ -131,7 +135,7 @@ export default class AuthService implements AuthServiceInterface {
             this.guard(guard);
         }
 
-        return this.store[this.getGuardName()].loggedIn
+        return this.authStore[this.getGuardName()].loggedIn
     }
 
     public guest(guard?: string) {
@@ -143,7 +147,7 @@ export default class AuthService implements AuthServiceInterface {
             this.guard(guard);
         }
 
-        return this.store[this.getGuardName()].user[this.authConfig('user.idPropertyName')];
+        return this.authStore[this.getGuardName()].user[this.authConfig('user.idPropertyName')];
     }
 
     public guard(guard: string) {
@@ -158,16 +162,24 @@ export default class AuthService implements AuthServiceInterface {
     }
     
     public getToken(guard?: string) {
-        return this.getStorage(guard).token[this.getGuard().accessTokenName];
+        if (guard) {
+            this.guard(guard);
+        }
+
+        return this.getStorage().token[this.getGuard().accessTokenName];
     }
 
-    public getStorage(guard?: string) {
+    public getStorage(json: boolean = true, guard?: string) {
         try {
             if (guard) {
                 this.guard(guard);
             }
 
             let storage = localStorage.getItem(this.getStorageName()) || '';
+
+            if (! json) {
+                return storage;
+            }
 
             return JSON.parse(storage);
         } catch (e) {
@@ -215,7 +227,7 @@ export default class AuthService implements AuthServiceInterface {
 
         this.setStorage({user})
 
-        this.store[this.getGuardName()].user = user;
+        this.authStore[this.getGuardName()].user = user;
 
         return this;
     }
@@ -230,7 +242,7 @@ export default class AuthService implements AuthServiceInterface {
         if (storage instanceof Object && storage.hasOwnProperty('user')) {
             this.setUser(storage.user);
 
-            return this.store[this.getGuardName()].user;
+            return this.authStore[this.getGuardName()].user;
         }
         
         return null;
@@ -241,7 +253,7 @@ export default class AuthService implements AuthServiceInterface {
             this.guard(guard);
         }
 
-        this.store[this.getGuardName()].loggedIn = value;
+        this.authStore[this.getGuardName()].loggedIn = value;
 
         return this;
     }
@@ -251,13 +263,13 @@ export default class AuthService implements AuthServiceInterface {
             this.guard(guard);
         }
 
-        try {
-            return this.getGuard().endpoints[endpoint];
-        } catch (e) {
-            throw "Endpoint '" + endpoint + "' not found";
+        let _endpoint = this.authConfig(`guards.${this.getGuardName()}.endpoints.${endpoint}`)
 
-            return null;
+        if (_endpoint) {
+            return _endpoint;
         }
+
+        throw "Endpoint '" + endpoint + "' not found";
     }
 
     protected setStorage(data: object) {
@@ -274,13 +286,18 @@ export default class AuthService implements AuthServiceInterface {
         }
 
         localStorage.removeItem(this.getStorageName());
+
         this.setLoggedIn(false);
 
         return this;
     }
 
     protected hasStorage(guard?: string) {
-        return this.getStorage(guard) instanceof Object;
+        if (guard) {
+            this.guard(guard);
+        }
+
+        return this.getStorage();
     }
 
     protected getGuard() {
