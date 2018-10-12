@@ -10,6 +10,12 @@ export default interface AuthServiceInterface {
     id(guard?: string): void;
     guard(guard: string): void;
     getToken(guard?: string): void;
-    getStorage(guard?: string): void;
+    getStorage(json?: boolean, guard?: string): void;
     getHeaders(guard?: string): void;
+    authConfig(path?: string): void;
+    onError(listener) : void;
+    onUnauthorized(listener) : void;
+    callListener(type, error, guard) : void;
+    redirect(redirect: object|string|boolean) : void;
+    getGuardFromError(error) : void;
 }

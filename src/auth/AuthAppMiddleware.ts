@@ -11,7 +11,7 @@ export default class AuthAppMiddleware implements AxiosHttpMiddlewareInterface {
     this.authService = authService;
   }
   public request(config: AxiosRequestConfig) {
-    let guard = config.guard;
+    let guard = config['guard'];
 
     if (this.authService.loggedIn(guard) || this.authService.hasStorage(guard)) {
         config.headers.common = Object.assign(config.headers.common, this.authService.getHeaders(guard));
@@ -25,6 +25,12 @@ export default class AuthAppMiddleware implements AxiosHttpMiddlewareInterface {
   }
 
   public responseError(error: AxiosError) {
-    return Promise.reject(error);
+    if (error.response &&
+      error.response.status === 401) {
+
+      this.authService.callListener('unauthorized', error, this.authService.getGuardFromError(error))
+    }
+
+    return error;
   }
 }

@@ -2,9 +2,6 @@ export default {
     defaults: {
         guard: 'user'
     },
-    user: {
-        idPropertyName: 'id'
-    },
     guards: {
         user: {
             driver: 'jwt',
@@ -36,7 +33,8 @@ export default {
             // Response
             accessTokenName: 'access_token',
             expiresAtName: 'expires_at',
-            tokenType: 'bearer'
+            tokenType: 'bearer',
+            idName: 'id'
         }
     }
 };

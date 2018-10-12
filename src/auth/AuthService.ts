@@ -5,25 +5,32 @@ import HttpServiceInterface from "varie/src/http/HttpServiceInterface";
 import StateServiceInterface from "varie/src/state/StateServiceInterface";
 import AuthStore from "./AuthStore";
 import AuthAppMiddleware from "./AuthAppMiddleware";
+import VueRouterService from "../routing/VueRouterService";
 
 @injectable()
 export default class AuthService implements AuthServiceInterface {
     protected configService;
     protected httpService;
     protected storeService;
+    protected routerService;
     protected _guard;
     protected _guardName;
     protected authStore;
-    protected listeners = <any>[];
+    protected listeners = {
+        error: <any>[],
+        unauthorized: <any>[]
+    };
 
     constructor(
         @inject("ConfigService") configService: ConfigInterface,
         @inject("HttpService") httpService: HttpServiceInterface,
-        @inject("StoreService") storeService: StateServiceInterface) 
+        @inject("StoreService") storeService: StateServiceInterface,
+        @inject("RouterService") routerService: VueRouterService)
     {
         this.configService = configService;
         this.httpService = httpService;
         this.storeService = storeService;
+        this.routerService = routerService;
         this.guard(this.authConfig('defaults.guard'));
         storeService.registerStore(AuthStore);
         this.authStore = storeService.getStore().state.auth;
@@ -44,19 +51,21 @@ export default class AuthService implements AuthServiceInterface {
             this.fetch('login', data, {headers: this.getGuard().headers})
                 .then(loginResponse => {
                     this.setStorage({token: loginResponse.data});
+
                     this.fetchUser()
                         .then(userResponse => {
                             this.setLoggedIn(true);
 
                             resolve({loginResponse, userResponse});
+
+                            this.redirect(this.getEndpoint('login.redirect'));
                         })
                         .catch(error => {
-                            this.callListeners(error, 'user');
+                            this.callListener('error', error, this.getGuardFromError(error));
                         })
                 })
                 .catch(error => {
-                    this.removeStorage();
-                    this.callListeners(error, 'login');
+                    this.callListener('error', error, this.getGuardFromError(error));
                     reject(error);
                 })
         });
@@ -65,12 +74,14 @@ export default class AuthService implements AuthServiceInterface {
     public register(data: object, guard?: string) {
         return this.fetch('register', data)
             .then(response => {
-                if (this.getEndpoint('register').autoLogin) {
+                if (this.getEndpoint('register.autoLogin')) {
                     this.setStorage({token: response.data});
                 }
+
+                this.redirect(this.getEndpoint('register.redirect'));
             })
             .catch(error => {
-                this.callListeners(error, 'register');
+                this.callListener('error', error, this.getGuardFromError(error));
             })
     }
 
@@ -147,7 +158,7 @@ export default class AuthService implements AuthServiceInterface {
             this.guard(guard);
         }
 
-        return this.authStore[this.getGuardName()].user[this.authConfig('user.idPropertyName')];
+        return this.authStore[this.getGuardName()].user[this.getGuard('idName')];
     }
 
     public guard(guard: string) {
@@ -192,32 +203,49 @@ export default class AuthService implements AuthServiceInterface {
             this.guard(guard);
         }
 
-        let storage = this.getStorage();
-        let _guard = this.getGuard();
-        let token = storage.token[_guard.accessTokenName];
-        let tokenType = _guard.tokenType;
-
         return {
-            'Authorization': tokenType+ ' ' + token
+            'Authorization': this.getGuard('tokenType')+ ' ' + this.getStorage().token[this.getGuard('accessTokenName')]
         };
     }
 
-    public onError(listener) {
-        this.listeners.push(listener);
-
-        return this;
+    public authConfig(path: string = '') {
+        return this.configService.get(path ? 'auth.'+path : 'auth');
     }
 
-    protected callListeners(error, endpoint) {
-        for (let listener of this.listeners) {
+    public onError(listener) {
+        return this.addListener('error', listener);
+    }
+
+    public onUnauthorized(listener) {
+        return this.addListener('unauthorized', listener);
+    }
+
+    public callListener(type, error, guard) {
+        for (let listener of this.listeners[type]) {
             try {
-                listener(error, this.getGuardName(), endpoint);
+                listener(error, guard);
             } catch (e) {}
         }
     }
 
-    protected authConfig(path: string = '') {
-        return this.configService.get(path ? 'auth.'+path : 'auth');
+    public redirect(redirect: object|string|boolean) {
+        if (!redirect) {
+            return false;
+        }
+
+        this.routerService.push(redirect);
+
+        return this;
+    }
+
+    public getGuardFromError(error) {
+        return error.config && error.config.guard ? error.config.guard : null;
+    }
+
+    protected addListener(type, listener) {
+        this.listeners[type].push(listener);
+
+        return this;
     }
 
     protected setUser(user: object, guard?: string) {
@@ -300,8 +328,12 @@ export default class AuthService implements AuthServiceInterface {
         return this.getStorage();
     }
 
-    protected getGuard() {
-        return this._guard;
+    protected getGuard(config?: string|boolean, guard?: string) {
+        if (guard) {
+            this.guard(guard);
+        }
+
+        return this.authConfig(`guards.${this.getGuardName()}${config ? '.'+config : ''}`);
     }
 
     protected getGuardName() {
@@ -318,11 +350,13 @@ export default class AuthService implements AuthServiceInterface {
         if (_endpoint.method == "get" || _endpoint.method == "head" || _endpoint.method == "options") {
             return this.httpService[_endpoint.method](_endpoint.url, {
                 params: data,
-                headers: headers
+                headers: headers,
+                guard: this.getGuardName()
             })
         } else {
             return this.httpService[_endpoint.method](_endpoint.url, data, {
-                headers: headers
+                headers: headers,
+                guard: this.getGuardName()
             })
         }
     }
