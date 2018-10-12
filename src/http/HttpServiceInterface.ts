@@ -6,6 +6,7 @@ export default interface HttpServiceInterface {
   delete(url: string, config?: object);
   head(url: string, config?: object);
   options(url: string, config?: object);
+  request(config?: object);
   registerMiddleware(middleware: () => void);
   unregisterMiddleware(middleware: () => void);
 }

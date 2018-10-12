@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { inject, injectable } from "inversify";
 import HttpServiceInterface from "./HttpServiceInterface";
 import ApplicationInterface from "../foundation/ApplicationInterface";
@@ -12,39 +12,42 @@ export default class AxiosHttpService implements HttpServiceInterface {
 
   constructor(
     @inject("app") app: ApplicationInterface,
-    @inject("ConfigService") $config
+    @inject("ConfigService") configService
   ) {
     this.app = app;
-    let config = $config.get("http");
-    this.axios = axios.create(config);
+    this.axios = axios.create(configService.get("http"));
   }
 
-  public delete(url: string, config = {}) {
+  public delete(url: string, config: AxiosRequestConfig = {}) {
     return this.axios.delete(url, config);
   }
 
-  public get(url: string, config = {}) {
+  public get(url: string, config: AxiosRequestConfig = {}) {
     return this.axios.get(url, config);
   }
 
-  public head(url: string, config = {}) {
+  public head(url: string, config: AxiosRequestConfig = {}) {
     return this.axios.head(url, config);
   }
 
-  public options(url: string, config = {}) {
+  public options(url: string, config: AxiosRequestConfig = {}) {
     return this.options(url, config);
   }
 
-  public post(url: string, data: object, config = {}) {
+  public post(url: string, data: object, config: AxiosRequestConfig = {}) {
     return this.axios.post(url, data, config);
   }
 
-  public put(url: string, data: object, config = {}) {
+  public put(url: string, data: object, config: AxiosRequestConfig = {}) {
     return this.axios.put(url, data, config);
   }
 
-  public patch(url: string, data: object, config = {}) {
+  public patch(url: string, data: object, config: AxiosRequestConfig = {}) {
     return this.axios.patch(url, data, config);
+  }
+
+  public request(config: AxiosRequestConfig = {}) {
+    return this.axios.request(config);
   }
 
   public registerMiddleware(Middleware) {
