@@ -17,7 +17,10 @@ export default class ServiceProvider implements ServiceProviderInterface {
 
     for (let appConfigKey in appConfig) {
       if (appConfig[appConfigKey] !== undefined) {
-        if (frameworkConfig[appConfigKey] instanceof Object && appConfig[appConfigKey] instanceof Object) {
+        if (
+          frameworkConfig[appConfigKey] instanceof Object &&
+          appConfig[appConfigKey] instanceof Object
+        ) {
           Object.assign(frameworkConfig[appConfigKey], appConfig[appConfigKey]);
         } else {
           frameworkConfig[appConfigKey] = appConfig[appConfigKey];

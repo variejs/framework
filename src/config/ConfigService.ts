@@ -21,7 +21,7 @@ export default class Config implements ConfigInterface {
       this._configs[configName] = Object.assign(
         {},
         files(filename).default,
-        this._configs[configName],
+        this._configs[configName]
       );
     }
   }

@@ -6,16 +6,10 @@ export default class AutoRegisterComponentsServiceProvider extends ServiceProvid
   public register() {}
 
   public boot() {
-    try {
-      let files = require.context("@components", true, /^\.\/.*\.(vue)$/);
-      files.keys().forEach(filename => {
-        Vue.component(this.getComponentName(filename), files(filename).default);
-      });
-    } catch (e) {
-      console.warn(
-        "You are trying to auto load components, but do not have a component folder, please create `app/components` folder."
-      );
-    }
+    let files = require.context("@components", true, /^\.\/.*\.(vue)$/);
+    files.keys().forEach(filename => {
+      Vue.component(this.getComponentName(filename), files(filename).default);
+    });
   }
 
   private getComponentName(filename: string) {
