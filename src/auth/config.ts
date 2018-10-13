@@ -6,10 +6,6 @@ export default {
         user: {
             driver: 'jwt',
             endpoints: {
-                user: {
-                    url: '/auth/me',
-                    method: 'post'
-                },
                 login: {
                     url: '/auth/login',
                     method: 'post',
@@ -25,6 +21,14 @@ export default {
                     method: 'post',
                     redirect: false,
                     autoLogin: false
+                },
+                user: {
+                    url: '/auth/me',
+                    method: 'post'
+                },
+                refresh: {
+                    url: '/auth/refresh',
+                    method: 'post'
                 }
             },
             headers: {},

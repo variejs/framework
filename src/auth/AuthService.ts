@@ -120,25 +120,26 @@ export default class AuthService implements AuthServiceInterface {
 
         if (storage instanceof Object === false) {
             this.setLoggedIn(false);
-
-            return this.loggedIn();
-        }
-
-        try {
-            if (new Date(storage.token.expiresAt).getTime() < new Date().getTime()) {
+        } else {
+            try {
+                if (new Date(storage.token[this.getGuard('expiresAtName')]).getTime() < new Date().getTime()) {
+                    this.setLoggedIn(false);
+                } else {
+                    this.setLoggedIn(true);
+                }
+            } catch (e) {
                 this.setLoggedIn(false);
-
-                return this.loggedIn();
             }
-
-            this.setLoggedIn(true);
-
-            return this.loggedIn();
-        } catch (e) {
-            this.setLoggedIn(false);
-
-            return this.loggedIn();
         }
+
+        return this.loggedIn();
+    }
+
+    public async refresh() {
+
+        let refresh = await this.fetch('refresh')
+
+        return refresh;
     }
 
     public loggedIn(guard?: string) {
@@ -293,7 +294,7 @@ export default class AuthService implements AuthServiceInterface {
 
         let _endpoint = this.authConfig(`guards.${this.getGuardName()}.endpoints.${endpoint}`)
 
-        if (_endpoint) {
+        if (_endpoint !== undefined) {
             return _endpoint;
         }
 
