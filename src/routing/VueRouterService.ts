@@ -78,6 +78,7 @@ export default class VueRouterService implements RouterInterface {
     let route = new Route(path, component, props);
 
     if (this.currentGroupLevel > -1) {
+      // children routes cannot begin with a `/` as they would not be children
       route.path = route.path.replace(/^\/*/g, "");
 
       if (route.path === "*") {
@@ -143,6 +144,8 @@ export default class VueRouterService implements RouterInterface {
   public group(routes: Function) {
     this.currentGroupLevel++;
     this.groups.push(clone(this.groupInfo));
+    // Areas only apply to 1 group not all subsequent children groups
+    delete this.groupInfo.area;
     routes();
     this._resetGroup();
     return this;
@@ -166,6 +169,10 @@ export default class VueRouterService implements RouterInterface {
     return this;
   }
 
+  /**
+   * We loop through all middleware of that route
+   * Making sure we resolve them one at a time
+   */
   public setupMiddleware() {
     this.router.beforeResolve((to, from, next) => {
       let stopMiddleware = false;
@@ -208,6 +215,17 @@ export default class VueRouterService implements RouterInterface {
     return this.app.make<RouteMiddlewareInterface>(containerMiddlewareName);
   }
 
+  /**
+   * We build all the group information by looping through each level
+   *
+   * Each group will go up in a level with a child group is made
+   *
+   * We then go through each grouping and set middleware / areas
+   * and place the children for that group.
+   *
+   * By going up and down for each group we retain the data for the group level
+   * allowing us to chain in a pretty way
+   */
   private _resetGroup() {
     this.groupInfo = {
       path: "/",
@@ -223,24 +241,24 @@ export default class VueRouterService implements RouterInterface {
     };
 
     if (this.groups.length) {
-      if (this.currentGroupLevel === 0) {
-        let baseGroup: GroupInfo = this.groups[0];
-        if (baseGroup.area) {
-          baseGroup.component = baseGroup.area;
-        }
-        this.routes.push(baseGroup);
-        this.groups = [];
-      } else {
-        let childGroup = this.groups[this.currentGroupLevel];
-        let parentGroup = this.groups[this.currentGroupLevel - 1];
+      let childGroup = this.groups[this.currentGroupLevel];
+      let parentGroup = this.groups[this.currentGroupLevel - 1];
 
-        if (parentGroup) {
-          this.groupInfo.meta.layout = parentGroup.meta.layout;
-          this.groupInfo.meta.middleware = parentGroup.meta.middleware;
-        }
+      if (childGroup.area) {
+        childGroup.component = childGroup.area;
+        delete childGroup.area;
+      }
 
+      if (parentGroup) {
+        this.groupInfo.meta.layout = parentGroup.meta.layout;
+        this.groupInfo.meta.middleware = parentGroup.meta.middleware;
         parentGroup.children.push(childGroup);
-        this.groups.splice(this.currentGroupLevel, 1);
+      }
+
+      this.groups.splice(this.currentGroupLevel, 1);
+
+      if (this.currentGroupLevel === 0) {
+        this.routes.push(childGroup);
       }
     }
 
