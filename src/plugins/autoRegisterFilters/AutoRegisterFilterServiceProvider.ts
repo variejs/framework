@@ -2,7 +2,7 @@ import Vue from "vue";
 import * as camelCase from "camelcase";
 import ServiceProvider from "../../support/ServiceProvider";
 
-export default class AutoRegisterFiltersServiceProvider extends ServiceProvider {
+export default class AutoRegisterFilterServiceProvider extends ServiceProvider {
   public register() {}
 
   public boot() {

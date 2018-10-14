@@ -1,7 +1,7 @@
 import Vue from "vue";
 import ServiceProvider from "../../support/ServiceProvider";
 
-export default class AutoRegisterMixinsServiceProvider extends ServiceProvider {
+export default class AutoRegisterMixinServiceProvider extends ServiceProvider {
   public register() {}
 
   public boot() {

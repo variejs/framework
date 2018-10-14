@@ -6,7 +6,7 @@ import NotificationService from "./NotificationService";
 import ServiceProvider from "../../support/ServiceProvider";
 import NotificationServiceInterface from "./NotificationServiceInterface";
 
-export default class NotificationsServiceProvider extends ServiceProvider {
+export default class NotificationServiceProvider extends ServiceProvider {
   public boot() {
     Vue.use(new Notifications(this.app.make("ConfigService")), {
       store: this.app.make<VuexService>("StoreService").getStore(),

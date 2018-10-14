@@ -2,7 +2,7 @@ import Vue from "vue";
 import * as dashify from "dashify";
 import ServiceProvider from "../../support/ServiceProvider";
 
-export default class AutoRegisterLayoutsServiceProvider extends ServiceProvider {
+export default class AutoRegisterLayoutServiceProvider extends ServiceProvider {
   public register() {}
 
   public boot() {
