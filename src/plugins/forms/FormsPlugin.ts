@@ -4,8 +4,7 @@ import { VueConstructor } from "vue/types/vue";
 
 @injectable()
 class Forms {
-  @inject("ValidationService")
-  private validateService;
+  @inject("ValidationService") private validateService;
 
   public install(Vue: VueConstructor) {
     Vue.mixin({
