@@ -34,13 +34,21 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "version": "auto-changelog && git add CHANGELOG.md"
   },
   "lint-staged": {
     "/src/*.{js,json,css,md,vue}": [
       "prettier --write",
       "git add"
     ]
+  },
+  "auto-changelog": {
+    "output": "CHANGELOG.md",
+    "template": "keepachangelog",
+    "commitLimit": false,
+    "ignoreCommitPattern" : "Merge|Bump",
+    "startingCommit" : "1fe40187faedad2de1b35c6e83f898c8b1a4877b"
   },
   "files": [
     "lib",
