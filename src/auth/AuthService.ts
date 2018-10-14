@@ -123,7 +123,8 @@ export default class AuthService implements AuthServiceInterface {
         } else {
             try {
                 if (new Date(storage.token[this.getGuard('expiresAtName')]).getTime() < new Date().getTime()) {
-                    this.setLoggedIn(false);
+                    this.setLoggedIn(false)
+                    this.removeStorage();
                 } else {
                     this.setLoggedIn(true);
                 }
