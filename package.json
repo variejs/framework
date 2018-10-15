@@ -53,8 +53,9 @@
   "files": [
     "lib",
     "src",
+    "stubs",
+    "components",
     "BaseLayout.vue",
-    "Notifications.vue",
-    "components"
+    "Notifications.vue"
   ]
 }
