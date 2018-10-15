@@ -1,6 +1,6 @@
 {
   "name": "varie",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "VueJS Framework",
   "main": "./lib/index.js",
   "typings": "./lib/index",
@@ -57,5 +57,8 @@
     "components",
     "BaseLayout.vue",
     "Notifications.vue"
+  ],
+  "sideEffects": [
+    "*.vue"
   ]
 }
