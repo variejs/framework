@@ -13,7 +13,7 @@
     "camelcase": "^5.0.0",
     "clone-deep": "^4.0.0",
     "dashify": "^1.0.0",
-    "inversify": "^4.13.0",
+    "inversify": "^5.0.1",
     "inversify-inject-decorators": "^3.1.0",
     "reflect-metadata": "^0.1.12",
     "validator": "^10.7.1"
