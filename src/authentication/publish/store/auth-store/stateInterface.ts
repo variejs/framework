@@ -1,7 +1,9 @@
 export interface AuthState {
   user: Object;
   authAreaData: {
-    name: string;
-    password: string;
+    name: String,
+    email: String,
+    password: String,
+    confirm_password: String
   };
 }

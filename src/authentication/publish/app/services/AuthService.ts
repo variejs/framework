@@ -1,4 +1,4 @@
-import VarieAuthService from "varie/authenication/AuthService";
+import VarieAuthService from "varie/lib/authentication/AuthService";
 
 export default class AuthService extends VarieAuthService {
   /*
