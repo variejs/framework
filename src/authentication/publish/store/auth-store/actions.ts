@@ -4,26 +4,17 @@ import { AuthState } from "./stateInterface";
 import AuthService from "@app/services/AuthService";
 
 export default function(authService: AuthService) {
-  function handleAuthResponse(context, response) {
-    context.commit("RESET_AUTH_AREA_DATA");
-    authService.handleAuthResponse(response.data);
-    return context.dispatch("getUser");
-  }
   return {
     login: (context: ActionContext<AuthState, RootState>, data) => {
       return authService.login(data.email, data.password).then(response => {
-        return handleAuthResponse(context, response).then(user => {
-          return user;
-        });
+        return response;
       });
     },
     register: (context: ActionContext<AuthState, RootState>, form) => {
       return authService
         .register(form.name, form.email, form.password, form.passwordConfirmed)
         .then(response => {
-          return handleAuthResponse(context, response).then(user => {
-            return user;
-          });
+          return response;
         });
     },
     forgotPasswordRequest: (
@@ -39,9 +30,7 @@ export default function(authService: AuthService) {
       return authService
         .resetPassword(token, form.email, form.password, form.passwordConfirmed)
         .then(response => {
-          return handleAuthResponse(context, response).then(user => {
-            return user;
-          });
+          return response;
         });
     },
     getUser: (context: ActionContext<AuthState, RootState>) => {
