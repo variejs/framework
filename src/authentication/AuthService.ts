@@ -1,16 +1,16 @@
 import { injectable, inject } from "inversify";
-import ConfigInterface from '../config/ConfigInterface'
+import ConfigInterface from "../config/ConfigInterface";
 import HttpServiceInterface from "../http/HttpServiceInterface";
 
 @injectable()
 export default class AuthService {
-
   private httpService: HttpServiceInterface;
-  private configService : ConfigInterface
+  private configService: ConfigInterface;
 
   constructor(
-    @inject("HttpService") httpService : HttpServiceInterface,
-    @inject("ConfigService") configService : ConfigInterface) {
+    @inject("HttpService") httpService: HttpServiceInterface,
+    @inject("ConfigService") configService: ConfigInterface
+  ) {
     this.httpService = httpService;
     this.configService = configService;
   }
@@ -19,18 +19,20 @@ export default class AuthService {
   // refresh
 
   private getGuardConfig(config) {
-    return this.configService.get(`auth.guards.${this.configService.get('auth.defaults.guard')}.${config}`);
+    return this.configService.get(
+      `auth.guards.${this.configService.get("auth.defaults.guard")}.${config}`
+    );
   }
 
   login(email, password) {
-    return this.httpService.post(this.getGuardConfig('endpoints.login'), {
+    return this.httpService.post(this.getGuardConfig("endpoints.login"), {
       email,
       password
     });
   }
 
   register(name, email, password, confirmPassword) {
-    return this.httpService.post(this.getGuardConfig('endpoints.register'), {
+    return this.httpService.post(this.getGuardConfig("endpoints.register"), {
       name,
       email,
       password,
@@ -39,18 +41,24 @@ export default class AuthService {
   }
 
   forgotPasswordRequest(email) {
-    return this.httpService.post(this.getGuardConfig('endpoints.forgotPassword'), {
-      email
-    });
+    return this.httpService.post(
+      this.getGuardConfig("endpoints.forgotPassword"),
+      {
+        email
+      }
+    );
   }
 
   resetPassword(token, email, password, confirmPassword) {
-    return this.httpService.post(this.getGuardConfig('endpoints.resetPassword'), {
-      email,
-      token,
-      password,
-      password_confirmation: confirmPassword
-    });
+    return this.httpService.post(
+      this.getGuardConfig("endpoints.resetPassword"),
+      {
+        email,
+        token,
+        password,
+        password_confirmation: confirmPassword
+      }
+    );
   }
 
   handleAuthResponse(response) {
@@ -58,6 +66,6 @@ export default class AuthService {
   }
 
   getUser() {
-    return this.httpService.get(this.getGuardConfig('endpoints.user'));
+    return this.httpService.get(this.getGuardConfig("endpoints.user"));
   }
 }

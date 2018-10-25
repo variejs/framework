@@ -1,16 +1,12 @@
 import { AuthState } from "./stateInterface";
-import AuthService from "@app/services/AuthService";
 
-export default function(authService: AuthService) {
+export default function() {
   return {
     SET_AUTH_USER: (state: AuthState, user) => {
-      authService.setUser(state, user);
-    },
-    SET_AUTH_RESPONSE: (state: AuthState) => {
-      authService.setAuthResponse(state);
+      state.user = user;
     },
     REMOVE_AUTH: (state: AuthState) => {
-      authService.logout(state);
+      state.user = null;
     },
     UPDATE_AUTH_AREA_DATA: (state: AuthState, data) => {
       state.authAreaData = Object.assign(state.authAreaData, data);

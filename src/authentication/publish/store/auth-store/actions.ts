@@ -4,17 +4,16 @@ import { AuthState } from "./stateInterface";
 import AuthService from "@app/services/AuthService";
 
 export default function(authService: AuthService) {
-  function setAuthResponse(context, response) {
+  function handleAuthResponse(context, response) {
     context.commit("RESET_AUTH_AREA_DATA");
-    context.commit("SET_AUTH_RESPONSE", response.data);
+    authService.handleAuthResponse(response.data);
     return context.dispatch("getUser");
   }
-
   return {
     login: (context: ActionContext<AuthState, RootState>, data) => {
       return authService.login(data.email, data.password).then(response => {
-        return setAuthResponse(context, response).then(() => {
-          return response.data;
+        return handleAuthResponse(context, response).then(user => {
+          return user;
         });
       });
     },
@@ -22,8 +21,8 @@ export default function(authService: AuthService) {
       return authService
         .register(form.name, form.email, form.password, form.passwordConfirmed)
         .then(response => {
-          return setAuthResponse(context, response).then(() => {
-            return response.data;
+          return handleAuthResponse(context, response).then(user => {
+            return user;
           });
         });
     },
@@ -40,8 +39,8 @@ export default function(authService: AuthService) {
       return authService
         .resetPassword(token, form.email, form.password, form.passwordConfirmed)
         .then(response => {
-          return setAuthResponse(context, response).then(() => {
-            return response.data;
+          return handleAuthResponse(context, response).then(user => {
+            return user;
           });
         });
     },

@@ -1,5 +1,9 @@
 import { AuthState } from "./stateInterface";
 
 export default function() {
-  return {};
+  return {
+    SAMPLE_GETTER: (state: AuthState) => {
+      return state;
+    }
+  };
 }
