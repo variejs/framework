@@ -2,16 +2,20 @@ import { injectable, inject } from "inversify";
 import ConfigInterface from "../config/ConfigInterface";
 import HttpServiceInterface from "../http/HttpServiceInterface";
 import JwtGuard from "./guards/JwtGuard";
+import ApplicationInterface from "../foundation/ApplicationInterface";
 
 @injectable()
 export default class AuthService {
-  private httpService: HttpServiceInterface;
+  private app: ApplicationInterface;
   private configService: ConfigInterface;
+  private httpService: HttpServiceInterface;
 
   constructor(
+    @inject("app") app,
     @inject("HttpService") httpService: HttpServiceInterface,
     @inject("ConfigService") configService: ConfigInterface
   ) {
+    this.app = app;
     this.httpService = httpService;
     this.configService = configService;
   }
@@ -19,6 +23,7 @@ export default class AuthService {
   // refresh
 
   public login(email, password) {
+    this.getDriver().loginResponse("123");
     return this.httpService
       .post(this.getGuardConfig("endpoints.login"), {
         email,
@@ -84,7 +89,6 @@ export default class AuthService {
   }
 
   private getDriver(): JwtGuard {
-    let Driver = this.getGuardConfig("driver");
-    return new Driver();
+    return this.app.make(this.getGuardConfig("driver"));
   }
 }

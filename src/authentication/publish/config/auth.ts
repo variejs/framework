@@ -1,12 +1,12 @@
-import JwtGuard from "varie/lib/authentication/guards/JwtGuard";
-
 export default {
   defaults: {
     guard: "user"
   },
   guards: {
     user: {
-      driver: JwtGuard,
+      driver: "JwtGuard",
+      loginAfterReset: true,
+      loginAfterRegister: true,
       endpoints: {
         user: "/auth/me",
         login: "/auth/login",
@@ -16,10 +16,12 @@ export default {
         resetPassword: "/auth/reset-password",
         forgotPassword: "/auth/forgot-password"
       },
-      tokenName: "token",
-      tokenType: "bearer",
-      expiresAtName: "expires_at",
-      accessTokenName: "access_token"
+      token: {
+        name: "token",
+        type: "bearer",
+        expiresAt: "expires_at",
+        accessToken: "access_token"
+      }
     }
   }
 };
