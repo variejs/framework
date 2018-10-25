@@ -18,18 +18,7 @@ export default class AuthService {
 
   // refresh
 
-  private getGuardConfig(config): any {
-    return this.configService.get(
-      `auth.guards.${this.configService.get("auth.defaults.guard")}.${config}`
-    );
-  }
-
-  private getDriver(): JwtGuard {
-    let Driver = this.getGuardConfig("driver");
-    return new Driver();
-  }
-
-  login(email, password) {
+  public login(email, password) {
     return this.httpService
       .post(this.getGuardConfig("endpoints.login"), {
         email,
@@ -40,7 +29,7 @@ export default class AuthService {
       });
   }
 
-  logout() {
+  public logout() {
     return this.httpService
       .post(this.getGuardConfig("endpoints.logout"))
       .then(response => {
@@ -48,7 +37,7 @@ export default class AuthService {
       });
   }
 
-  register(name, email, password, confirmPassword) {
+  public register(name, email, password, confirmPassword) {
     return this.httpService
       .post(this.getGuardConfig("endpoints.register"), {
         name,
@@ -61,7 +50,7 @@ export default class AuthService {
       });
   }
 
-  forgotPasswordRequest(email) {
+  public forgotPasswordRequest(email) {
     return this.httpService
       .post(this.getGuardConfig("endpoints.forgotPassword"), {
         email
@@ -71,7 +60,7 @@ export default class AuthService {
       });
   }
 
-  resetPassword(token, email, password, confirmPassword) {
+  public resetPassword(token, email, password, confirmPassword) {
     return this.httpService
       .post(this.getGuardConfig("endpoints.resetPassword"), {
         email,
@@ -84,7 +73,18 @@ export default class AuthService {
       });
   }
 
-  getUser() {
+  public getUser() {
     return this.httpService.get(this.getGuardConfig("endpoints.user"));
+  }
+
+  private getGuardConfig(config): any {
+    return this.configService.get(
+      `auth.guards.${this.configService.get("auth.defaults.guard")}.${config}`
+    );
+  }
+
+  private getDriver(): JwtGuard {
+    let Driver = this.getGuardConfig("driver");
+    return new Driver();
   }
 }
