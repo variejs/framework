@@ -20,10 +20,7 @@ export default class AuthService {
     this.configService = configService;
   }
 
-  // refresh
-
   public login(email, password) {
-    this.getDriver().loginResponse("123");
     return this.httpService
       .post(this.getGuardConfig("endpoints.login"), {
         email,
@@ -31,6 +28,14 @@ export default class AuthService {
       })
       .then(response => {
         return this.getDriver().loginResponse(response);
+      });
+  }
+
+  public refresh() {
+    return this.httpService
+      .post(this.getGuardConfig("endpoints.refresh"))
+      .then(response => {
+        return this.getDriver().refreshResponse(response);
       });
   }
 
@@ -82,7 +87,7 @@ export default class AuthService {
     return this.httpService.get(this.getGuardConfig("endpoints.user"));
   }
 
-  private getGuardConfig(config): any {
+  public getGuardConfig(config): any {
     return this.configService.get(
       `auth.guards.${this.configService.get("auth.defaults.guard")}.${config}`
     );
