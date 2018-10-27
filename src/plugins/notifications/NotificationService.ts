@@ -12,9 +12,9 @@ class NotificationService {
 
   constructor(
     @inject("ConfigService") $config: ConfigInterface,
-    @inject("StoreService") storeService: StateServiceInterface
+    @inject("StateService") stateService: StateServiceInterface
   ) {
-    this.store = storeService.getStore();
+    this.store = stateService.getStore();
     this.configService = $config.get("notifications");
   }
 
