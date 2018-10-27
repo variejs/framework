@@ -35,7 +35,7 @@ export default class JwtGuard {
   }
 
   public async logoutResponse(response) {
-    // TODO
+
   }
 
   public async refreshResponse(response) {
@@ -50,7 +50,7 @@ export default class JwtGuard {
   }
 
   public async forgotPasswordRequestResponse(response) {
-    // TODO
+
   }
 
   public async resetPasswordResponse(response) {
