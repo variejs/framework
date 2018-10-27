@@ -1,4 +1,0 @@
-{
-  "store": "@store/auth",
-  "config.ts": "@config/auth.ts"
-}
