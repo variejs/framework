@@ -1,9 +1,9 @@
-import JwtGuard from "./guards/JwtGuard";
+import JwtGuard from "./guards/jwt/JwtGuard";
 import { injectable, inject } from "inversify";
 import ConfigInterface from "../config/ConfigInterface";
+import AuthServiceInterface from "./AuthServiceInterface";
 import HttpServiceInterface from "../http/HttpServiceInterface";
 import ApplicationInterface from "../foundation/ApplicationInterface";
-import AuthServiceInterface from "./AuthServiceInterface";
 
 @injectable()
 export default class AuthService implements AuthServiceInterface {
@@ -13,8 +13,8 @@ export default class AuthService implements AuthServiceInterface {
 
   constructor(
     @inject("app") app,
-    @inject("HttpService") httpService: HttpServiceInterface,
-    @inject("ConfigService") configService: ConfigInterface
+    @inject("ConfigService") configService: ConfigInterface,
+    @inject("HttpService") httpService: HttpServiceInterface
   ) {
     this.app = app;
     this.httpService = httpService;

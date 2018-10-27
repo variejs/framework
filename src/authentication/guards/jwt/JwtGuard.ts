@@ -1,10 +1,9 @@
-import auth from "../publish/config/auth";
+import auth from "./../../publish/config/auth";
 import { inject, injectable } from "inversify";
-import ConfigInterface from "../../config/ConfigInterface";
-import HttpServiceInterface from "../../http/HttpServiceInterface";
-import StateServiceInterface from "../../state/StateServiceInterface";
-import StorageServiceInterface from "../../storage/StorageServiceInterface";
-import AxiosHttpMiddlewareInterface from "../../http/AxiosHttpMiddlewareInterface";
+import ConfigInterface from "./../../../config/ConfigInterface";
+import HttpServiceInterface from "./../../../http/HttpServiceInterface";
+import StateServiceInterface from "./../../../state/StateServiceInterface";
+import StorageServiceInterface from "./../../../storage/StorageServiceInterface";
 
 @injectable()
 export default class JwtGuard {
@@ -18,9 +17,9 @@ export default class JwtGuard {
 
   constructor(
     @inject("AuthService") authService,
-    @inject("StateService") stateService: StateServiceInterface,
     @inject("ConfigService") configService: ConfigInterface,
     @inject("HttpService") httpService: HttpServiceInterface,
+    @inject("StateService") stateService: StateServiceInterface,
     @inject("StorageService") storageService: StorageServiceInterface
   ) {
     this.httpService = httpService;
@@ -28,7 +27,6 @@ export default class JwtGuard {
     this.configService = configService;
     this.storageService = storageService;
     this.$store = stateService.getStore();
-    this.httpService.registerMiddleware(SetAuthToken);
   }
 
   public async loginResponse(response) {
@@ -95,58 +93,5 @@ export default class JwtGuard {
             response.data[this.authService.getGuardConfig("token.expiresIn")]
       })
     );
-  }
-}
-
-// TODO - this needs to be moved out and registered somewhere else, most likely the JWT service provider ?
-@injectable()
-class SetAuthToken implements AxiosHttpMiddlewareInterface {
-  private authService;
-  private storageService;
-
-  constructor(
-    @inject("AuthService") authService,
-    @inject("StorageService") storageService: StorageServiceInterface
-  ) {
-    this.authService = authService;
-    this.storageService = storageService;
-  }
-
-  // @ts-ignore
-  public request(config) {
-    return new Promise(resolve => {
-      let token = JSON.parse(this.storageService.get("auth.token"));
-      if (token) {
-        if (
-          !config.url.includes(
-            this.authService.getGuardConfig("endpoints.refresh")
-          ) &&
-          token.expires_at < new Date().getTime()
-        ) {
-          this.authService.refresh().then(() => {
-            token = JSON.parse(this.storageService.get("auth.token"));
-            config.headers.common.Authorization = `${token.token_type} ${
-              token.access_token
-            }`;
-            resolve(config);
-          });
-        } else {
-          config.headers.common.Authorization = `${token.token_type} ${
-            token.access_token
-          }`;
-          resolve(config);
-        }
-      } else {
-        resolve(config);
-      }
-    });
-  }
-
-  public response(response) {
-    return response;
-  }
-
-  public responseError(error) {
-    return error;
   }
 }
