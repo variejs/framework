@@ -34,9 +34,7 @@ export default class JwtGuard {
     return await this.$store.dispatch("auth/getUser");
   }
 
-  public async logoutResponse(response) {
-
-  }
+  public async logoutResponse(response) {}
 
   public async refreshResponse(response) {
     this.setAuthToken(response);
@@ -49,9 +47,7 @@ export default class JwtGuard {
     }
   }
 
-  public async forgotPasswordRequestResponse(response) {
-
-  }
+  public async forgotPasswordRequestResponse(response) {}
 
   public async resetPasswordResponse(response) {
     if (this.authService.getGuardConfig("loginAfterReset")) {
