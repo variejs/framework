@@ -1,11 +1,21 @@
 export default interface AuthServiceInterface {
-  login(email, password);
+  login(email: string, password: string);
   refresh();
   logout();
-  register(name, email, password, confirmPassword);
-  forgotPasswordRequest(email);
-  resetPassword(token, email, password, confirmPassword);
+  register(
+    name: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+  );
+  forgotPasswordRequest(email: string);
+  resetPassword(
+    token: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+  );
   getUser(): Promise<any>;
   getGuardConfig(config: string);
-  isLoggedIn() : Promise<any>;
+  isLoggedIn(): Promise<boolean>;
 }

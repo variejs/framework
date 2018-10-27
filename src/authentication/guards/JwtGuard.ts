@@ -1,9 +1,9 @@
 import auth from "../publish/config/auth";
 import { inject, injectable } from "inversify";
-import StateServiceInterface from "../../state/StateServiceInterface";
-import StorageServiceInterface from "../../storage/StorageServiceInterface";
 import ConfigInterface from "../../config/ConfigInterface";
 import HttpServiceInterface from "../../http/HttpServiceInterface";
+import StateServiceInterface from "../../state/StateServiceInterface";
+import StorageServiceInterface from "../../storage/StorageServiceInterface";
 import AxiosHttpMiddlewareInterface from "../../http/AxiosHttpMiddlewareInterface";
 
 @injectable()
@@ -31,45 +31,51 @@ export default class JwtGuard {
     this.httpService.registerMiddleware(SetAuthToken);
   }
 
-  loginResponse(response) {
+  public loginResponse(response) {
     this.setAuthToken(response);
     this.$store.dispatch("auth/getUser");
   }
 
-  logoutResponse(response) {
+  public logoutResponse(response) {
     // TODO
   }
 
-  refreshResponse(response) {
+  public refreshResponse(response) {
     this.setAuthToken(response);
   }
 
-  registerResponse(response) {
+  public registerResponse(response) {
     if (this.authService.getGuardConfig("loginAfterRegister")) {
       this.setAuthToken(response);
       this.$store.dispatch("auth/getUser");
     }
   }
 
-  forgotPasswordRequestResponse(response) {
+  public forgotPasswordRequestResponse(response) {
     // TODO
   }
 
-  resetPasswordResponse(response) {
+  public resetPasswordResponse(response) {
     if (this.authService.getGuardConfig("loginAfterReset")) {
       this.setAuthToken(response);
       this.$store.dispatch("auth/getUser");
     }
   }
 
-  async isLoggedIn() {
+  public async isLoggedIn() {
     if (this.$store.state.auth.user) {
       return true;
     }
 
     if (this.storageService.get(this.tokenName)) {
-      await this.$store.dispatch("auth/getUser");
-      return this.$store.state.auth.user;
+      await this.$store.dispatch("auth/getUser").then(
+        () => {
+          return true;
+        },
+        () => {
+          return false;
+        }
+      );
     }
 
     return false;
