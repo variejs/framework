@@ -1,11 +1,12 @@
+import JwtGuard from "./guards/JwtGuard";
 import { injectable, inject } from "inversify";
 import ConfigInterface from "../config/ConfigInterface";
 import HttpServiceInterface from "../http/HttpServiceInterface";
-import JwtGuard from "./guards/JwtGuard";
 import ApplicationInterface from "../foundation/ApplicationInterface";
+import AuthServiceInterface from "./AuthServiceInterface";
 
 @injectable()
-export default class AuthService {
+export default class AuthService implements AuthServiceInterface {
   private app: ApplicationInterface;
   private configService: ConfigInterface;
   private httpService: HttpServiceInterface;
@@ -85,6 +86,10 @@ export default class AuthService {
 
   public getUser() {
     return this.httpService.get(this.getGuardConfig("endpoints.user"));
+  }
+
+  public isLoggedIn() {
+    return this.getDriver().isLoggedIn();
   }
 
   public getGuardConfig(config): any {

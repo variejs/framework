@@ -1,10 +1,10 @@
+import auth from "../publish/config/auth";
 import { inject, injectable } from "inversify";
 import StateServiceInterface from "../../state/StateServiceInterface";
 import StorageServiceInterface from "../../storage/StorageServiceInterface";
 import ConfigInterface from "../../config/ConfigInterface";
 import HttpServiceInterface from "../../http/HttpServiceInterface";
 import AxiosHttpMiddlewareInterface from "../../http/AxiosHttpMiddlewareInterface";
-import auth from "../publish/config/auth";
 
 @injectable()
 export default class JwtGuard {
@@ -13,6 +13,8 @@ export default class JwtGuard {
   private httpService;
   private configService;
   private storageService;
+
+  protected tokenName = "auth.token";
 
   constructor(
     @inject("AuthService") authService,
@@ -43,7 +45,10 @@ export default class JwtGuard {
   }
 
   registerResponse(response) {
-    // TODO
+    if (this.authService.getGuardConfig("loginAfterRegister")) {
+      this.setAuthToken(response);
+      this.$store.dispatch("auth/getUser");
+    }
   }
 
   forgotPasswordRequestResponse(response) {
@@ -51,12 +56,28 @@ export default class JwtGuard {
   }
 
   resetPasswordResponse(response) {
-    // TODO
+    if (this.authService.getGuardConfig("loginAfterReset")) {
+      this.setAuthToken(response);
+      this.$store.dispatch("auth/getUser");
+    }
+  }
+
+  async isLoggedIn() {
+    if (this.$store.state.auth.user) {
+      return true;
+    }
+
+    if (this.storageService.get(this.tokenName)) {
+      await this.$store.dispatch("auth/getUser");
+      return this.$store.state.auth.user;
+    }
+
+    return false;
   }
 
   private setAuthToken(response) {
     this.storageService.set(
-      "auth.token",
+      this.tokenName,
       JSON.stringify({
         access_token:
           response.data[this.authService.getGuardConfig("token.accessToken")],
@@ -64,12 +85,14 @@ export default class JwtGuard {
           response.data[this.authService.getGuardConfig("token.tokenTypeName")],
         expires_at:
           new Date().getTime() +
-          response.data[this.authService.getGuardConfig("token.expiresIn")]
+          1000 *
+            response.data[this.authService.getGuardConfig("token.expiresIn")]
       })
     );
   }
 }
 
+// TODO - this needs to be moved out and registered somewhere else, most likely the JWT service provider ?
 @injectable()
 class SetAuthToken implements AxiosHttpMiddlewareInterface {
   private authService;
