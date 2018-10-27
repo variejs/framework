@@ -68,7 +68,7 @@ export default class JwtGuard {
     }
 
     if (this.storageService.get(this.tokenName)) {
-      await this.$store.dispatch("auth/getUser").then(
+      return await this.$store.dispatch("auth/getUser").then(
         () => {
           return true;
         },
