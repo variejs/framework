@@ -33,32 +33,32 @@ export default class JwtGuard {
 
   public loginResponse(response) {
     this.setAuthToken(response);
-    this.$store.dispatch("auth/getUser");
+    return this.$store.dispatch("auth/getUser");
   }
 
-  public logoutResponse(response) {
+  public async logoutResponse(response) {
     // TODO
   }
 
-  public refreshResponse(response) {
+  public async refreshResponse(response) {
     this.setAuthToken(response);
   }
 
-  public registerResponse(response) {
+  public async registerResponse(response) {
     if (this.authService.getGuardConfig("loginAfterRegister")) {
       this.setAuthToken(response);
-      this.$store.dispatch("auth/getUser");
+      return this.$store.dispatch("auth/getUser");
     }
   }
 
-  public forgotPasswordRequestResponse(response) {
+  public async forgotPasswordRequestResponse(response) {
     // TODO
   }
 
-  public resetPasswordResponse(response) {
+  public async resetPasswordResponse(response) {
     if (this.authService.getGuardConfig("loginAfterReset")) {
       this.setAuthToken(response);
-      this.$store.dispatch("auth/getUser");
+      return this.$store.dispatch("auth/getUser");
     }
   }
 
