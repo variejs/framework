@@ -31,9 +31,9 @@ export default class JwtGuard {
     this.httpService.registerMiddleware(SetAuthToken);
   }
 
-  public loginResponse(response) {
+  public async loginResponse(response) {
     this.setAuthToken(response);
-    return this.$store.dispatch("auth/getUser");
+    return await this.$store.dispatch("auth/getUser");
   }
 
   public async logoutResponse(response) {
@@ -47,7 +47,7 @@ export default class JwtGuard {
   public async registerResponse(response) {
     if (this.authService.getGuardConfig("loginAfterRegister")) {
       this.setAuthToken(response);
-      return this.$store.dispatch("auth/getUser");
+      return await this.$store.dispatch("auth/getUser");
     }
   }
 
@@ -58,7 +58,7 @@ export default class JwtGuard {
   public async resetPasswordResponse(response) {
     if (this.authService.getGuardConfig("loginAfterReset")) {
       this.setAuthToken(response);
-      return this.$store.dispatch("auth/getUser");
+      return await this.$store.dispatch("auth/getUser");
     }
   }
 
