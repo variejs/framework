@@ -4,7 +4,7 @@ import Mutations from "./mutations";
 import { injectable } from "inversify";
 
 @injectable()
-export default class Notifications {
+export default class AlertStore {
   public name;
   public state;
   public actions;
@@ -13,8 +13,8 @@ export default class Notifications {
 
   constructor() {
     this.state = state;
+    this.name = "alerts";
     this.namespaced = true;
-    this.name = "notifications";
     this.actions = new Actions();
     this.mutations = new Mutations();
   }

@@ -1,5 +1,5 @@
 <style lang="scss">
-.notifications {
+.alerts {
   position: fixed;
   right: 10px;
   top: 66px;
@@ -7,7 +7,7 @@
   z-index: 40;
 }
 
-.notification {
+.alert {
   border-radius: 6px;
   box-shadow: -1px 1px 4px rgba(0, 0, 0, 0.3);
   margin-bottom: 10px;
@@ -64,37 +64,37 @@
   }
 }
 
-.notification-animation-enter-active {
+.alert-animation-enter-active {
   transition: all 0.3s ease;
 }
-.notification-animation-leave-active {
+.alert-animation-leave-active {
   transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
 }
-.notification-animation-enter,
-.notification-animation-leave-to {
+.alert-animation-enter,
+.alert-animation-leave-to {
   transform: translateX(10px);
   opacity: 0;
 }
 </style>
 
 <template>
-	<div class="notifications">
-		<transition-group name="notification-animation">
-			<notification :notification="notification" :key="notification.id" v-for="notification in notifications"></notification>
+	<div class="alerts">
+		<transition-group name="alert-animation">
+			<alert :alert="alert" :key="alert.id" v-for="alert in alerts"></alert>
 		</transition-group>
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import Notification from "./components/Notification.vue";
+import alert from "./components/Alert.vue";
 export default Vue.extend({
   components: {
-    Notification
+    alert
   },
   computed: {
-    notifications() {
-      return this.$store.state.varie.notifications.notifications;
+    alerts() {
+      return this.$store.state.varie.alerts.alerts;
     }
   }
 });

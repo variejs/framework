@@ -4,7 +4,7 @@ import ConfigInterface from "../../config/ConfigInterface";
 import StateServiceInterface from "../../state/StateServiceInterface";
 
 @injectable()
-class NotificationService {
+class AlertService {
   protected store: Store<object>;
   protected configService: {
     duration: number;
@@ -15,7 +15,7 @@ class NotificationService {
     @inject("StateService") stateService: StateServiceInterface
   ) {
     this.store = stateService.getStore();
-    this.configService = $config.get("notifications");
+    this.configService = $config.get("alerts");
   }
 
   public showError(
@@ -55,7 +55,7 @@ class NotificationService {
     if (duration === undefined) {
       duration = this.configService.duration;
     }
-    this.store.dispatch("varie/notifications/add", {
+    this.store.dispatch("varie/alerts/add", {
       message: message,
       duration: duration,
       severity: severity,
@@ -64,4 +64,4 @@ class NotificationService {
   }
 }
 
-export default NotificationService;
+export default AlertService;

@@ -1,4 +1,4 @@
-export default interface NotificationModel {
+export default interface AlertModel {
   title: string;
   message: string;
   severity: string;
