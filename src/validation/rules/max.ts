@@ -11,7 +11,7 @@ export default {
         return value.size <= max * 1024;
       }
 
-      return isLength(value, { max: max });
+      return isLength(value, { max });
     }
     return true;
   },
