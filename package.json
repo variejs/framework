@@ -46,9 +46,7 @@
   "auto-changelog": {
     "output": "CHANGELOG.md",
     "template": "keepachangelog",
-    "commitLimit": false,
-    "ignoreCommitPattern": "Merge|Bump",
-    "startingCommit": "1fe40187faedad2de1b35c6e83f898c8b1a4877b"
+    "commitLimit": false
   },
   "files": [
     "lib",
