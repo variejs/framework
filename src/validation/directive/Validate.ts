@@ -4,7 +4,6 @@ import Form from "../../plugins/forms/Form";
 function checkForErrors(formElement, form: Form) {
   let errors = form.errors();
   formElement.querySelectorAll("*[validate]").forEach(el => {
-    console.info(el.name, el.hasAttribute("touched"));
     if (el.hasAttribute("touched") && errors[el.name]) {
       return attachError(el, errors[el.name]);
     }
