@@ -50,6 +50,7 @@ Vue.directive("form", {
     // @ts-ignore
     formElement
       .querySelectorAll("*[validate]")
+      // @ts-ignore
       .forEach((el: HTMLInputElement) => {
         switch (el.type) {
           case "radio":
