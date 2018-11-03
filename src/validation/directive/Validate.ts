@@ -1,64 +1,75 @@
 import Vue from "vue";
+import Form from "../../plugins/forms/Form";
 
-function checkForErrors(el: HTMLInputElement, vNode) {
-  if (!vNode.value.isValid()) {
-    let errors = vNode.value.errors();
-    if (errors && errors[el.name]) {
-      if (!hasValidationErrorElement(el)) {
-        el.insertAdjacentHTML(
-          "afterend",
-          `<div class="validation-error"></div>`
-        );
-      }
-      if (el.nextSibling) {
-        // @ts-ignore
-        return (el.nextSibling.innerHTML = errors[el.name]);
-      }
+function checkForErrors(formElement, form: Form) {
+  let errors = form.errors();
+  formElement.querySelectorAll("*[validate]").forEach(el => {
+    console.info(el.name, el.hasAttribute("touched"));
+    if (el.hasAttribute("touched") && errors[el.name]) {
+      return attachError(el, errors[el.name]);
     }
+    removeErrors(el);
+  });
+}
+
+function attachError(el: HTMLInputElement, error) {
+  let validationElement = getValidationErrorElement(el);
+  if (!validationElement) {
+    el.insertAdjacentHTML(
+      "afterend",
+      `<div class="validation-error">${error}</div>`
+    );
+  } else {
+    // @ts-ignore
+    validationElement.innerHTML = error;
   }
-  removeErrors(el);
 }
 
 function removeErrors(el: HTMLInputElement) {
-  if (hasValidationErrorElement(el)) {
-    if (el.nextSibling) {
-      // @ts-ignore
-      el.nextSibling.remove();
-    }
+  let validationElement = getValidationErrorElement(el);
+  if (validationElement) {
+    // @ts-ignore
+    validationElement.remove();
   }
 }
 
-function hasValidationErrorElement(el: HTMLInputElement) {
+function getValidationErrorElement(
+  el: HTMLInputElement
+): HTMLInputElement | boolean {
   let sibling = el.nextSibling;
   // @ts-ignore
   if (sibling && sibling.classList) {
     // @ts-ignore
-    return sibling.classList.contains("validation-error");
+    return sibling.classList.contains("validation-error") && sibling;
   }
   return false;
 }
 
 // @ts-ignore
 Vue.directive("form", {
-  inserted: (form: HTMLInputElement, vNode) => {
+  inserted(formElement: HTMLInputElement, vNode) {
     // @ts-ignore
-    form.querySelectorAll("*[validate]").forEach((el: HTMLInputElement) => {
-      switch (el.type) {
-        case "radio":
-        case "checkbox":
-          el.onchange = () => {
-            checkForErrors(el, vNode);
-          };
-          break;
-        default:
-          el.onblur = () => {
-            checkForErrors(el, vNode);
-            el.oninput = () => {
-              checkForErrors(el, vNode);
+    formElement
+      .querySelectorAll("*[validate]")
+      .forEach((el: HTMLInputElement) => {
+        switch (el.type) {
+          case "radio":
+          case "checkbox":
+            el.onchange = () => {
+              el.setAttribute("touched", "true");
+              checkForErrors(formElement, vNode.value);
             };
-          };
-          break;
-      }
-    });
+            break;
+          default:
+            el.oninput = () => {
+              checkForErrors(formElement, vNode.value);
+              el.onblur = () => {
+                el.setAttribute("touched", "true");
+                checkForErrors(formElement, vNode.value);
+              };
+            };
+            break;
+        }
+      });
   }
 });

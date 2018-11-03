@@ -103,8 +103,17 @@ class Form {
     return this._validator.validate(this.data(), this._rules, this._messages);
   }
 
-  public isDirty() {
-    return JSON.stringify(this.data()) !== JSON.stringify(this._originalData);
+  public isDirty(property?) {
+    let data = this.data();
+    let originalData = this._originalData;
+    if (property) {
+      return (
+        (data.hasOwnProperty(property) &&
+          !originalData.hasOwnProperty(property)) ||
+        data[property] !== originalData[property]
+      );
+    }
+    return JSON.stringify(data) !== JSON.stringify(originalData);
   }
 }
 
