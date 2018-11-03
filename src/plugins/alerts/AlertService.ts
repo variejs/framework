@@ -18,11 +18,7 @@ class AlertService {
     this.configService = $config.get("alerts");
   }
 
-  public error(
-    message: string,
-    title: string = "Error",
-    duration?: number
-  ) {
+  public error(message: string, title: string = "Error", duration?: number) {
     this._makeAlert(message, title, duration, "error");
   }
 

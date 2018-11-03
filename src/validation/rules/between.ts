@@ -4,7 +4,7 @@ export default {
       let min = parameters[0];
       let max = parameters[1];
 
-      if (Array.isArray(value) || typeof value === 'string') {
+      if (Array.isArray(value) || typeof value === "string") {
         return min <= value.length && max >= value.length;
       } else if (typeof value === "object") {
         let minSize = min * 1024;
