@@ -18,7 +18,7 @@ class AlertService {
     this.configService = $config.get("alerts");
   }
 
-  public showError(
+  public error(
     message: string,
     title: string = "Error",
     duration?: number
@@ -26,11 +26,11 @@ class AlertService {
     this._makeAlert(message, title, duration, "error");
   }
 
-  public showInfo(message: string, title: string = "Info", duration?: number) {
+  public info(message: string, title: string = "Info", duration?: number) {
     this._makeAlert(message, title, duration, "info");
   }
 
-  public showSuccess(
+  public success(
     message: string,
     title: string = "Success",
     duration?: number
@@ -38,7 +38,7 @@ class AlertService {
     this._makeAlert(message, title, duration, "success");
   }
 
-  public showWarning(
+  public warning(
     message: string,
     title: string = "Warning",
     duration?: number

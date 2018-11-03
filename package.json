@@ -1,6 +1,6 @@
 {
   "name": "varie",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "description": "VueJS Framework",
   "main": "./lib/index.js",
   "typings": "./lib/index",
@@ -19,12 +19,12 @@
     "validator": "^10.7.1"
   },
   "devDependencies": {
-    "@types/node": "^10.12.1",
+    "@types/node": "^10.12.2",
     "@types/validator": "^9.4.1",
     "@types/webpack-env": "^1.13.6",
     "husky": "^0.14.3",
     "lint-staged": "^8.0.4",
-    "typescript": "^3.1.5"
+    "typescript": "^3.1.6"
   },
   "peerDependencies": {
     "vue": "^2.5.17",
