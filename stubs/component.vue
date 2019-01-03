@@ -1,7 +1,5 @@
 <template>
-    <section>
-        Component
-    </section>
+  <section>Component</section>
 </template>
 
 <script>

@@ -1,7 +1,5 @@
 <template>
-    <component :is="layout">
-        <router-view></router-view>
-    </component>
+  <component :is="layout"> <router-view></router-view> </component>
 </template>
 <script>
 import Vue from "vue";

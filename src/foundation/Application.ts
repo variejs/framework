@@ -1,16 +1,16 @@
-declare const global: any;
+import Vue from "vue";
 import "reflect-metadata";
 import { Container } from "inversify";
 import ContainerMixin from "./ContainerMixin";
 import ApplicationInterface from "./ApplicationInterface";
 import ServiceProviderInterface from "../support/ServiceProviderInterface";
-import Vue from "vue";
+
+declare const global: any;
 
 export class Application implements ApplicationInterface {
   public $container: Container;
   public providers: Array<ServiceProviderInterface> = [];
 
-  private $providerPromises: Array<Promise<{}>> = [];
   private $appProviders = require("@config/app").default.providers;
 
   constructor() {
@@ -20,15 +20,11 @@ export class Application implements ApplicationInterface {
     this.constant("app", this);
   }
 
-  public boot(): Promise<ApplicationInterface> {
+  public async boot(): Promise<ApplicationInterface> {
     new ContainerMixin().registerMixin(this);
-
-    return new Promise(resolve => {
-      this.registerConfiguredProviders().then(() => {
-        this.bootProviders();
-        return resolve(this);
-      });
-    });
+    await this.registerConfiguredProviders();
+    await this.bootProviders();
+    return this;
   }
 
   public bind<T>(abstract: string, concrete: any) {
@@ -50,31 +46,21 @@ export class Application implements ApplicationInterface {
     return this.$container.get(abstract);
   }
 
-  private registerConfiguredProviders() {
+  private async registerConfiguredProviders() {
     for (let provider in this.$appProviders) {
-      let providerPromise = new Promise(resolve => {
-        let appProvider = this.getAppProvider(provider);
-        if (appProvider instanceof Promise) {
-          return appProvider.then(() => {
-            return resolve();
-          });
-        }
-        resolve();
-      });
-      this.$providerPromises.push(providerPromise);
+      await this.getAppProvider(provider);
     }
-    return Promise.all(this.$providerPromises);
   }
 
-  private getAppProvider(provider: string): ServiceProviderInterface {
+  private async getAppProvider(
+    provider: string
+  ): Promise<ServiceProviderInterface> {
     return new this.$appProviders[provider](this).register();
   }
 
-  private bootProviders() {
-    Object.values(this.providers).forEach(
-      (provider: ServiceProviderInterface) => {
-        provider.boot();
-      }
-    );
+  private async bootProviders() {
+    for (const provider in this.providers) {
+      await this.providers[provider].boot();
+    }
   }
 }
