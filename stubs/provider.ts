@@ -9,11 +9,11 @@ import ServiceProvider from "varie/lib/support/ServiceProvider";
 |
 */
 export default class tempProvider extends ServiceProvider {
-  public boot() {
+  public async boot() {
     //
   }
 
-  public register() {
+  public async register() {
     //
   }
 }
