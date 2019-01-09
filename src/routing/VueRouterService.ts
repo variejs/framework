@@ -72,7 +72,6 @@ export default class VueRouterService implements RouterInterface {
       })
     );
 
-    console.info(this.routes);
     this.setupMiddleware();
   }
 
@@ -144,7 +143,6 @@ export default class VueRouterService implements RouterInterface {
 
   public group(routes: Function) {
     this.currentGroupLevel++;
-    console.info(`LEVEL OF GROUP ${this.currentGroupLevel}`);
     this.groups.push(clone(this.groupInfo));
     // Areas only apply to 1 group not all subsequent children groups
     delete this.groupInfo.area;
@@ -159,7 +157,6 @@ export default class VueRouterService implements RouterInterface {
   }
 
   public prefix(prefix: string) {
-    console.info(`PREFIX LEVEL : ${this.currentGroupLevel}, ${prefix}`);
     this.groupInfo.path = prefix || "";
     if (this.currentGroupLevel > -1) {
       this.groupInfo.path = this.groupInfo.path.replace(/^\/*/g, "");
