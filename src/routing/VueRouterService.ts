@@ -14,6 +14,7 @@ interface GroupInfo {
   area: null | object;
   children: Array<Route | GroupInfo>;
   meta: {
+    data: object;
     layout: string;
     middleware: Array<any>;
   };
@@ -100,13 +101,15 @@ export default class VueRouterService implements RouterInterface {
         this.currentGroupLevel
       ].meta.middleware;
 
+      route.meta.data = this.groups[this.currentGroupLevel].meta.data;
+
       return route;
     }
 
     if (route.path === "*") {
       this.wildCardRoutes.push(route);
     } else {
-      route.setMeta(this.groupInfo);
+      route.setMeta(this.groupInfo.meta);
       this.routes.push(route);
     }
 
@@ -166,6 +169,11 @@ export default class VueRouterService implements RouterInterface {
 
   public layout(layout) {
     this.groupInfo.meta.layout = layout;
+    return this;
+  }
+
+  public data(data) {
+    this.groupInfo.meta.data = data;
     return this;
   }
 
@@ -230,6 +238,7 @@ export default class VueRouterService implements RouterInterface {
     this.groupInfo = {
       path: "/",
       meta: {
+        data: {},
         middleware: [],
         layout: this.configService.get("view.defaultLayout", "public")
       },
@@ -253,6 +262,7 @@ export default class VueRouterService implements RouterInterface {
         if (childGroup.path === parentGroup.path) {
           childGroup.path = "";
         }
+        this.groupInfo.meta.data = parentGroup.meta.data;
         this.groupInfo.meta.layout = parentGroup.meta.layout;
         this.groupInfo.meta.middleware = parentGroup.meta.middleware;
         parentGroup.children.push(childGroup);

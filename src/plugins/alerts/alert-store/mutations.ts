@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { AlertState } from "./stateInterface";
-import AlertModel from "../../models/AlertModel";
+import AlertModel from "./../models/AlertModel";
 
 export default class Mutations {
   add = (state: AlertState, alert: AlertModel) => {

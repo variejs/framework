@@ -5,6 +5,7 @@ export default class Route {
   public props;
 
   public meta: {
+    data?: object;
     layout?: string;
     middleware?: Array<any>;
   } = {};

@@ -10,5 +10,6 @@ export default interface RouterInterface {
   area(area: object): this;
   redirect(path: string, redirect: string): this;
   layout(layout: string): this;
+  data(data: object): this;
   register(RouteClass: RoutesInterface): this;
 }
