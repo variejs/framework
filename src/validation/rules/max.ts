@@ -1,5 +1,7 @@
-import * as isLength from "validator/lib/isLength";
+import isLength from "validator/lib/isLength";
+import isAlpha from "validator/lib/isAlpha";
 
+console.info(isLength, isAlpha)
 export default {
   passes(value: { size: number }, attributes: Array<any>) {
     if (value) {
