@@ -5,16 +5,13 @@ import { injectable, inject } from "inversify";
 @injectable()
 export default class StoreModule {
   public name;
+  public modules = {};
+  public namespaced = true;
   public state: GenericObject = {};
   public actions: GenericObject = {};
   public getters: GenericObject = {};
   public mutations: GenericObject = {};
-  public namespaced = true;
-
-  public modules = {};
   public $modules: Array<StoreModule> = [];
-
-  protected $store;
 
   setName(name) {
     this.name = name;

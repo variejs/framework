@@ -12,7 +12,7 @@ export default class AutoRegisterFilterServiceProvider extends ServiceProvider {
     });
   }
 
-  private getFilterName(filename: string) {
+  protected getFilterName(filename: string) {
     return camelCase(filename.replace(".ts", ""));
   }
 }

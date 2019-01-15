@@ -5,11 +5,11 @@ import ApplicationInterface from "./../foundation/ApplicationInterface";
 
 @injectable()
 export default class ServiceProvider implements ServiceProviderInterface {
-  protected app: ApplicationInterface;
+  private app: ApplicationInterface;
 
   constructor(app: ApplicationInterface) {
     this.app = app;
-    app.providers.push(this);
+    this.app.addProvider(this);
   }
 
   protected mergeConfigFrom(frameworkConfig: any, key: string) {

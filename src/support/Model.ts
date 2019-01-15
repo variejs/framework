@@ -7,6 +7,6 @@ export default class Model {
   }
 
   protected defaults() {
-    // place defaults here
+    // ...
   }
 }

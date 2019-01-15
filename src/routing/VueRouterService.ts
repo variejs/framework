@@ -27,9 +27,6 @@ interface RedirectRoute {
 
 @injectable()
 export default class VueRouterService implements RouterInterface {
-  private app: ApplicationInterface;
-  private configService: ConfigInterface;
-
   public router;
   public routes: Array<Route | RedirectRoute | GroupInfo> = [];
 
@@ -38,13 +35,16 @@ export default class VueRouterService implements RouterInterface {
   protected groups: Array<GroupInfo> = [];
   protected wildCardRoutes: Array<Route> = [];
 
+  private app: ApplicationInterface;
+  private configService: ConfigInterface;
+
   constructor(
     @inject("app") app: ApplicationInterface,
     @inject("ConfigService") configService: ConfigInterface
   ) {
     this.app = app;
     this.configService = configService;
-    this._resetGroup();
+    this.resetGroup();
     Vue.use(VueRouter);
   }
 
@@ -117,7 +117,7 @@ export default class VueRouterService implements RouterInterface {
     return route;
   }
 
-  private convertRoutePathToRouteName(route: Route, path?: string) {
+  protected convertRoutePathToRouteName(route: Route, path?: string) {
     path = JSON.stringify(path ? path : route.path);
     route.setName(
       path
@@ -150,7 +150,7 @@ export default class VueRouterService implements RouterInterface {
     // Areas only apply to 1 group not all subsequent children groups
     delete this.groupInfo.area;
     routes();
-    this._resetGroup();
+    this.resetGroup();
     return this;
   }
 
@@ -212,7 +212,7 @@ export default class VueRouterService implements RouterInterface {
     });
   }
 
-  private getMiddleware(middleware) {
+  protected getMiddleware(middleware) {
     let containerMiddlewareName = `routerMiddleware${middleware.name}`;
     if (!this.app.$container.isBound(containerMiddlewareName)) {
       this.app.bind<RouteMiddlewareInterface>(
@@ -234,7 +234,7 @@ export default class VueRouterService implements RouterInterface {
    * By going up and down for each group we retain the data for the group level
    * allowing us to chain in a pretty way
    */
-  private _resetGroup() {
+  protected resetGroup() {
     this.groupInfo = {
       path: "/",
       meta: {

@@ -2,14 +2,14 @@ import Vue from "vue";
 import filterEmpty from "./../../utilities/filterEmpty";
 import ValidationServiceInterface from "../../validation/ValidationServiceInterface";
 
+// TODO - we could use setters / getters to remove _'s for public things
 class Form {
   public _rules: object = {};
   public _messages: object = {};
 
-  private _initialData: any;
-  private _originalData: any;
-
   protected _validator;
+  protected _initialData: any;
+  protected _originalData: any;
 
   constructor(data: object, validationService?: ValidationServiceInterface) {
     if (validationService) {

@@ -12,7 +12,7 @@ export default class AutoRegisterLayoutServiceProvider extends ServiceProvider {
     });
   }
 
-  private getComponentName(filename: string) {
+  protected getComponentName(filename: string) {
     return `${dashify(filename.replace(".vue", ""))}-layout`;
   }
 }

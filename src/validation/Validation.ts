@@ -5,10 +5,10 @@ import ConfigInterface from "../config/ConfigInterface";
 export default class Validation {
   public errors: object = {};
 
-  protected _data: object;
-  protected _schema: object;
-  protected _messages: object;
-  protected _rules: object = {};
+  protected data: object;
+  protected schema: object;
+  protected messages: object;
+  protected rules: object = {};
 
   private configService;
 
@@ -17,7 +17,7 @@ export default class Validation {
    *
    * @var array
    */
-  private _sizeRules = ["between", "min", "max", "size"];
+  protected sizeRules = ["between", "min", "max", "size"];
 
   constructor(
     data: object,
@@ -25,30 +25,30 @@ export default class Validation {
     messages: object,
     configService: ConfigInterface
   ) {
-    this._data = data;
-    this._schema = schema;
+    this.data = data;
+    this.schema = schema;
+    this.messages = messages;
     this.configService = configService;
-    this._messages = messages;
-    this._rules = this.configService.get("validation.rules");
+    this.rules = this.configService.get("validation.rules");
   }
 
   public validate() {
-    return this.validateSchema(this._schema);
+    return this.validateSchema(this.schema);
   }
 
-  private validateSchema(schema: any, key?: string) {
+  protected validateSchema(schema: any, key?: string) {
     for (let field in schema) {
       if (typeof schema[field] === "object") {
         this.validateSchema(schema[field], key ? `${key}.${field}` : field);
       } else {
         let ruleField = key ? `${key}.${field}` : field;
-        this._checkRules(ruleField, schema[field]);
+        this.checkRules(ruleField, schema[field]);
       }
     }
     return this.errors;
   }
 
-  private _checkRules(field: string, rules: string) {
+  protected checkRules(field: string, rules: string) {
     let rulesArray = rules.split("|");
     if (rulesArray.length) {
       for (let ruleIndex in rulesArray) {
@@ -59,22 +59,22 @@ export default class Validation {
           parameters = tempRule[1].split(",");
         }
 
-        let ruleClass = this._getRule(rule);
+        let ruleClass = this.getRule(rule);
         if (ruleClass === undefined) {
           throw `We cannot find the rule ${rule}`;
         }
 
         if (
           !ruleClass.passes(
-            this._getValue(field),
+            this.getValue(field),
             parameters,
-            this._data,
+            this.data,
             field
           ) &&
           rule !== "nullable"
         ) {
-          this.errors[field] = this._makeReplacements(
-            this._getMessage(rule, field),
+          this.errors[field] = this.makeReplacements(
+            this.getMessage(rule, field),
             rule,
             field,
             parameters
@@ -89,24 +89,24 @@ export default class Validation {
     }
   }
 
-  private _getRule(rule: string) {
-    return this._rules[rule];
+  protected getRule(rule: string) {
+    return this.rules[rule];
   }
 
-  private _makeReplacements(
+  protected makeReplacements(
     message: string,
     rule: string,
     field: string,
     parameters: any
   ) {
-    let ruleFunctions = this._getRule(rule);
+    let ruleFunctions = this.getRule(rule);
     if (!message) {
       return `The ${field} fails the validation.`;
     }
     message = message.replace(":field", uncamelize(field.replace(".", "s ")));
     if (ruleFunctions.replacers) {
       ruleFunctions.replacers().forEach((replacer: string, index: number) => {
-        if(parameters[index]) {
+        if (parameters[index]) {
           message = message.replace(
             `:${replacer}`,
             uncamelize(parameters[index].replace(".", "s "))
@@ -122,33 +122,33 @@ export default class Validation {
     return message;
   }
 
-  private _getValue(field: string) {
-    return getByDot(this._data, field);
+  protected getValue(field: string) {
+    return getByDot(this.data, field);
   }
 
-  private _getMessage(rule: string, field: string) {
-    let customMessage = getByDot(this._messages, field);
+  protected getMessage(rule: string, field: string) {
+    let customMessage = getByDot(this.messages, field);
 
     if (customMessage) {
       return customMessage;
     }
 
-    if (this._sizeRules.indexOf(rule) > -1) {
-      return this._getSizeMessage(field, rule);
+    if (this.sizeRules.indexOf(rule) > -1) {
+      return this.getSizeMessage(field, rule);
     }
 
-    let tempRule = this._getRule(rule).message;
+    let tempRule = this.getRule(rule).message;
     if (tempRule) {
       return tempRule();
     }
 
-    return this._getMessageFromLocale(rule);
+    return this.getMessageFromLocale(rule);
   }
 
-  private _getSizeMessage(field: string, rule: string) {
+  protected getSizeMessage(field: string, rule: string) {
     let type = "string";
     let locale = this.configService.get("app.locale");
-    let value = getByDot(this._data, field);
+    let value = getByDot(this.data, field);
 
     if (typeof value === "object") {
       type = "file";
@@ -161,7 +161,7 @@ export default class Validation {
     return this.configService.get(`validation.${locale}.${rule}.${type}`);
   }
 
-  private _getMessageFromLocale(rule: string) {
+  protected getMessageFromLocale(rule: string) {
     let locale = this.configService.get("app.locale");
     return this.configService.get(`validation.${locale}.${rule}`);
   }

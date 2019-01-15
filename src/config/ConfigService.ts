@@ -6,7 +6,7 @@ declare const __ENV_VARIABLES__: object;
 
 @injectable()
 export default class Config implements ConfigInterface {
-  private _configs = __ENV_VARIABLES__;
+  protected configs = __ENV_VARIABLES__;
 
   constructor() {
     let files = require.context("@config", true, /^\.\/.*\.(ts)$/);
@@ -18,19 +18,19 @@ export default class Config implements ConfigInterface {
         .replace(/\.js/, "")
         .replace(/\.ts/, "");
 
-      this._configs[configName] = Object.assign(
+      this.configs[configName] = Object.assign(
         {},
         files(filename).default,
-        this._configs[configName]
+        this.configs[configName]
       );
     }
   }
 
-  get(path: string, defaultValue: any) {
-    return getByDot(this._configs, path, defaultValue);
+  public get(path: string, defaultValue: any) {
+    return getByDot(this.configs, path, defaultValue);
   }
 
-  set(path: string, value: any) {
-    return setByDot(this._configs, path, value);
+  public set(path: string, value: any) {
+    return setByDot(this.configs, path, value);
   }
 }

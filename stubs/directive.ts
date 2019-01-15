@@ -3,6 +3,6 @@ import Vue from "vue";
 
 Vue.directive("temp", {
   inserted: function(el, binding) {
-    //
+    // ...
   }
 });

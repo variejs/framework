@@ -4,12 +4,12 @@ import AlertStore from "./alert-store/AlertStore";
 import ConfigInterface from "../../config/ConfigInterface";
 
 export default class Alerts {
-  protected __config: {
+  protected config: {
     duration: number;
   };
 
   constructor($config: ConfigInterface) {
-    this.__config = $config.get("alerts");
+    this.config = $config.get("alerts");
   }
 
   public install(Vue: VueConstructor, { store, service }) {

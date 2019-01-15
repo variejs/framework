@@ -5,8 +5,8 @@ import StateServiceInterface from "../../state/StateServiceInterface";
 
 @injectable()
 class AlertService {
-  protected store: Store<object>;
-  protected configService: {
+  private store: Store<object>;
+  private configService: {
     duration: number;
   };
 
@@ -19,11 +19,11 @@ class AlertService {
   }
 
   public error(message: string, title: string = "Error", duration?: number) {
-    this._makeAlert(message, title, duration, "error");
+    this.makeAlert(message, title, duration, "error");
   }
 
   public info(message: string, title: string = "Info", duration?: number) {
-    this._makeAlert(message, title, duration, "info");
+    this.makeAlert(message, title, duration, "info");
   }
 
   public success(
@@ -31,7 +31,7 @@ class AlertService {
     title: string = "Success",
     duration?: number
   ) {
-    this._makeAlert(message, title, duration, "success");
+    this.makeAlert(message, title, duration, "success");
   }
 
   public warning(
@@ -39,10 +39,10 @@ class AlertService {
     title: string = "Warning",
     duration?: number
   ) {
-    this._makeAlert(message, title, duration, "warning");
+    this.makeAlert(message, title, duration, "warning");
   }
 
-  private _makeAlert(
+  protected makeAlert(
     message: string,
     title: string,
     duration?: number,

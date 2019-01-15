@@ -2,17 +2,14 @@ export default class Route {
   public path;
   public name;
   public alias;
+  public group;
   public props;
-
+  public components;
   public meta: {
     data?: object;
     layout?: string;
     middleware?: Array<any>;
   } = {};
-
-  public components;
-
-  public group;
 
   protected component;
 
@@ -47,7 +44,7 @@ export default class Route {
     return this;
   }
 
-  private registerComponents(components) {
+  protected registerComponents(components) {
     if (typeof components === "object" && !components.__file) {
       this.components = {};
       for (let name in components) {

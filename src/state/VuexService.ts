@@ -34,7 +34,7 @@ export default class VuexService implements StateServiceInterface {
     return this;
   }
 
-  private registerSubModules(store: StoreModule) {
+  protected registerSubModules(store: StoreModule) {
     store.$modules.forEach(Module => {
       let module = this.bindStore(Module);
       store.modules[this.getStoreName(module)] = this.registerSubModules(
@@ -44,14 +44,14 @@ export default class VuexService implements StateServiceInterface {
     return store;
   }
 
-  private getStoreName(store: StoreModule) {
+  protected getStoreName(store: StoreModule) {
     if (!store.name) {
       throw "Your store does not have a name";
     }
     return store.name;
   }
 
-  private bindStore(Store: StoreModule) {
+  protected bindStore(Store: StoreModule) {
     let moduleAbstractName = camelCase(`store ${Store.name}`);
     this.app.singleton<StoreModule>(moduleAbstractName, Store);
     return this.app.make<StoreModule>(moduleAbstractName);
