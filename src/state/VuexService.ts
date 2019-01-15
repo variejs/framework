@@ -8,9 +8,8 @@ import ApplicationInterface from "../foundation/ApplicationInterface";
 
 @injectable()
 export default class VuexService implements StateServiceInterface {
-  private app: ApplicationInterface;
-
   protected store: Store<any>;
+  protected app: ApplicationInterface;
 
   constructor(@inject("app") app: ApplicationInterface) {
     Vue.use(Vuex);

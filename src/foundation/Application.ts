@@ -9,8 +9,8 @@ declare const global: any;
 
 export class Application implements ApplicationInterface {
   protected app;
-  protected container: Container;
 
+  private container: Container;
   private providers: Array<ServiceProviderInterface> = [];
   private appProviders = require("@config/app").default.providers;
 
@@ -50,6 +50,10 @@ export class Application implements ApplicationInterface {
 
   public addProvider(provider) {
     this.providers.push(provider);
+  }
+
+  public isBound(key) {
+    this.container.isBound(key);
   }
 
   private async registerConfiguredProviders() {

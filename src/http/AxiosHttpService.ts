@@ -8,8 +8,7 @@ import AxiosHttpMiddlewareInterface from "./AxiosHttpMiddlewareInterface";
 export default class AxiosHttpService implements HttpServiceInterface {
   protected middleware = {};
   protected axios: AxiosInstance;
-
-  private app: ApplicationInterface;
+  protected app: ApplicationInterface;
 
   constructor(
     @inject("app") app: ApplicationInterface,

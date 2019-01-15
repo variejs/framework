@@ -5,8 +5,8 @@ import StateServiceInterface from "../../state/StateServiceInterface";
 
 @injectable()
 class AlertService {
-  private store: Store<object>;
-  private configService: {
+  protected store: Store<object>;
+  protected configService: {
     duration: number;
   };
 

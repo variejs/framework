@@ -4,7 +4,7 @@ import ValidationServiceInterface from "./ValidationServiceInterface";
 
 @injectable()
 export default class ValidationService implements ValidationServiceInterface {
-  private configService;
+  protected configService;
 
   constructor(@inject("ConfigService") configService) {
     this.configService = configService;

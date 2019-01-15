@@ -6,11 +6,10 @@ export default class Validation {
   public errors: object = {};
 
   protected data: object;
+  protected configService;
   protected schema: object;
   protected messages: object;
   protected rules: object = {};
-
-  private configService;
 
   /**
    * The size related validation rules.

@@ -15,7 +15,7 @@
     "dashify": "^2.0.0",
     "inversify": "^5.0.1",
     "inversify-inject-decorators": "^3.1.0",
-    "reflect-metadata": "^0.1.12",
+    "reflect-metadata": "^0.1.13",
     "validator": "^10.11.0"
   },
   "devDependencies": {

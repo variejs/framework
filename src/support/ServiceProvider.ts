@@ -5,7 +5,7 @@ import ApplicationInterface from "./../foundation/ApplicationInterface";
 
 @injectable()
 export default class ServiceProvider implements ServiceProviderInterface {
-  private app: ApplicationInterface;
+  public app: ApplicationInterface;
 
   constructor(app: ApplicationInterface) {
     this.app = app;

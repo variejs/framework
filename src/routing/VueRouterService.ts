@@ -32,11 +32,10 @@ export default class VueRouterService implements RouterInterface {
 
   protected groupInfo;
   protected currentGroupLevel = 0;
+  protected app: ApplicationInterface;
   protected groups: Array<GroupInfo> = [];
+  protected configService: ConfigInterface;
   protected wildCardRoutes: Array<Route> = [];
-
-  private app: ApplicationInterface;
-  private configService: ConfigInterface;
 
   constructor(
     @inject("app") app: ApplicationInterface,
@@ -214,7 +213,7 @@ export default class VueRouterService implements RouterInterface {
 
   protected getMiddleware(middleware) {
     let containerMiddlewareName = `routerMiddleware${middleware.name}`;
-    if (!this.app.$container.isBound(containerMiddlewareName)) {
+    if (!this.app.isBound(containerMiddlewareName)) {
       this.app.bind<RouteMiddlewareInterface>(
         containerMiddlewareName,
         middleware
