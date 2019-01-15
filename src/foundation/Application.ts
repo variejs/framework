@@ -53,7 +53,7 @@ export class Application implements ApplicationInterface {
   }
 
   public isBound(key) {
-    this.container.isBound(key);
+    return this.container.isBound(key);
   }
 
   private async registerConfiguredProviders() {
