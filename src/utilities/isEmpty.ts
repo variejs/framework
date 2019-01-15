@@ -1,4 +1,4 @@
-export default function isEmpty(value: object) {
+export default function(value: object) {
   //check for empty object {}, array []
   if (value !== null && typeof value === "object") {
     if (Object.keys(value).length === 0) {

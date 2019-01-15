@@ -1,4 +1,4 @@
-import * as isURL from "validator/lib/isURL";
+import isURL from "validator/lib/isURL";
 
 export default {
   passes(value: any): boolean {

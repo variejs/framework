@@ -1,4 +1,4 @@
-import * as isBefore from "validator/lib/isBefore";
+import isBefore from "validator/lib/isBefore";
 
 export default {
   passes(value: any, parameters: Array<any> = []) {

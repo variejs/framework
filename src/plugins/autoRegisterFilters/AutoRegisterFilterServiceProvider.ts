@@ -1,5 +1,5 @@
 import Vue from "vue";
-import * as camelCase from "camelcase";
+import camelize from "../../utilities/camelize";
 import ServiceProvider from "../../support/ServiceProvider";
 
 export default class AutoRegisterFilterServiceProvider extends ServiceProvider {
@@ -13,6 +13,6 @@ export default class AutoRegisterFilterServiceProvider extends ServiceProvider {
   }
 
   protected getFilterName(filename: string) {
-    return camelCase(filename.replace(".ts", ""));
+    return camelize(filename.replace(".ts", ""));
   }
 }

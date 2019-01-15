@@ -1,4 +1,4 @@
-import * as isNumeric from "validator/lib/isNumeric";
+import isNumeric from "validator/lib/isNumeric";
 import { getByDot, uncamelize } from "./../utilities";
 import ConfigInterface from "../config/ConfigInterface";
 

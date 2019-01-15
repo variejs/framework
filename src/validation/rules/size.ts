@@ -1,4 +1,4 @@
-import * as isLength from "validator/lib/isLength";
+import isLength from "validator/lib/isLength";
 
 export default {
   passes(

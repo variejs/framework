@@ -1,5 +1,5 @@
 import Vue from "vue";
-import * as camelCase from "camelcase";
+import camelize from "../utilities/camelize";
 import ApplicationInterface from "./ApplicationInterface";
 
 export default class ContainerMixin {
@@ -9,7 +9,7 @@ export default class ContainerMixin {
         // @ts-ignore
         let services = this.$options.$inject || [];
         services.forEach((service: string) => {
-          this[camelCase(service)] = app.make(service);
+          this[camelize(service)] = app.make(service);
         });
       }
     });

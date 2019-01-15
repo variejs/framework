@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex, { Store } from "vuex";
 import StoreModule from "./StoreModule";
-import * as camelCase from "camelcase";
+import camelize from "../utilities/camelize";
 import { inject, injectable } from "inversify";
 import StateServiceInterface from "./StateServiceInterface";
 import ApplicationInterface from "../foundation/ApplicationInterface";
@@ -52,7 +52,7 @@ export default class VuexService implements StateServiceInterface {
   }
 
   protected bindStore(Store: StoreModule) {
-    let moduleAbstractName = camelCase(`store ${Store.name}`);
+    let moduleAbstractName = camelize(`store ${Store.name}`);
     this.app.singleton<StoreModule>(moduleAbstractName, Store);
     return this.app.make<StoreModule>(moduleAbstractName);
   }

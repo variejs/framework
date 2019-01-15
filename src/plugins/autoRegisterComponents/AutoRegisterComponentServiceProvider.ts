@@ -1,5 +1,5 @@
 import Vue from "vue";
-import * as dashify from "dashify";
+import dashify from "../../utilities/dashify";
 import ServiceProvider from "../../support/ServiceProvider";
 
 export default class AutoRegisterComponentServiceProvider extends ServiceProvider {

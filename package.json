@@ -16,7 +16,7 @@
     "inversify": "^5.0.1",
     "inversify-inject-decorators": "^3.1.0",
     "reflect-metadata": "^0.1.12",
-    "validator": "^10.10.0"
+    "validator": "^10.11.0"
   },
   "devDependencies": {
     "@types/node": "^10.12.18",
