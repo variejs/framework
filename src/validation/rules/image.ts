@@ -1,5 +1,5 @@
 export default {
-  passes(files: File | Array<File>, parameters: Array<any>) {
+  passes(files: File | Array<File>) {
     if (files) {
       if (!Array.isArray(files)) {
         files = [files];
