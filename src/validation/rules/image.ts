@@ -1,3 +1,4 @@
+// TODO - we should accept a file instead
 export default {
   passes(value: any) {
     if (value) {
