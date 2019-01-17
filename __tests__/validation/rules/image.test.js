@@ -13,6 +13,14 @@ test("test image rule", () => {
     ).toBe(true);
   });
 
+  valid.forEach(value => {
+    expect(
+      image.passes({
+        type: `${value}`
+      })
+    ).toBe(true);
+  });
+
   invalid.forEach(value => {
     expect(
       image.passes({
@@ -20,4 +28,12 @@ test("test image rule", () => {
       })
     ).toBe(false);
   });
+
+  // invalid.forEach(value => {
+  //   expect(
+  //     image.passes({
+  //       type: `${value}`
+  //     })
+  //   ).toBe(false);
+  // });
 });
