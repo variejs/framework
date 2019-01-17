@@ -7,7 +7,7 @@ import ServiceProviderInterface from "../support/ServiceProviderInterface";
 
 declare const global: any;
 
-export class Application implements ApplicationInterface {
+export default class Application implements ApplicationInterface {
   protected app;
 
   private container: Container;
