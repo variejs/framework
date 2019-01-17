@@ -1,6 +1,6 @@
 import different from "../../../src/validation/rules/different";
 
-test("test accepted", () => {
+test("test different rule", () => {
   expect(
     different.passes("abcd", ["name"], {
       name: "abc"

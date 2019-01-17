@@ -1,6 +1,6 @@
 import required_unless from "../../../src/validation/rules/required_unless";
 
-test("test accepted", () => {
+test("test required unless rule", () => {
   expect(
     required_unless.passes("abc", ["name", "abc"], {
       name: "abc"

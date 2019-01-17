@@ -1,6 +1,6 @@
 import required from "../../../src/validation/rules/required";
 
-test("test accepted", () => {
+test("test required rule", () => {
   expect(required.passes("abc")).toBe(true);
   expect(required.passes({ test: true })).toBe(true);
   expect(required.passes([1])).toBe(true);

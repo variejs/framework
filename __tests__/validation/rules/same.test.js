@@ -1,6 +1,6 @@
 import same from "../../../src/validation/rules/same";
 
-test("test accepted", () => {
+test("test same rule", () => {
   let valid = ["abc"];
 
   let invalid = ["  foo  ", {}];

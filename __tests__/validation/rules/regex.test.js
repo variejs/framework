@@ -1,6 +1,6 @@
 import regex from "../../../src/validation/rules/regex";
 
-test("test accepted", () => {
+test("test regex rule", () => {
   let valid = [/^[A-Za-z0-9]+$/, "^[A-Za-z0-9]+$"];
 
   let invalid = [/abc/, "abc"];

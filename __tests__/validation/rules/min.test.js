@@ -1,6 +1,11 @@
 import min from "../../../src/validation/rules/min";
+import max from "../../../src/validation/rules/max";
 
-test("test accepted", () => {
+test("test min rule", () => {
+  expect(min.passes("asd", [3])).toBe(true);
+  expect(min.passes("12", [3])).toBe(false);
+  expect(min.passes("1234", [3])).toBe(true);
+
   expect(min.passes(9, [10])).toBe(false);
   expect(min.passes(10, [10])).toBe(true);
   expect(min.passes(123, [10])).toBe(true);

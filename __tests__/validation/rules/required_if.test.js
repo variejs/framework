@@ -1,6 +1,6 @@
 import required_if from "../../../src/validation/rules/required_if";
 
-test("test accepted", () => {
+test("test required if rule", () => {
   expect(
     required_if.passes("asdfadsf", ["name", "abc"], {
       name: "abc"

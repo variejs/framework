@@ -1,6 +1,6 @@
 import required_without_all from "../../../src/validation/rules/required_without_all";
 
-test("test accepted", () => {
+test("test without all rule", () => {
   expect(
     required_without_all.passes("abc", ["name"], {
       name: "abc"

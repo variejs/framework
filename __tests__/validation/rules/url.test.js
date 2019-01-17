@@ -1,6 +1,6 @@
 import url from "../../../src/validation/rules/url";
 
-test("test accepted", () => {
+test("test url rule", () => {
   let valid = [
     "foobar.com",
     "www.foobar.com",

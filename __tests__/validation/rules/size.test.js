@@ -1,6 +1,6 @@
 import size from "../../../src/validation/rules/size";
 
-test("test accepted", () => {
+test("test size rule", () => {
   expect(size.passes(9, [10])).toBe(false);
   expect(size.passes(10, [10])).toBe(true);
   expect(size.passes(123, [10])).toBe(false);

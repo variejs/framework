@@ -1,6 +1,6 @@
 import confirmed from "../../../src/validation/rules/confirmed";
 
-test("test accepted", () => {
+test("test confirmed rule", () => {
   expect(
     confirmed.passes(
       "abc",

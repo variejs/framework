@@ -1,6 +1,6 @@
 import nullable from "../../../src/validation/rules/nullable";
 
-test("test accepted", () => {
+test("test nullable rule", () => {
   let valid = ["", "   ", {}, [], undefined, null];
 
   let invalid = ["  foo  ", { test: true }, [1]];

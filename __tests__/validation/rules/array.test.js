@@ -1,6 +1,6 @@
 import array from "../../../src/validation/rules/array";
 
-test("test accepted", () => {
+test("test array rule", () => {
   let valid = [[1, 2, 3]];
 
   let invalid = ["  foo  ", {}];

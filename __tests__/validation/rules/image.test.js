@@ -1,6 +1,6 @@
 import image from "../../../src/validation/rules/image";
 
-test("test accepted", () => {
+test("test image rule", () => {
   let valid = ["jpg", "svg", "jpeg", "png", "bmp", "gif"];
 
   let invalid = ["blah", "mp4", "pdf"];

@@ -1,6 +1,6 @@
 import alpha_num from "../../../src/validation/rules/alpha_num";
 
-test("test accepted", () => {
+test("test alpha num rule", () => {
   let valid = ["abc123", "ABC11", "123"];
 
   let invalid = ["  foo  ", "", "ÄBC", "FÜübar", "Jön", "Heiß"];

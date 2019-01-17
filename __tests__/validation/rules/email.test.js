@@ -8,7 +8,7 @@ function repeat(str, count) {
   return result;
 }
 
-test("test accepted", () => {
+test("test email rule", () => {
   let valid = [
     "foo@bar.com",
     "x@x.au",

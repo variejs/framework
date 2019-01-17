@@ -6,7 +6,7 @@ class MockFile {
   }
 }
 
-test("test accepted", () => {
+test("test mimetype rule", () => {
   let valid = ["jpg", "svg", "jpeg", "png", "bmp", "gif"];
 
   let invalid = ["blah", "mp4", "pdf"];

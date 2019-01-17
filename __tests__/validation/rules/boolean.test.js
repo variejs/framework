@@ -1,6 +1,6 @@
 import boolean from "../../../src/validation/rules/boolean";
 
-test("test accepted", () => {
+test("test boolean rule", () => {
   let valid = [true, false, 0, 1];
 
   let invalid = ["1", "0", 2, "abc"];

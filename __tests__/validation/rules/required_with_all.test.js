@@ -1,6 +1,6 @@
 import required_with_all from "../../../src/validation/rules/required_with_all";
 
-test("test accepted", () => {
+test("test required with all rule", () => {
   expect(
     required_with_all.passes("abc", ["name"], {
       name: "abc"

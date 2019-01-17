@@ -1,6 +1,10 @@
 import max from "../../../src/validation/rules/max";
 
-test("test accepted", () => {
+test("test max rule", () => {
+  expect(max.passes("asd", [3])).toBe(true);
+  expect(max.passes("123", [3])).toBe(true);
+  expect(max.passes("1234", [3])).toBe(false);
+
   expect(max.passes(9, [10])).toBe(true);
   expect(max.passes(10, [10])).toBe(true);
   expect(max.passes(123, [10])).toBe(false);
