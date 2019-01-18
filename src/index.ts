@@ -18,7 +18,6 @@ import FormServiceProvider from './plugins/forms/FormServiceProvider'
 import AlertServiceProvider from './plugins/alerts/AlertServiceProvider'
 import ValidationServiceProvider from './validation/ValidationServiceProvider'
 
-
 // Auto Register Service Providers
 import AutoRegisterMixinServiceProvider from './plugins/autoRegisterMixins/AutoRegisterMixinServiceProvider'
 import AutoRegisterFilterServiceProvider from './plugins/autoRegisterFilters/AutoRegisterFilterServiceProvider'
@@ -27,7 +26,10 @@ import AutoRegisterComponentServiceProvider from './plugins/autoRegisterComponen
 import AutoRegisterDirectiveServiceProvider from './plugins/autoRegisterDirectives/AutoRegisterDirectiveServiceProvider'
 
 const application = new Application();
-const serviceProviders = {
+
+export {
+  utilities,
+  application,
 
   // Core Service Providers
   HttpServiceProvider,
@@ -52,9 +54,4 @@ const serviceProviders = {
   AutoRegisterLayoutServiceProvider,
   AutoRegisterComponentServiceProvider,
   AutoRegisterDirectiveServiceProvider,
-}
-export {
-  utilities,
-  application,
-  serviceProviders
 }
