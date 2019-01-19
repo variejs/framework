@@ -53,7 +53,6 @@ export default class Application implements ApplicationInterface {
   }
 
   public isBound(key) {
-    console.info(key);
     return this.container.isBound(key);
   }
 
