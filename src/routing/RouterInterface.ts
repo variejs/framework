@@ -11,5 +11,5 @@ export default interface RouterInterface {
   layout(layout: string): this;
   data(data: object): this;
   // TODO - this should not be any
-  register(routes : any, ...services : Array<any>): this;
+  register(routes: any, ...services: Array<any>): this;
 }

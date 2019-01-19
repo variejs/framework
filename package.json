@@ -25,7 +25,6 @@
     "babel-core": "^6.26.3",
     "babel-jest": "^23.6.0",
     "babel-preset-env": "^1.7.0",
-    "husky": "^0.14.3",
     "jest": "^23.6.0",
     "lint-staged": "^8.1.0",
     "ts-jest": "^23.10.5",
@@ -39,15 +38,9 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "precommit": "lint-staged",
+    "test": "jest",
     "version": "auto-changelog && git add CHANGELOG.md",
-    "test": "jest"
-  },
-  "lint-staged": {
-    "/src/*.{js,json,css,md,vue}": [
-      "prettier --write",
-      "git add"
-    ]
+    "peer": "npm install vue vue-router vuex --no-save"
   },
   "auto-changelog": {
     "output": "CHANGELOG.md",

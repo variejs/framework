@@ -7,8 +7,15 @@ export default class RoutingServiceProvider extends ServiceProvider {
 
   public boot() {
     this.$router = this.app.make("RouterService");
+
     // @ts-ignore
-    this.map();
+    if (typeof this.map === "function") {
+      // @ts-ignore
+      this.map();
+    } else {
+      throw "Your routing service provider must have a map function.";
+    }
+
     this.$router.buildRouter();
   }
 

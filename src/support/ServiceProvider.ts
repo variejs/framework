@@ -30,6 +30,5 @@ export default class ServiceProvider implements ServiceProviderInterface {
     $config.set(key, frameworkConfig);
   }
 
-
   public boot() {}
 }

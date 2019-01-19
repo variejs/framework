@@ -1,5 +1,5 @@
 import { ActionContext } from "vuex";
-// @ts-ignore - unreachable
+// @ts-ignore
 import RootState from "@store/rootState";
 import { AlertState } from "./stateInterface";
 import AlertModel from "./../models/AlertModel";
