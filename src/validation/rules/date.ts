@@ -4,7 +4,7 @@ import isRFC3339 from "validator/lib/isRFC3339";
 export default {
   passes(value: any) {
     if (value) {
-      return isISO8601(value) || isRFC3339(value);
+      return value instanceof Date || isISO8601(value) || isRFC3339(value);
     }
   }
 };
