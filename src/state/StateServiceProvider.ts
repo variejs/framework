@@ -7,8 +7,14 @@ export default class StateServiceProvider extends ServiceProvider {
 
   public boot() {
     this.$store = this.app.make("StateService");
+
     // @ts-ignore
-    this.map();
+    if (typeof this.map === "function") {
+      // @ts-ignore
+      this.map();
+    } else {
+      throw "Your state service provider must have a map function.";
+    }
   }
 
   public register() {

@@ -7,7 +7,7 @@ import ServiceProviderInterface from "../support/ServiceProviderInterface";
 
 declare const global: any;
 
-export class Application implements ApplicationInterface {
+export default class Application implements ApplicationInterface {
   protected app;
 
   private container: Container;
@@ -29,11 +29,11 @@ export class Application implements ApplicationInterface {
     return this;
   }
 
-  public bind<T>(abstract: string, concrete: any) {
+  public bind<T>(abstract: string, concrete: AnyClass) {
     this.container.bind(abstract).to(concrete);
   }
 
-  public singleton<T>(abstract: string, concrete: any) {
+  public singleton<T>(abstract: string, concrete: AnyClass) {
     this.container
       .bind(abstract)
       .to(concrete)
@@ -53,6 +53,7 @@ export class Application implements ApplicationInterface {
   }
 
   public isBound(key) {
+    console.info(key);
     return this.container.isBound(key);
   }
 

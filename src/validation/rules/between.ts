@@ -7,9 +7,7 @@ export default {
       if (Array.isArray(value) || typeof value === "string") {
         return min <= value.length && max >= value.length;
       } else if (typeof value === "object") {
-        let minSize = min * 1024;
-        let maxSize = max * 1024;
-        return minSize <= value.size && maxSize >= value.size;
+        return min <= value.size / 1024 && max >= value.size / 1024;
       }
 
       return min <= value && max >= value;

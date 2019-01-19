@@ -1,21 +1,20 @@
-import isLength from "validator/lib/isLength";
-
 export default {
-  passes(
-    value: { size: number } | Array<any>,
-    parameters: Array<number>
-  ): boolean {
+  passes(value: { size: number }, attributes: Array<any>) {
     if (value) {
-      let size = parameters[0];
+      let size = attributes[0];
 
-      if (Array.isArray(value)) {
+      if (Array.isArray(value) || typeof value === "string") {
         return value.length === size;
       } else if (typeof value === "object") {
-        return value.size === size * 1024;
+        return value.size / 1024 === size;
       }
 
-      return isLength(value, size);
+      return value === size;
     }
     return true;
+  },
+
+  replacers() {
+    return ["max", "size"];
   }
 };

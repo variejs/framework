@@ -1,5 +1,4 @@
 import Route from "./Route";
-import RoutesInterface from "./RoutesInterface";
 
 export default interface RouterInterface {
   getRouter(): any;
@@ -11,5 +10,6 @@ export default interface RouterInterface {
   redirect(path: string, redirect: string): this;
   layout(layout: string): this;
   data(data: object): this;
-  register(RouteClass: RoutesInterface): this;
+  // TODO - this should not be any
+  register(routes: any, ...services: Array<any>): this;
 }

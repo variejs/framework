@@ -1,12 +1,10 @@
-import { getByDot } from "./../../utilities";
+import { getByDot, isEmpty } from "./../../utilities";
 
+// required_unless
 export default {
   passes(value: any, parameters: Array<any>, data: {}): boolean {
-    if (!value) {
-      if (getByDot(data, parameters[0]) === parameters[1]) {
-        return true;
-      }
-      return false;
+    if (isEmpty(value)) {
+      return getByDot(data, parameters[0]) === value;
     }
     return true;
   },

@@ -1,13 +1,19 @@
-import toDate from "validator/lib/toDate";
 import isAfter from "validator/lib/isAfter";
+import isBefore from "validator/lib/isBefore";
+import isISO8601 from "validator/lib/isISO8601";
+import isRFC3339 from "validator/lib/isRFC3339";
 
 export default {
   passes(value: any, parameters: Array<any>) {
-    let date = toDate(parameters[0]);
     if (value) {
-      date.setDate(date.getDate() - 1);
-      return isAfter(value, date.toLocaleDateString("en-US"));
+      if (isISO8601(value) || isRFC3339(value)) {
+        return (
+          isAfter(value, parameters[0]) ||
+          (!isAfter(value, parameters[0]) && !isBefore(value, parameters[0]))
+        );
+      }
     }
+    return false;
   },
 
   replacers() {

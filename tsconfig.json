@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "outDir": "./lib/",
     "moduleResolution": "node",
     "lib": ["es2017", "dom", "dom.iterable"],
@@ -19,7 +20,8 @@
     "inlineSourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "paths": {}
   },
   "include": ["src/**/*"]
 }

@@ -22,8 +22,12 @@
     "@types/node": "^10.12.18",
     "@types/validator": "^10.9.0",
     "@types/webpack-env": "^1.13.6",
-    "husky": "^0.14.3",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.6.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^23.6.0",
     "lint-staged": "^8.1.0",
+    "ts-jest": "^23.10.5",
     "typescript": "^3.2.2"
   },
   "peerDependencies": {
@@ -34,14 +38,9 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "precommit": "lint-staged",
-    "version": "auto-changelog && git add CHANGELOG.md"
-  },
-  "lint-staged": {
-    "/src/*.{js,json,css,md,vue}": [
-      "prettier --write",
-      "git add"
-    ]
+    "test": "jest",
+    "version": "auto-changelog && git add CHANGELOG.md",
+    "peer": "npm install vue vue-router vuex --no-save"
   },
   "auto-changelog": {
     "output": "CHANGELOG.md",
