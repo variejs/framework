@@ -1,6 +1,6 @@
 {
   "name": "varie",
-  "version": "0.10.12",
+  "version": "0.11.0",
   "description": "VueJS Framework",
   "main": "./lib/index.js",
   "typings": "./lib/index",
@@ -22,6 +22,7 @@
     "@types/node": "^10.12.18",
     "@types/validator": "^10.9.0",
     "@types/webpack-env": "^1.13.6",
+    "auto-changelog": "^1.11.0",
     "babel-core": "^6.26.3",
     "babel-jest": "^23.6.0",
     "babel-preset-env": "^1.7.0",
