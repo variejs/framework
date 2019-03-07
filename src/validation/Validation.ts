@@ -22,7 +22,7 @@ export default class Validation {
     data: object,
     schema: object,
     messages: object,
-    configService: ConfigInterface
+    configService: ConfigInterface,
   ) {
     this.data = data;
     this.schema = schema;
@@ -58,6 +58,20 @@ export default class Validation {
           parameters = tempRule[1].split(",");
         }
 
+        parameters = parameters.map((parameter) => {
+          if (parameter === "false") {
+            return false;
+          }
+          if (parameter === "true") {
+            return true;
+          }
+          let number = parseFloat(parameter);
+          if (!isNaN(number)) {
+            return number;
+          }
+          return parameter;
+        });
+
         let ruleClass = this.getRule(rule);
         if (ruleClass === undefined) {
           throw `We cannot find the rule ${rule}`;
@@ -68,7 +82,7 @@ export default class Validation {
             this.getValue(field),
             parameters,
             this.data,
-            field
+            field,
           ) &&
           rule !== "nullable"
         ) {
@@ -76,7 +90,7 @@ export default class Validation {
             this.getMessage(rule, field),
             rule,
             field,
-            parameters
+            parameters,
           );
           break;
         }
@@ -96,7 +110,7 @@ export default class Validation {
     message: string,
     rule: string,
     field: string,
-    parameters: any
+    parameters: any,
   ) {
     let ruleFunctions = this.getRule(rule);
     if (!message) {
@@ -108,7 +122,11 @@ export default class Validation {
         if (parameters[index]) {
           message = message.replace(
             `:${replacer}`,
-            uncamelize(parameters[index].replace(".", "s "))
+            typeof parameters[index] === "string"
+              ? uncamelize(
+                  parameters[index].replace("_", " ").replace(".", "s "),
+                )
+              : parameters[index],
           );
         }
       });

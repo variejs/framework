@@ -12,9 +12,9 @@ export default class Mutations {
     Vue.set(
       state,
       "alerts",
-      state.alerts.filter(tempAlert => {
+      state.alerts.filter((tempAlert) => {
         return alert.id !== tempAlert.id;
-      })
+      }),
     );
   };
 

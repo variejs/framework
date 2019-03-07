@@ -4,7 +4,7 @@ export default {
   passes(value: any, parameters: Array<any>, data: {}): boolean {
     if (!value) {
       let validLength = 0;
-      parameters.forEach(parameter => {
+      parameters.forEach((parameter) => {
         let parameterValue = getByDot(data, parameter);
         if (parameterValue) {
           validLength++;
@@ -18,5 +18,5 @@ export default {
   },
   replacers() {
     return ["values"];
-  }
+  },
 };

@@ -39,7 +39,7 @@ export default class VueRouterService implements RouterInterface {
 
   constructor(
     @inject("app") app: ApplicationInterface,
-    @inject("ConfigService") configService: ConfigInterface
+    @inject("ConfigService") configService: ConfigInterface,
   ) {
     this.app = app;
     this.configService = configService;
@@ -58,7 +58,7 @@ export default class VueRouterService implements RouterInterface {
 
   public buildRouter() {
     if (this.wildCardRoutes.length) {
-      this.wildCardRoutes.forEach(route => {
+      this.wildCardRoutes.forEach((route) => {
         if (route.group) {
           route.group.children.push(route);
         } else {
@@ -68,8 +68,8 @@ export default class VueRouterService implements RouterInterface {
     }
     this.router = new VueRouter(
       Object.assign({}, this.configService.get("router"), {
-        routes: this.routes
-      })
+        routes: this.routes,
+      }),
     );
 
     this.setupMiddleware();
@@ -118,19 +118,21 @@ export default class VueRouterService implements RouterInterface {
 
   protected convertRoutePathToRouteName(route: Route, path?: string) {
     path = JSON.stringify(path ? path : route.path);
+
     route.setName(
       path
         .replace(/"/g, "")
         .replace(/\//g, ".")
-        .replace(/\:.*\./g, "")
+        .replace(/\:.*?(\.|$)/g, "")
         .replace(/^\.+/, "")
         .replace(/\.+$/, "")
+        .toLowerCase(),
     );
   }
 
   public middleware(middleware: Array<any>) {
     this.groupInfo.meta.middleware = this.groupInfo.meta.middleware.concat(
-      middleware
+      middleware,
     );
     return this;
   }
@@ -138,7 +140,7 @@ export default class VueRouterService implements RouterInterface {
   public redirect(path: string, redirect: string) {
     this.routes.push({
       path: path,
-      redirect: redirect
+      redirect: redirect,
     });
     return this;
   }
@@ -191,7 +193,7 @@ export default class VueRouterService implements RouterInterface {
                 return this.getMiddleware(currentValue).handler(
                   to,
                   from,
-                  options => {
+                  (options) => {
                     if (options) {
                       next(options);
                       stopMiddleware = true;
@@ -199,12 +201,12 @@ export default class VueRouterService implements RouterInterface {
                     } else if (currentIndex === to.meta.middleware.length - 1) {
                       return next();
                     }
-                  }
+                  },
                 );
               }
             });
           },
-          Promise.resolve()
+          Promise.resolve(),
         );
       }
       next();
@@ -216,7 +218,7 @@ export default class VueRouterService implements RouterInterface {
     if (!this.app.isBound(containerMiddlewareName)) {
       this.app.bind<RouteMiddlewareInterface>(
         containerMiddlewareName,
-        middleware
+        middleware,
       );
     }
     return this.app.make<RouteMiddlewareInterface>(containerMiddlewareName);
@@ -239,13 +241,13 @@ export default class VueRouterService implements RouterInterface {
       meta: {
         data: {},
         middleware: [],
-        layout: this.configService.get("view.defaultLayout", "public")
+        layout: this.configService.get("view.defaultLayout", "public"),
       },
       area: null,
       children: [],
       component: {
-        template: "<router-view/>"
-      }
+        template: "<router-view/>",
+      },
     };
 
     if (this.groups.length) {

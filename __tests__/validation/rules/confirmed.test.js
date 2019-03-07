@@ -7,10 +7,10 @@ test("test confirmed rule", () => {
       [],
       {
         password: "abc",
-        password_confirmation: "abc"
+        password_confirmation: "abc",
       },
-      "password"
-    )
+      "password",
+    ),
   ).toBe(true);
 
   expect(
@@ -19,10 +19,10 @@ test("test confirmed rule", () => {
       [],
       {
         password: "abc",
-        password_confirmation: "abcd"
+        password_confirmation: "abcd",
       },
-      "password"
-    )
+      "password",
+    ),
   ).toBe(false);
 
   expect(
@@ -30,9 +30,9 @@ test("test confirmed rule", () => {
       "abc",
       [],
       {
-        password: "abc"
+        password: "abc",
       },
-      "password"
-    )
+      "password",
+    ),
   ).toBe(false);
 });

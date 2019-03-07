@@ -14,7 +14,7 @@
 import Vue from "vue";
 export default Vue.extend({
   props: {
-    alert: Object
+    alert: Object,
   },
   created() {
     setTimeout(() => {
@@ -26,7 +26,7 @@ export default Vue.extend({
   methods: {
     close() {
       this.$store.dispatch("varie/alerts/remove", this.alert);
-    }
-  }
+    },
+  },
 });
 </script>
