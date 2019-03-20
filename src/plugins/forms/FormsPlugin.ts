@@ -11,8 +11,8 @@ class Forms {
       methods: {
         createForm: (data: object) => {
           return new Form(data, this.validateService);
-        }
-      }
+        },
+      },
     });
   }
 }

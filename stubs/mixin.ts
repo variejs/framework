@@ -6,5 +6,5 @@ Vue.mixin({
   },
   computed: {
     //
-  }
+  },
 });

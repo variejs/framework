@@ -3,25 +3,25 @@ import required_if from "../../../src/validation/rules/required_if";
 test("test required if rule", () => {
   expect(
     required_if.passes("asdfadsf", ["name", "abc"], {
-      name: "abc"
-    })
+      name: "abc",
+    }),
   ).toBe(true);
 
   expect(
     required_if.passes("", ["name", "abc"], {
-      name: "abc"
-    })
+      name: "abc",
+    }),
   ).toBe(false);
 
   expect(
     required_if.passes("", ["name"], {
-      name: "abc"
-    })
+      name: "abc",
+    }),
   ).toBe(false);
 
   expect(
     required_if.passes("", ["name"], {
-      name: null
-    })
+      name: null,
+    }),
   ).toBe(true);
 });

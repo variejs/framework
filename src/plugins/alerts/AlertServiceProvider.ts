@@ -10,7 +10,7 @@ export default class AlertServiceProvider extends ServiceProvider {
   public boot() {
     Vue.use(new Alerts(this.app.make("ConfigService")), {
       store: this.app.make<VuexService>("StateService").getStore(),
-      service: this.app.make("AlertService")
+      service: this.app.make("AlertService"),
     });
   }
 

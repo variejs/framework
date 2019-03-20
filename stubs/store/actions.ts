@@ -6,8 +6,8 @@ export default function(httpService) {
   return {
     sampleAction: (context: ActionContext<tempState, RootState>, data) => {
       return httpService.post("/some-url", {
-        data
+        data,
       });
-    }
+    },
   };
 }
