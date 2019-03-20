@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
-import HttpMiddlewareInterface from "varie/lib/http/HttpMiddlewareInterface";
+import HttpMiddlewareInterface from "varie/lib/http/interfaces/HttpMiddlewareInterface";
 
 @injectable()
 export default class temp implements HttpMiddlewareInterface {
