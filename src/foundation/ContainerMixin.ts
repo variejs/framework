@@ -10,7 +10,7 @@ export default class ContainerMixin {
         services.forEach((service: string) => {
           this[camelize(service)] = app.make(service);
         });
-      },
+      }
     });
   }
 }

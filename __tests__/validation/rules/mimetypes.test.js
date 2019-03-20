@@ -11,11 +11,11 @@ test("test mimetype rule", () => {
 
   let invalid = ["blah", "mp4", "pdf"];
 
-  valid.forEach((value) => {
+  valid.forEach(value => {
     expect(mimetypes.passes(new MockFile(value), valid)).toBe(true);
   });
 
-  invalid.forEach((value) => {
+  invalid.forEach(value => {
     expect(mimetypes.passes(new MockFile(value), valid)).toBe(false);
   });
 });

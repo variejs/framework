@@ -14,17 +14,17 @@ test("test between rule", () => {
   expect(
     between.passes(
       {
-        size: 3500000, // 3500 kb
+        size: 3500000 // 3500 kb
       },
-      [2000, 4000],
-    ),
+      [2000, 4000]
+    )
   ).toBe(true);
   expect(
     between.passes(
       {
-        size: 1500000, // 1500 kb
+        size: 1500000 // 1500 kb
       },
-      [2000, 4000],
-    ),
+      [2000, 4000]
+    )
   ).toBe(false);
 });

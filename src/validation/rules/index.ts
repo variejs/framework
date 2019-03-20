@@ -65,5 +65,5 @@ export default {
   same,
   size,
   string,
-  url,
+  url
 };

@@ -5,5 +5,5 @@ export default {
 
   message() {
     return "This :field has this message to display";
-  },
+  }
 };

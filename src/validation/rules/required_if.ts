@@ -14,5 +14,5 @@ export default {
 
   replacers() {
     return ["other", "value"];
-  },
+  }
 };

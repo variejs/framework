@@ -16,5 +16,5 @@ export default {
 
   replacers() {
     return ["max", "size"];
-  },
+  }
 };

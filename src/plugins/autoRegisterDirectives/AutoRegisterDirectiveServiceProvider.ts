@@ -5,7 +5,7 @@ export default class AutoRegisterDirectiveServiceProvider extends ServiceProvide
 
   public boot() {
     let files = require.context("@app/directives", true, /^\.\/.*\.(ts|js)$/);
-    files.keys().forEach((filename) => {
+    files.keys().forEach(filename => {
       files(filename);
     });
   }

@@ -18,8 +18,8 @@ export default class Alerts {
       computed: {
         alertService: (): AlertService => {
           return service;
-        },
-      },
+        }
+      }
     });
   }
 }

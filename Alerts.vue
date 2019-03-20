@@ -90,12 +90,12 @@ import Vue from "vue";
 import alert from "./components/Alert.vue";
 export default Vue.extend({
   components: {
-    alert,
+    alert
   },
   computed: {
     alerts() {
       return this.$store.state.varie.alerts.alerts;
-    },
-  },
+    }
+  }
 });
 </script>

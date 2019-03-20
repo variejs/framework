@@ -40,7 +40,7 @@ test("test url rule", () => {
     "http://[1080::8:800:200C:417A]/foo",
     "http://[::192.9.5.5]/ipng",
     "http://[::FFFF:129.144.52.38]:80/index.html",
-    "http://[2010:836B:4179::836B:4179]",
+    "http://[2010:836B:4179::836B:4179]"
   ];
 
   let invalid = [
@@ -81,14 +81,14 @@ test("test url rule", () => {
     "http://localhost:61500this is an invalid url!!!!",
     "////foobar.com",
     "http:////foobar.com",
-    "https://example.com/foo/<script>alert('XSS')</script>/",
+    "https://example.com/foo/<script>alert('XSS')</script>/"
   ];
 
-  valid.forEach((value) => {
+  valid.forEach(value => {
     expect(url.passes(value)).toBe(true);
   });
 
-  invalid.forEach((value) => {
+  invalid.forEach(value => {
     expect(url.passes(value)).toBe(false);
   });
 });

@@ -5,11 +5,11 @@ test("test numeric rule", () => {
 
   let invalid = ["  foo  "];
 
-  valid.forEach((value) => {
+  valid.forEach(value => {
     expect(numeric.passes(value)).toBe(true);
   });
 
-  invalid.forEach((value) => {
+  invalid.forEach(value => {
     expect(numeric.passes(value)).toBe(false);
   });
 });

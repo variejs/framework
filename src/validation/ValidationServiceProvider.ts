@@ -19,13 +19,13 @@ export default class ValidationServiceProvider extends ServiceProvider {
           .replace("./", "")
           .split("/")
           .shift()}`,
-        files(filename).default,
+        files(filename).default
       );
     }
 
     this.app.singleton<ValidationServiceInterface>(
       "ValidationService",
-      VarieValidationService,
+      VarieValidationService
     );
   }
 }
