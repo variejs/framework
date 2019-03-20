@@ -66,8 +66,9 @@ export default class AxiosHttpService implements HttpServiceInterface {
   public registerMiddleware(Middleware) {
     let middlewareName = `httpMiddleware${Middleware.name}`;
     this.app.bind<HttpMiddlewareInterface>(middlewareName, Middleware);
-    let middleware = this.app.make<HttpMiddlewareInterface>(middlewareName);
-
+    let middleware = this.app.make<HttpMiddlewareInterface>(
+      middlewareName,
+    );
     this.middleware[middleware.constructor.name] = {
       request: this.axios.interceptors.request.use((config) => {
         if (middleware.request) {
