@@ -58,6 +58,20 @@ export default class Validation {
           parameters = tempRule[1].split(",");
         }
 
+        parameters = parameters.map(parameter => {
+          if (parameter === "false") {
+            return false;
+          }
+          if (parameter === "true") {
+            return true;
+          }
+          let number = parseFloat(parameter);
+          if (!isNaN(number)) {
+            return number;
+          }
+          return parameter;
+        });
+
         let ruleClass = this.getRule(rule);
         if (ruleClass === undefined) {
           throw `We cannot find the rule ${rule}`;
@@ -108,7 +122,11 @@ export default class Validation {
         if (parameters[index]) {
           message = message.replace(
             `:${replacer}`,
-            uncamelize(parameters[index].replace(".", "s "))
+            typeof parameters[index] === "string"
+              ? uncamelize(
+                  parameters[index].replace("_", " ").replace(".", "s ")
+                )
+              : parameters[index]
           );
         }
       });

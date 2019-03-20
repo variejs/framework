@@ -1,7 +1,7 @@
 import { getByDot, isEmpty } from "./../../utilities";
 
 export default {
-  passes(value: any, parameters: Array<any>, data: {}): boolean {
+  passes(value: any, parameters, data: {}): boolean {
     if (isEmpty(value)) {
       let requiredValue = getByDot(data, parameters[0]);
       return (

@@ -118,13 +118,15 @@ export default class VueRouterService implements RouterInterface {
 
   protected convertRoutePathToRouteName(route: Route, path?: string) {
     path = JSON.stringify(path ? path : route.path);
+
     route.setName(
       path
         .replace(/"/g, "")
         .replace(/\//g, ".")
-        .replace(/\:.*\./g, "")
+        .replace(/\:.*?(\.|$)/g, "")
         .replace(/^\.+/, "")
         .replace(/\.+$/, "")
+        .toLowerCase()
     );
   }
 
