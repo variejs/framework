@@ -6,7 +6,7 @@ export default class StorageServiceProvider extends ServiceProvider {
   public register() {
     this.app.singleton<StorageServiceInterface>(
       "StorageService",
-      StorageService,
+      StorageService
     );
   }
 }

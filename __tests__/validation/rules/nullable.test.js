@@ -5,11 +5,11 @@ test("test nullable rule", () => {
 
   let invalid = ["  foo  ", { test: true }, [1]];
 
-  valid.forEach((value) => {
+  valid.forEach(value => {
     expect(nullable.passes(value)).toBe(true);
   });
 
-  invalid.forEach((value) => {
+  invalid.forEach(value => {
     expect(nullable.passes(value)).toBe(false);
   });
 });

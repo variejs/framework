@@ -6,5 +6,5 @@ export default {
     if (value) {
       return value instanceof Date || isISO8601(value) || isRFC3339(value);
     }
-  },
+  }
 };

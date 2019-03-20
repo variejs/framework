@@ -5,11 +5,11 @@ test("test integer rule", () => {
 
   let invalid = [1.1, "1.1", "12", 12313.14];
 
-  valid.forEach((value) => {
+  valid.forEach(value => {
     expect(integer.passes(value)).toBe(true);
   });
 
-  invalid.forEach((value) => {
+  invalid.forEach(value => {
     expect(integer.passes(value)).toBe(false);
   });
 });

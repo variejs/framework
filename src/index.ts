@@ -43,5 +43,5 @@ export {
   AutoRegisterFilterServiceProvider,
   AutoRegisterLayoutServiceProvider,
   AutoRegisterComponentServiceProvider,
-  AutoRegisterDirectiveServiceProvider,
+  AutoRegisterDirectiveServiceProvider
 };

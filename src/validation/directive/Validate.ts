@@ -3,7 +3,7 @@ import Form from "../../plugins/forms/Form";
 
 function checkForErrors(formElement, form: Form) {
   let errors = form.errors();
-  formElement.querySelectorAll("*[validate]").forEach((el) => {
+  formElement.querySelectorAll("*[validate]").forEach(el => {
     if (el.hasAttribute("touched") && errors[el.name]) {
       return attachError(el, errors[el.name]);
     }
@@ -16,7 +16,7 @@ function attachError(el: HTMLInputElement, error) {
   if (!validationElement) {
     el.insertAdjacentHTML(
       "afterend",
-      `<div class="validation-error">${error}</div>`,
+      `<div class="validation-error">${error}</div>`
     );
   } else {
     // @ts-ignore
@@ -33,7 +33,7 @@ function removeErrors(el: HTMLInputElement) {
 }
 
 function getValidationErrorElement(
-  el: HTMLInputElement,
+  el: HTMLInputElement
 ): HTMLInputElement | boolean {
   let sibling = el.nextSibling;
   // @ts-ignore
@@ -71,5 +71,5 @@ Vue.directive("form", {
             break;
         }
       });
-  },
+  }
 });

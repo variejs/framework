@@ -63,7 +63,7 @@ export default class Application implements ApplicationInterface {
   }
 
   private async getAppProvider(
-    provider: string,
+    provider: string
   ): Promise<ServiceProviderInterface> {
     return new this.appProviders[provider](this.app).register();
   }

@@ -5,15 +5,15 @@ test("test regex rule", () => {
 
   let invalid = [/abc/, "abc"];
 
-  valid.forEach((value) => {
+  valid.forEach(value => {
     expect(regex.passes("ABC123", [value])).toBe(true);
   });
 
-  valid.forEach((value) => {
+  valid.forEach(value => {
     expect(regex.passes("...FAIL...", [value])).toBe(false);
   });
 
-  invalid.forEach((value) => {
+  invalid.forEach(value => {
     expect(regex.passes("...FAIL...", [value])).toBe(false);
   });
 });

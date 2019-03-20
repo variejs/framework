@@ -12,7 +12,7 @@ class AlertService {
 
   constructor(
     @inject("ConfigService") $config: ConfigInterface,
-    @inject("StateService") stateService: StateServiceInterface,
+    @inject("StateService") stateService: StateServiceInterface
   ) {
     this.store = stateService.getStore();
     this.configService = $config.get("alerts");
@@ -29,7 +29,7 @@ class AlertService {
   public success(
     message: string,
     title: string = "Success",
-    duration?: number,
+    duration?: number
   ) {
     this.makeAlert(message, title, duration, "success");
   }
@@ -37,7 +37,7 @@ class AlertService {
   public warning(
     message: string,
     title: string = "Warning",
-    duration?: number,
+    duration?: number
   ) {
     this.makeAlert(message, title, duration, "warning");
   }
@@ -46,7 +46,7 @@ class AlertService {
     message: string,
     title: string,
     duration?: number,
-    severity?: string,
+    severity?: string
   ) {
     if (duration === undefined) {
       duration = this.configService.duration;
@@ -55,7 +55,7 @@ class AlertService {
       message: message,
       duration: duration,
       severity: severity,
-      title: title ? title : `${severity}!!`,
+      title: title ? title : `${severity}!!`
     });
   }
 }

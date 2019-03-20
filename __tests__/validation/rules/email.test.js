@@ -25,12 +25,12 @@ test("test email rule", () => {
     `${repeat("a", 64)}@${repeat("a", 63)}.com`,
     `${repeat("a", 64)}@${repeat("a", 63)}.${repeat("a", 63)}.${repeat(
       "a",
-      63,
+      63
     )}.${repeat("a", 58)}.com`,
     `${repeat("a", 64)}@${repeat("a", 63)}.com`,
     `${repeat("a", 31)}@gmail.com`,
     "test@gmail.com",
-    "test.1@gmail.com",
+    "test.1@gmail.com"
   ];
 
   let invalid = [
@@ -64,14 +64,14 @@ test("test email rule", () => {
     "ends.with.dot.@gmail.com",
     "multiple..dots@gmail.com",
     'wrong()[]",:;<>@@gmail.com',
-    '"wrong()[]",:;<>@@gmail.com',
+    '"wrong()[]",:;<>@@gmail.com'
   ];
 
-  valid.forEach((value) => {
+  valid.forEach(value => {
     expect(email.passes(value)).toBe(true);
   });
 
-  invalid.forEach((value) => {
+  invalid.forEach(value => {
     expect(email.passes(value)).toBe(false);
   });
 });

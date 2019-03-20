@@ -3,5 +3,5 @@ export default {
     let validValues = ["yes", "on", 1, true];
 
     return validValues.indexOf(value) > -1;
-  },
+  }
 };

@@ -1,5 +1,5 @@
 import Vue from "vue";
 
-Vue.filter("temp", (value) => {
+Vue.filter("temp", value => {
   return value;
 });

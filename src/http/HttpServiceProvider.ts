@@ -6,7 +6,7 @@ import HttpServiceInterface from "./HttpServiceInterface";
 export default class HttpServiceProvider extends ServiceProvider {
   public boot() {
     let $httpService = this.app.make<AxiosHttpService>("HttpService");
-    require("@app/middleware").default.forEach((middleware) => {
+    require("@app/middleware").default.forEach(middleware => {
       $httpService.registerMiddleware(middleware);
     });
   }

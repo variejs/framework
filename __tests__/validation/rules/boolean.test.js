@@ -5,11 +5,11 @@ test("test boolean rule", () => {
 
   let invalid = ["1", "0", 2, "abc"];
 
-  valid.forEach((value) => {
+  valid.forEach(value => {
     expect(boolean.passes(value)).toBe(true);
   });
 
-  invalid.forEach((value) => {
+  invalid.forEach(value => {
     expect(boolean.passes(value)).toBe(false);
   });
 });

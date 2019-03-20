@@ -13,27 +13,27 @@ test("test max rule", () => {
   expect(
     max.passes(
       {
-        size: 3500000, // 3500 kb
+        size: 3500000 // 3500 kb
       },
-      [4000],
-    ),
+      [4000]
+    )
   ).toBe(true);
 
   expect(
     max.passes(
       {
-        size: 4096000, // 4000 kb
+        size: 4096000 // 4000 kb
       },
-      [4000],
-    ),
+      [4000]
+    )
   ).toBe(true);
 
   expect(
     max.passes(
       {
-        size: 5500000, // 5500 kb
+        size: 5500000 // 5500 kb
       },
-      [4000],
-    ),
+      [4000]
+    )
   ).toBe(false);
 });
