@@ -1,12 +1,14 @@
+import HttpRequestConfigInterface from "./interfaces/HttpRequestConfigInterface";
+
 export default interface HttpServiceInterface {
-  get(url: string, config?: object);
-  put(url: string, data: object, config?: object);
-  post(url: string, data?: object, config?: object);
-  patch(url: string, data: object, config?: object);
-  delete(url: string, config?: object);
-  head(url: string, config?: object);
-  options(url: string, config?: object);
-  request(config?: object);
+  get(url: string, config?: HttpRequestConfigInterface);
+  put(url: string, data: object, config?: HttpRequestConfigInterface);
+  post(url: string, data?: object, config?: HttpRequestConfigInterface);
+  patch(url: string, data: object, config?: HttpRequestConfigInterface);
+  delete(url: string, config?: HttpRequestConfigInterface);
+  head(url: string, config?: HttpRequestConfigInterface);
+  options(url: string, config?: HttpRequestConfigInterface);
+  request(config?: HttpRequestConfigInterface);
   registerMiddleware(middleware: () => void);
   unregisterMiddleware(middleware: () => void);
 }

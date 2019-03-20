@@ -9,7 +9,7 @@ export default {
       let fileTypeRegex = new RegExp(/(jpg|svg|jpeg|png|bmp|gif)$/i);
       let fileNameRegex = new RegExp(/\.(jpg|svg|jpeg|png|bmp|gif)$/i);
 
-      files.forEach(file => {
+      files.forEach((file) => {
         if (fileNameRegex.test(file.name) || fileTypeRegex.test(file.type)) {
           validLength++;
         }
@@ -23,5 +23,5 @@ export default {
 
   replacers() {
     return ["values"];
-  }
+  },
 };

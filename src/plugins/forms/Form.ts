@@ -47,7 +47,7 @@ class Form {
       let errors = this._validator.validate(
         this.data(),
         this._rules,
-        this._messages
+        this._messages,
       );
       if (Object.keys(errors).length) {
         return false;

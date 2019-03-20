@@ -5,19 +5,19 @@ test("test same rule", () => {
 
   let invalid = ["  foo  ", {}];
 
-  valid.forEach(value => {
+  valid.forEach((value) => {
     expect(
       same.passes(value, ["name"], {
-        name: "abc"
-      })
+        name: "abc",
+      }),
     ).toBe(true);
   });
 
-  invalid.forEach(value => {
+  invalid.forEach((value) => {
     expect(
       same.passes(value, ["name"], {
-        name: "abc"
-      })
+        name: "abc",
+      }),
     ).toBe(false);
   });
 });

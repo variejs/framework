@@ -1,8 +1,9 @@
+import axios, { AxiosInstance } from "axios";
 import { inject, injectable } from "inversify";
 import HttpServiceInterface from "./HttpServiceInterface";
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import ApplicationInterface from "../foundation/ApplicationInterface";
-import AxiosHttpMiddlewareInterface from "./AxiosHttpMiddlewareInterface";
+import HttpMiddlewareInterface from "./interfaces/HttpMiddlewareInterface";
+import HttpRequestConfigInterface from "./interfaces/HttpRequestConfigInterface";
 
 @injectable()
 export default class AxiosHttpService implements HttpServiceInterface {
@@ -12,53 +13,63 @@ export default class AxiosHttpService implements HttpServiceInterface {
 
   constructor(
     @inject("app") app: ApplicationInterface,
-    @inject("ConfigService") configService
+    @inject("ConfigService") configService,
   ) {
     this.app = app;
     this.axios = axios.create(configService.get("http"));
   }
 
-  public delete(url: string, config: AxiosRequestConfig = {}) {
+  public delete(url: string, config: HttpRequestConfigInterface = {}) {
     return this.axios.delete(url, config);
   }
 
-  public get(url: string, config: AxiosRequestConfig = {}) {
+  public get(url: string, config: HttpRequestConfigInterface = {}) {
     return this.axios.get(url, config);
   }
 
-  public head(url: string, config: AxiosRequestConfig = {}) {
+  public head(url: string, config: HttpRequestConfigInterface = {}) {
     return this.axios.head(url, config);
   }
 
-  public options(url: string, config: AxiosRequestConfig = {}) {
+  public options(url: string, config: HttpRequestConfigInterface = {}) {
     return this.options(url, config);
   }
 
-  public post(url: string, data: object, config: AxiosRequestConfig = {}) {
+  public post(
+    url: string,
+    data: object,
+    config: HttpRequestConfigInterface = {},
+  ) {
     return this.axios.post(url, data, config);
   }
 
-  public put(url: string, data: object, config: AxiosRequestConfig = {}) {
+  public put(
+    url: string,
+    data: object,
+    config: HttpRequestConfigInterface = {},
+  ) {
     return this.axios.put(url, data, config);
   }
 
-  public patch(url: string, data: object, config: AxiosRequestConfig = {}) {
+  public patch(
+    url: string,
+    data: object,
+    config: HttpRequestConfigInterface = {},
+  ) {
     return this.axios.patch(url, data, config);
   }
 
-  public request(config: AxiosRequestConfig = {}) {
+  public request(config: HttpRequestConfigInterface = {}) {
     return this.axios.request(config);
   }
 
   public registerMiddleware(Middleware) {
     let middlewareName = `httpMiddleware${Middleware.name}`;
-    this.app.bind<AxiosHttpMiddlewareInterface>(middlewareName, Middleware);
-    let middleware = this.app.make<AxiosHttpMiddlewareInterface>(
-      middlewareName
-    );
+    this.app.bind<HttpMiddlewareInterface>(middlewareName, Middleware);
+    let middleware = this.app.make<HttpMiddlewareInterface>(middlewareName);
 
     this.middleware[middleware.constructor.name] = {
-      request: this.axios.interceptors.request.use(config => {
+      request: this.axios.interceptors.request.use((config) => {
         if (middleware.request) {
           return middleware.request(config);
         }
@@ -76,8 +87,8 @@ export default class AxiosHttpService implements HttpServiceInterface {
             return Promise.reject(middleware.responseError(error));
           }
           return Promise.reject(error);
-        }
-      )
+        },
+      ),
     };
   }
 

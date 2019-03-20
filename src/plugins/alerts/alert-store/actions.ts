@@ -7,14 +7,14 @@ import AlertModel from "./../models/AlertModel";
 export default class Actions {
   public add = (
     context: ActionContext<AlertState, RootState>,
-    alert: AlertModel
+    alert: AlertModel,
   ) => {
     context.commit("add", alert);
   };
 
   public remove = (
     context: ActionContext<AlertState, RootState>,
-    alert: AlertModel
+    alert: AlertModel,
   ) => {
     context.commit("remove", alert);
   };

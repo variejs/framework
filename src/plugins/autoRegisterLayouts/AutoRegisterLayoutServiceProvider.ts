@@ -7,7 +7,7 @@ export default class AutoRegisterLayoutServiceProvider extends ServiceProvider {
 
   public boot() {
     let files = require.context("@views/layouts", false, /^\.\/.*\.(vue)$/);
-    files.keys().forEach(filename => {
+    files.keys().forEach((filename) => {
       Vue.component(this.getComponentName(filename), files(filename).default);
     });
   }

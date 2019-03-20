@@ -1,4 +1,4 @@
-import isDate from './date'
+import isDate from "./date";
 import isAfter from "validator/lib/isAfter";
 
 export default {
@@ -11,5 +11,5 @@ export default {
 
   replacers() {
     return ["date"];
-  }
+  },
 };
