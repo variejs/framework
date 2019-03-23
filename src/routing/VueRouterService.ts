@@ -92,7 +92,10 @@ export default class VueRouterService implements RouterInterface {
       let tempName = "";
       let groupIndex = this.currentGroupLevel;
       for (groupIndex; groupIndex > -1; groupIndex--) {
-        tempName = `${this.groups[groupIndex].path}.${tempName}`;
+        tempName =
+          this.groups[groupIndex].path !== "/"
+            ? this.groups[groupIndex].path + "/" + tempName
+            : tempName;
       }
       this.convertRoutePathToRouteName(route, tempName + route.path);
 
@@ -117,17 +120,16 @@ export default class VueRouterService implements RouterInterface {
   }
 
   protected convertRoutePathToRouteName(route: Route, path?: string) {
-    path = JSON.stringify(path ? path : route.path);
-
-    route.setName(
-      path
-        .replace(/"/g, "")
-        .replace(/\//g, ".")
-        .replace(/\:.*?(\.|$)/g, "")
-        .replace(/^\.+/, "")
-        .replace(/\.+$/, "")
-        .toLowerCase()
-    );
+    path = path ? path : route.path;
+    if (path) {
+      route.setName(
+        path
+          .replace(/^\/|\/$/g, "")
+          .replace(/(\/?)(:.*?)(\/|$)/g, ".")
+          .replace(/^\.|\.$/g, "")
+          .toLowerCase()
+      );
+    }
   }
 
   public middleware(middleware: Array<any>) {
