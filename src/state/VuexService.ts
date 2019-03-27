@@ -16,7 +16,10 @@ export default class VuexService implements StateServiceInterface {
     this.app = app;
     this.store = new Vuex.Store<any>({});
     this.store.registerModule("varie", {
-      namespaced: true
+      namespaced: true,
+      state : {
+
+      }
     });
   }
 
