@@ -1,6 +1,6 @@
 {
   "name": "varie",
-  "version": "0.12.4",
+  "version": "0.12.5",
   "description": "VueJS Framework",
   "main": "./lib/index.js",
   "typings": "./lib/index",
@@ -29,7 +29,7 @@
     "jest": "^24.5.0",
     "lint-staged": "^8.1.5",
     "ts-jest": "^24.0.0",
-    "typescript": "^3.3.4000"
+    "typescript": "^3.5.3"
   },
   "peerDependencies": {
     "vue": "^2.5.17",
