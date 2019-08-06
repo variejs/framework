@@ -3,7 +3,6 @@ import HttpResponseInterface from "./HttpResponseInterface";
 import HttpRequestConfigInterface from "./HttpRequestConfigInterface";
 
 export default interface HttpMiddlewareInterface {
-  name: string;
   request(
     config: HttpRequestConfigInterface,
   ): HttpRequestConfigInterface | Promise<HttpRequestConfigInterface>;

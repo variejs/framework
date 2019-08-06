@@ -1,6 +1,6 @@
+import HttpResponseInterface from "./interfaces/HttpResponseInterface";
 import HttpMiddlewareInterface from "./interfaces/HttpMiddlewareInterface";
 import HttpRequestConfigInterface from "./interfaces/HttpRequestConfigInterface";
-import HttpResponseInterface from "./interfaces/HttpResponseInterface";
 
 export default interface HttpServiceInterface {
   get(

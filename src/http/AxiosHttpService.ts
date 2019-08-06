@@ -1,9 +1,8 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { inject, injectable } from "inversify";
 import HttpServiceInterface from "./HttpServiceInterface";
 import ApplicationInterface from "../foundation/ApplicationInterface";
 import HttpMiddlewareInterface from "./interfaces/HttpMiddlewareInterface";
-import HttpRequestConfigInterface from "./interfaces/HttpRequestConfigInterface";
 
 @injectable()
 export default class AxiosHttpService implements HttpServiceInterface {
@@ -19,19 +18,19 @@ export default class AxiosHttpService implements HttpServiceInterface {
     this.axios = axios.create(configService.get("http"));
   }
 
-  public delete(url: string, config: HttpRequestConfigInterface = {}) {
+  public delete(url: string, config = {}) {
     return this.axios.delete(url, config);
   }
 
-  public get(url: string, config: HttpRequestConfigInterface = {}) {
+  public get(url: string, config = {}) {
     return this.axios.get(url, config);
   }
 
-  public head(url: string, config: HttpRequestConfigInterface = {}) {
+  public head(url: string, config = {}) {
     return this.axios.head(url, config);
   }
 
-  public options(url: string, config: HttpRequestConfigInterface = {}) {
+  public options(url: string, config = {}) {
     // https://github.com/axios/axios/pull/2341
     // @ts-ignore
     return this.axios.options(url, config);
@@ -40,7 +39,7 @@ export default class AxiosHttpService implements HttpServiceInterface {
   public post(
     url: string,
     data: object,
-    config: HttpRequestConfigInterface = {},
+    config = {},
   ) {
     return this.axios.post(url, data, config);
   }
@@ -48,7 +47,7 @@ export default class AxiosHttpService implements HttpServiceInterface {
   public put(
     url: string,
     data: object,
-    config: HttpRequestConfigInterface = {},
+    config = {},
   ) {
     return this.axios.put(url, data, config);
   }
@@ -56,12 +55,12 @@ export default class AxiosHttpService implements HttpServiceInterface {
   public patch(
     url: string,
     data: object,
-    config: HttpRequestConfigInterface = {},
+    config = {},
   ) {
     return this.axios.patch(url, data, config);
   }
 
-  public request(config: HttpRequestConfigInterface = {}) {
+  public request(config = {}) {
     return this.axios.request(config);
   }
 
@@ -72,14 +71,14 @@ export default class AxiosHttpService implements HttpServiceInterface {
     this.middleware[middleware.constructor.name] = {
       request: this.axios.interceptors.request.use((config) => {
         if (middleware.request) {
-          return middleware.request(config);
+          return <AxiosRequestConfig>middleware.request(config);
         }
         return config;
       }),
       response: this.axios.interceptors.response.use(
         function(response) {
           if (middleware.response) {
-            return middleware.response(response);
+            return <AxiosResponse>middleware.response(response);
           }
           return response;
         },
