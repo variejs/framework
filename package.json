@@ -1,12 +1,12 @@
 {
   "name": "varie",
-  "version": "0.12.6",
+  "version": "1.0.0",
   "description": "VueJS Framework",
   "main": "./lib/index.js",
   "typings": "./lib/index",
   "types": "./lib/index",
   "repository": "git@github.com:variejs/varie-framework.git",
-  "author": "Luke Policinski <Luke@LukePOLO.com>",
+  "author": "Luke Policinski",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.19.0",
@@ -22,13 +22,20 @@
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-typescript": "^7.3.3",
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
+    "@semantic-release/changelog": "^3.0.4",
+    "@semantic-release/git": "^7.0.16",
     "@types/node": "^10.14.14",
     "@types/validator": "^10.11.2",
     "@types/webpack-env": "^1.14.0",
-    "auto-changelog": "^1.14.1",
     "babel-jest": "^24.8.0",
+    "git-cz": "^3.2.1",
+    "husky": "^3.0.3",
     "jest": "^24.8.0",
-    "lint-staged": "^9.2.1",
+    "prettier": "^1.18.2",
+    "pretty-quick": "^1.11.1",
+    "semantic-release": "^15.13.19",
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.3"
   },
@@ -41,14 +48,15 @@
     "build": "tsc",
     "watch": "tsc --watch",
     "test": "jest",
-    "version": "auto-changelog && git add CHANGELOG.md",
-    "peer": "npm install vue vue-router vuex --no-save"
+    "commit": "npx git-cz",
+    "installPeers": "npm install vue vue-router vuex --no-save",
+    "release": "semantic-release"
   },
-  "auto-changelog": {
-    "output": "CHANGELOG.md",
-    "template": "keepachangelog",
-    "commitLimit": false,
-    "startingCommit": "5bc358362b61ffc28ce9e7641064f1277cf97395"
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   },
   "files": [
     "lib",
