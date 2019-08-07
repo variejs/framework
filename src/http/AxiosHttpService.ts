@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { inject, injectable } from "inversify";
 import HttpServiceInterface from "./HttpServiceInterface";
 import ApplicationInterface from "../foundation/ApplicationInterface";
@@ -12,7 +12,7 @@ export default class AxiosHttpService implements HttpServiceInterface {
 
   constructor(
     @inject("app") app: ApplicationInterface,
-    @inject("ConfigService") configService,
+    @inject("ConfigService") configService
   ) {
     this.app = app;
     this.axios = axios.create(configService.get("http"));
@@ -36,27 +36,15 @@ export default class AxiosHttpService implements HttpServiceInterface {
     return this.axios.options(url, config);
   }
 
-  public post(
-    url: string,
-    data: object,
-    config = {},
-  ) {
+  public post(url: string, data: object, config = {}) {
     return this.axios.post(url, data, config);
   }
 
-  public put(
-    url: string,
-    data: object,
-    config = {},
-  ) {
+  public put(url: string, data: object, config = {}) {
     return this.axios.put(url, data, config);
   }
 
-  public patch(
-    url: string,
-    data: object,
-    config = {},
-  ) {
+  public patch(url: string, data: object, config = {}) {
     return this.axios.patch(url, data, config);
   }
 
@@ -69,7 +57,7 @@ export default class AxiosHttpService implements HttpServiceInterface {
     this.app.bind<HttpMiddlewareInterface>(middlewareName, Middleware);
     let middleware = this.app.make<HttpMiddlewareInterface>(middlewareName);
     this.middleware[middleware.constructor.name] = {
-      request: this.axios.interceptors.request.use((config) => {
+      request: this.axios.interceptors.request.use(config => {
         if (middleware.request) {
           return <AxiosRequestConfig>middleware.request(config);
         }
@@ -87,8 +75,8 @@ export default class AxiosHttpService implements HttpServiceInterface {
             return Promise.reject(middleware.responseError(error));
           }
           return Promise.reject(error);
-        },
-      ),
+        }
+      )
     };
   }
 

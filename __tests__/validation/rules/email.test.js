@@ -23,10 +23,6 @@ test("test email rule", () => {
     '"  foo  m端ller "@example.com',
     '"foo\\@bar"@example.com',
     `${repeat("a", 64)}@${repeat("a", 63)}.com`,
-    `${repeat("a", 64)}@${repeat("a", 63)}.${repeat("a", 63)}.${repeat(
-      "a",
-      63
-    )}.${repeat("a", 58)}.com`,
     `${repeat("a", 64)}@${repeat("a", 63)}.com`,
     `${repeat("a", 31)}@gmail.com`,
     "test@gmail.com",
@@ -45,6 +41,10 @@ test("test email rule", () => {
     `${repeat("a", 64)}@${repeat("a", 251)}.com`,
     `${repeat("a", 65)}@${repeat("a", 250)}.com`,
     `${repeat("a", 64)}@${repeat("a", 64)}.com`,
+    `${repeat("a", 64)}@${repeat("a", 63)}.${repeat("a", 63)}.${repeat(
+      "a",
+      63
+    )}.${repeat("a", 58)}.com`,
     "test1@invalid.co m",
     "test2@invalid.co m",
     "test3@invalid.co m",
