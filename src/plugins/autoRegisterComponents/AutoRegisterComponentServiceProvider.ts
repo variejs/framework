@@ -7,7 +7,7 @@ export default class AutoRegisterComponentServiceProvider extends ServiceProvide
 
   public boot() {
     let files = require.context("@components", true, /^\.\/.*\.(vue)$/);
-    files.keys().forEach(filename => {
+    files.keys().forEach((filename) => {
       Vue.component(this.getComponentName(filename), files(filename).default);
     });
   }

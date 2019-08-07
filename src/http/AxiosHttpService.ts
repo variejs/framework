@@ -12,7 +12,7 @@ export default class AxiosHttpService implements HttpServiceInterface {
 
   constructor(
     @inject("app") app: ApplicationInterface,
-    @inject("ConfigService") configService
+    @inject("ConfigService") configService,
   ) {
     this.app = app;
     this.axios = axios.create(configService.get("http"));
@@ -57,7 +57,7 @@ export default class AxiosHttpService implements HttpServiceInterface {
     this.app.bind<HttpMiddlewareInterface>(middlewareName, Middleware);
     let middleware = this.app.make<HttpMiddlewareInterface>(middlewareName);
     this.middleware[middleware.constructor.name] = {
-      request: this.axios.interceptors.request.use(config => {
+      request: this.axios.interceptors.request.use((config) => {
         if (middleware.request) {
           return <AxiosRequestConfig>middleware.request(config);
         }
@@ -75,8 +75,8 @@ export default class AxiosHttpService implements HttpServiceInterface {
             return Promise.reject(middleware.responseError(error));
           }
           return Promise.reject(error);
-        }
-      )
+        },
+      ),
     };
   }
 

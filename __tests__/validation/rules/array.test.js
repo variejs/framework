@@ -5,11 +5,11 @@ test("test array rule", () => {
 
   let invalid = ["  foo  ", {}];
 
-  valid.forEach(value => {
+  valid.forEach((value) => {
     expect(array.passes(value)).toBe(true);
   });
 
-  invalid.forEach(value => {
+  invalid.forEach((value) => {
     expect(array.passes(value)).toBe(false);
   });
 });

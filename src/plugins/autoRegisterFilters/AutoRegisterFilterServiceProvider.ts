@@ -7,7 +7,7 @@ export default class AutoRegisterFilterServiceProvider extends ServiceProvider {
 
   public boot() {
     let files = require.context("@app/filters", true, /^\.\/.*\.(ts|js)$/);
-    files.keys().forEach(filename => {
+    files.keys().forEach((filename) => {
       Vue.filter(this.getFilterName(filename), files(filename).default);
     });
   }

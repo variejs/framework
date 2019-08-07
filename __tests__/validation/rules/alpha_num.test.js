@@ -5,11 +5,11 @@ test("test alpha num rule", () => {
 
   let invalid = ["  foo  ", "", "ÄBC", "FÜübar", "Jön", "Heiß"];
 
-  valid.forEach(value => {
+  valid.forEach((value) => {
     expect(alpha_num.passes(value)).toBe(true);
   });
 
-  invalid.forEach(value => {
+  invalid.forEach((value) => {
     expect(alpha_num.passes(value)).toBe(false);
   });
 });

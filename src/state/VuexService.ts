@@ -17,7 +17,7 @@ export default class VuexService implements StateServiceInterface {
     this.store = new Vuex.Store<any>({});
     this.store.registerModule("varie", {
       namespaced: true,
-      state: {}
+      state: {},
     });
   }
 
@@ -29,16 +29,16 @@ export default class VuexService implements StateServiceInterface {
     let store = this.bindStore(Store);
     this.store.registerModule(
       this.getStoreName(store),
-      this.registerSubModules(store)
+      this.registerSubModules(store),
     );
     return this;
   }
 
   protected registerSubModules(store: StoreModule) {
-    store.$modules.forEach(Module => {
+    store.$modules.forEach((Module) => {
       let module = this.bindStore(Module);
       store.modules[this.getStoreName(module)] = this.registerSubModules(
-        module
+        module,
       );
     });
     return store;

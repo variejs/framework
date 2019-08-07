@@ -8,10 +8,10 @@ export default {
 
       const regex = new RegExp(
         `${parameters.join("|").replace("*", ".+")}$`,
-        "i"
+        "i",
       );
 
-      files.forEach(file => {
+      files.forEach((file) => {
         if (regex.test(file.type)) {
           validLength++;
         }
@@ -25,5 +25,5 @@ export default {
 
   replacers() {
     return ["values"];
-  }
+  },
 };
