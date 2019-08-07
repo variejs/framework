@@ -6,7 +6,7 @@ export default interface CookieInterface {
     days?: number,
     path?: string,
     domain?: string,
-    secure?: boolean
+    secure?: boolean,
   );
   remove(name: string, path?: string, domain?: string);
   hasItem(name: string): boolean;

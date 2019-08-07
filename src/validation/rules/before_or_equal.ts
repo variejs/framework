@@ -15,5 +15,5 @@ export default {
 
   replacers() {
     return ["date"];
-  }
+  },
 };

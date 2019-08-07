@@ -5,27 +5,27 @@ test("test image rule", () => {
 
   let invalid = ["blah", "mp4", "pdf"];
 
-  valid.forEach(value => {
+  valid.forEach((value) => {
     expect(
       image.passes({
-        name: `some_name.${value}`
-      })
+        name: `some_name.${value}`,
+      }),
     ).toBe(true);
   });
 
-  valid.forEach(value => {
+  valid.forEach((value) => {
     expect(
       image.passes({
-        type: `${value}`
-      })
+        type: `${value}`,
+      }),
     ).toBe(true);
   });
 
-  invalid.forEach(value => {
+  invalid.forEach((value) => {
     expect(
       image.passes({
-        name: `some_name.${value}`
-      })
+        name: `some_name.${value}`,
+      }),
     ).toBe(false);
   });
 

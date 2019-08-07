@@ -15,5 +15,5 @@ export {
   getByDot,
   isEmpty,
   setByDot,
-  uncamelize
+  uncamelize,
 };

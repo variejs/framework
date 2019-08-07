@@ -6,5 +6,5 @@ export default {
       return true;
     }
     return isNumeric(value);
-  }
+  },
 };

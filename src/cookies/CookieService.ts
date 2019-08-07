@@ -15,10 +15,10 @@ export default class CookieService implements CookieInterface {
           new RegExp(
             "(?:(?:^|.*;)\\s*" +
               encodeURIComponent(name).replace(/[\-\.\+\*]/g, "\\$&") +
-              "\\s*\\=\\s*([^;]*).*$)|^.*$"
+              "\\s*\\=\\s*([^;]*).*$)|^.*$",
           ),
-          "$1"
-        )
+          "$1",
+        ),
       ) || null
     );
   }
@@ -29,7 +29,7 @@ export default class CookieService implements CookieInterface {
     days: number = 1,
     path: string = "/",
     domain?: string,
-    secure?: boolean
+    secure?: boolean,
   ) {
     let expires = new Date();
     expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
@@ -37,7 +37,7 @@ export default class CookieService implements CookieInterface {
       return false;
     }
     document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(
-      value
+      value,
     )}; expires=${expires.toUTCString()}${domain ? "; domain=" + domain : ""}${
       path ? "; path=" + path : ""
     }${secure ? "; secure" : ""}`;
@@ -61,7 +61,7 @@ export default class CookieService implements CookieInterface {
     return new RegExp(
       "(?:^|;\\s*)" +
         encodeURIComponent(name).replace(/[\-\.\+\*]/g, "\\$&") +
-        "\\s*\\="
+        "\\s*\\=",
     ).test(document.cookie);
   }
 }

@@ -15,7 +15,7 @@ export default class ValidationService implements ValidationServiceInterface {
       data,
       schema,
       messages,
-      this.configService
+      this.configService,
     ).validate();
   }
 }

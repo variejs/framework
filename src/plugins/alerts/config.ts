@@ -8,5 +8,5 @@ export default {
   |
   */
 
-  duration: 0
+  duration: 0,
 };
