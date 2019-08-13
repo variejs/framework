@@ -3,14 +3,69 @@ import camelize from "../utilities/camelize";
 import ApplicationInterface from "./ApplicationInterface";
 
 export default class ContainerMixin {
+  protected $app;
+  protected definedMeta = {};
+
   registerMixin(app: ApplicationInterface) {
+    let container = this;
+    this.$app = app;
+
     Vue.mixin({
       beforeCreate() {
-        let services = this.$options.$inject || [];
-        services.forEach((service: string) => {
-          this[camelize(service)] = app.make(service);
-        });
+        container.setServices(this);
+        container.setMeta(this);
       },
+      beforeDestroy() {
+        // @ts-ignore
+        if (this.metaCreated && Array.isArray(this.metaCreated)) {
+          // @ts-ignore
+          this.metaCreated.forEach(meta => {
+            if (meta instanceof HTMLElement) {
+              meta.remove();
+            }
+          })
+        }
+      }
     });
+  }
+
+  setServices(vm) {
+    let services = vm.$options.$inject || [];
+
+    services.forEach((service: string) => {
+      vm[camelize(service)] = this.$app.make(service);
+    });
+  }
+
+  setMeta(vm) {
+    let titleElement = document.querySelector('head title');
+
+    if (!titleElement) {
+      return false;
+    }
+
+    let title = vm.$options.title;
+    let meta = vm.$options.meta;
+    if (title) {
+      document.title = title;
+    }
+
+    if (meta && Array.isArray(meta)) {
+      for (let tag of meta) {
+        let metaTag = document.createElement('meta');
+
+        for (let key in tag) {
+          metaTag.setAttribute(key, tag[key])
+        }
+
+        if (!vm.metaCreated) {
+          vm.metaCreated = [];
+        }
+
+        vm.metaCreated.push(metaTag);
+        // @ts-ignore
+        titleElement.after(metaTag)
+      }
+    }
   }
 }
