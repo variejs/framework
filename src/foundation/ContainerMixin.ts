@@ -4,7 +4,6 @@ import ApplicationInterface from "./ApplicationInterface";
 
 export default class ContainerMixin {
   protected $app;
-  protected definedMeta = {};
 
   registerMixin(app: ApplicationInterface) {
     let container = this;
@@ -16,15 +15,7 @@ export default class ContainerMixin {
         container.setMeta(this);
       },
       beforeDestroy() {
-        // @ts-ignore
-        if (this.metaCreated && Array.isArray(this.metaCreated)) {
-          // @ts-ignore
-          this.metaCreated.forEach(meta => {
-            if (meta instanceof HTMLElement) {
-              meta.remove();
-            }
-          })
-        }
+        this.destoryMeta(this);
       }
     });
   }
@@ -66,6 +57,18 @@ export default class ContainerMixin {
         // @ts-ignore
         titleElement.after(metaTag)
       }
+    }
+  }
+  
+  destoryMeta(vm) {
+    // @ts-ignore
+    if (vm.metaCreated && Array.isArray(vm.metaCreated)) {
+      // @ts-ignore
+      vm.metaCreated.forEach(meta => {
+        if (meta instanceof HTMLElement) {
+          meta.remove();
+        }
+      })
     }
   }
 }
