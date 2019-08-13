@@ -60,7 +60,7 @@ export default class ContainerMixin {
     }
   }
   
-  destoryMeta(vm) {
+  destroyMeta(vm) {
     // @ts-ignore
     if (vm.metaCreated && Array.isArray(vm.metaCreated)) {
       // @ts-ignore
