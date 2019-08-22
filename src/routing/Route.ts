@@ -16,7 +16,7 @@ export default class Route {
   constructor(
     path: string,
     components: string | object | Array<string>,
-    props = {},
+    props: (() => void) | boolean | object = true,
   ) {
     this.path = path;
     this.props = props;

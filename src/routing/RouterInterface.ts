@@ -2,7 +2,11 @@ import Route from "./Route";
 
 export default interface RouterInterface {
   getRouter(): any;
-  route(path: string, component: object): Route;
+  route(
+    path: string,
+    component: object,
+    props?: (() => void) | boolean | object,
+  ): Route;
   group(routes: Function): this;
   middleware(middleware: Array<any>): this;
   prefix(prefix: string): this;

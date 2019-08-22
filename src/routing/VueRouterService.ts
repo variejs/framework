@@ -75,7 +75,7 @@ export default class VueRouterService implements RouterInterface {
     this.setupMiddleware();
   }
 
-  public route(path: string, component: string | object, props = {}): Route {
+  public route(path: string, component: string | object, props = true): Route {
     let route = new Route(path, component, props);
 
     if (this.currentGroupLevel > -1) {
