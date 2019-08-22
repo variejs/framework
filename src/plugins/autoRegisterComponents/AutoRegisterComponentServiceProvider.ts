@@ -13,6 +13,6 @@ export default class AutoRegisterComponentServiceProvider extends ServiceProvide
   }
 
   protected getComponentName(filename: string) {
-    return dashify(filename.replace(".vue", ""));
+    return dashify(filename.replace(/(\.vue|\/)/g, ""));
   }
 }

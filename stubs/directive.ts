@@ -1,8 +1,6 @@
 // https://vuejs.org/v2/guide/custom-directive.html
-import Vue from "vue";
-
-Vue.directive("temp", {
+export default {
   inserted: function(el, binding) {
     // ...
   },
-});
+};

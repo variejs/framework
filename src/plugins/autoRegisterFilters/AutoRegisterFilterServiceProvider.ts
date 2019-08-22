@@ -13,6 +13,6 @@ export default class AutoRegisterFilterServiceProvider extends ServiceProvider {
   }
 
   protected getFilterName(filename: string) {
-    return camelize(filename.replace(".ts", ""));
+    return camelize(filename.replace(/(\.ts|\.js|\/)/g, ""));
   }
 }

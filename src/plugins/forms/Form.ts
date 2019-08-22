@@ -15,12 +15,12 @@ class Form {
     if (validationService) {
       this._validator = validationService;
     }
-    this.fill(data);
+    this.$fill(data);
     this.setAsOriginalData();
     this._initialData = this.data(false);
   }
 
-  public fill(data) {
+  public $fill(data) {
     for (let key in data) {
       Vue.set(this, key, data[key]);
     }
@@ -85,12 +85,12 @@ class Form {
     for (let field in this.data()) {
       this.remove(field);
     }
-    this.fill(this._originalData);
+    this.$fill(this._originalData);
     return this;
   }
 
   initial() {
-    this.fill(this._initialData).setAsOriginalData();
+    this.$fill(this._initialData).setAsOriginalData();
     return this;
   }
 

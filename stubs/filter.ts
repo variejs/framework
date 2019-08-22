@@ -1,5 +1,3 @@
-import Vue from "vue";
-
-Vue.filter("temp", (value) => {
+export default function(value) {
   return value;
-});
+}

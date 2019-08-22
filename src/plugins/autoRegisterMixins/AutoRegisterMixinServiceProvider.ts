@@ -7,7 +7,7 @@ export default class AutoRegisterMixinServiceProvider extends ServiceProvider {
   public boot() {
     let files = require.context("@app/mixins", true, /^\.\/.*\.(ts|js)$/);
     files.keys().forEach((filename) => {
-      Vue.mixin(files(filename));
+      Vue.mixin(files(filename).default);
     });
   }
 }
