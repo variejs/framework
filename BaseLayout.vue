@@ -7,7 +7,7 @@ export default Vue.extend({
   $inject: ["ConfigService"],
   computed: {
     layout() {
-      let matched = Object.assign([], this.$route.matched);
+      let matched = this.$router.match(window.location.pathname).matched;
       let route = matched.reverse().find((route) => route.meta.layout);
       return `${
         typeof route === "object"
