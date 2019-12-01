@@ -1,5 +1,5 @@
 import * as utilities from "./utilities";
-import Application from "./foundation/application";
+import Application from "./foundation/Application";
 
 // Core Service Providers
 import HttpServiceProvider from "./http/HttpServiceProvider";

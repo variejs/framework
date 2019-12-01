@@ -2,19 +2,19 @@ name: Node CI
 
 on:
   push:
-    branches:    
-      - '*'         # matches every branch
-      - '*/*'       # matches every branch containing a single '/'
-      - '!master'   # excludes master
-      
+    branches:
+      - "*" # matches every branch
+      - "*/*" # matches every branch containing a single '/'
+      - "!master" # excludes master
+
 jobs:
   test:
     name: Test on node ${{ matrix.node_version }} and ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node_version: [10, 12]
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        node_version: [10.x, 12.x]
+        os: [ubuntu-latest, macOS-latest]
 
     steps:
       - uses: actions/checkout@v1
@@ -23,7 +23,9 @@ jobs:
         with:
           version: ${{ matrix.node_version }}
 
-      - name: npm ci and test
+      - name: npm install, build and test
         run: |
           npm ci
+          npm run installPeers
+          npm run build
           npm test
