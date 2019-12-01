@@ -3,8 +3,8 @@
     "baseUrl": ".",
     "outDir": "./lib/",
     "moduleResolution": "node",
-    "lib": ["es2017", "dom", "dom.iterable"],
-    "target": "es5",
+    "lib": ["es6", "dom", "dom.iterable"],
+    "target": "es6",
     "strict": true,
     "types": [
       "vue",
@@ -20,8 +20,7 @@
     "inlineSourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "paths": {}
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*"]
 }
