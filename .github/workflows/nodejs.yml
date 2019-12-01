@@ -2,11 +2,11 @@ name: Node CI
 
 on:
   push:
-    branches:    
-      - '*'         # matches every branch
-      - '*/*'       # matches every branch containing a single '/'
-      - '!master'   # excludes master
-      
+    branches:
+      - "*" # matches every branch
+      - "*/*" # matches every branch containing a single '/'
+      - "!master" # excludes master
+
 jobs:
   test:
     name: Test on node ${{ matrix.node_version }} and ${{ matrix.os }}
@@ -26,4 +26,6 @@ jobs:
       - name: npm ci and test
         run: |
           npm ci
+          npm run installPeers
+          npm run build
           npm test
