@@ -23,7 +23,7 @@ jobs:
         with:
           version: ${{ matrix.node_version }}
 
-      - name: npm ci and test
+      - name: npm install, build and test
         run: |
           npm ci
           npm run installPeers
