@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "outDir": "./lib/",
     "moduleResolution": "node",
-    "lib": ["es2017", "dom", "dom.iterable"],
+    "lib": ["es6", "dom", "dom.iterable"],
     "target": "es5",
     "strict": true,
     "types": [
@@ -20,8 +20,7 @@
     "inlineSourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "paths": {}
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*"]
 }
